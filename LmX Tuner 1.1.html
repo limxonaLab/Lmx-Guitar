@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>LmX Tuner 1.1</title>
+<link rel="icon" type="image/svg+xml" href="lmx-tuner-icon.svg">
+<link rel="icon" type="image/x-icon" href="lmx-tuner-icon.ico">
+<link rel="apple-touch-icon" href="lmx-tuner-icon-512.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #e8eee9;
+    --card: #f7faf7;
+    --text: #12262a;
+    --muted: #5d7377;
+    --line: #cbd8d2;
+    --brass: #a8761b;
+    --good: #14895c;
+    --warn: #b9801a;
+    --bad: #c8462f;
+    --chip: #e3ebe6;
+    --chip-on: #12262a;
+    --chip-on-text: #f7faf7;
+    --serif: "Fraunces", Georgia, "Times New Roman", serif;
+    --sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0b2025;
+      --card: #12313a;
+      --text: #e9f1ed;
+      --muted: #8fa9ab;
+      --line: #25474f;
+      --brass: #e2b155;
+      --good: #6fe3b0;
+      --warn: #e2b155;
+      --bad: #ff7a62;
+      --chip: #1a3d46;
+      --chip-on: #e9f1ed;
+      --chip-on-text: #0b2025;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0b2025;
+    --card: #12313a;
+    --text: #e9f1ed;
+    --muted: #8fa9ab;
+    --line: #25474f;
+    --brass: #e2b155;
+    --good: #6fe3b0;
+    --warn: #e2b155;
+    --bad: #ff7a62;
+    --chip: #1a3d46;
+    --chip-on: #e9f1ed;
+    --chip-on-text: #0b2025;
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    padding: 20px 14px 32px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-text-size-adjust: 100%;
+  }
+  html { touch-action: manipulation; }
+  button { touch-action: manipulation; }
+  input { -webkit-user-select: text; user-select: text; touch-action: manipulation; }
+  .app {
+    width: 100%;
+    max-width: 460px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 18px 18px 22px;
+  }
+  header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+  h1 { font-family: var(--serif); font-size: 1.15rem; font-weight: 700; margin: 0; letter-spacing: .01em; }
+  .hint { color: var(--muted); font-size: .78rem; }
+  .brand { display: flex; align-items: center; gap: 8px; }
+  .brand svg { width: 26px; height: 26px; flex: none; color: var(--brass); }
+  .brand small { font-family: var(--sans); font-weight: 500; font-size: .72rem; color: var(--muted); margin-left: 2px; }
+
+  .modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: var(--chip); padding: 4px; border-radius: 12px; }
+  .modes button {
+    border: 0; background: transparent; color: var(--muted); font: 500 .9rem var(--sans);
+    padding: 9px 4px; border-radius: 9px; cursor: pointer;
+  }
+  .modes button[aria-pressed="true"] { background: var(--chip-on); color: var(--chip-on-text); }
+  button:focus-visible, input:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+
+  .readout { text-align: center; margin: 22px 0 0; min-height: 138px; transition: opacity .25s; }
+  .readout.idle { opacity: .38; }
+  .note { font-family: var(--serif); font-weight: 700; font-size: 5.6rem; line-height: 1; letter-spacing: -.02em; display: inline-flex; align-items: flex-start; justify-content: center; }
+  .note sub { font-family: var(--sans); font-weight: 600; font-size: 1.7rem; vertical-align: baseline; margin: 3.6rem 0 0 .25rem; color: var(--brass); letter-spacing: 0; }
+  .solfege { color: var(--muted); font-size: .95rem; margin-top: 2px; min-height: 1.4em; }
+  .octave-label { color: var(--muted); font-size: .78rem; margin-top: 2px; min-height: 1.2em; }
+
+  .gauge { width: 100%; height: auto; display: block; margin-top: 4px; }
+  .gauge text { font-family: var(--sans); fill: var(--muted); font-size: 11px; }
+  .needle { transition: stroke .2s; }
+
+  .status { text-align: center; font-weight: 600; font-size: 1.02rem; min-height: 1.6em; margin-top: -2px; }
+  .status.good { color: var(--good); }
+  .status.warn { color: var(--warn); }
+  .status.bad { color: var(--bad); }
+
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+  .stat { background: var(--chip); border-radius: 12px; padding: 9px 6px; text-align: center; }
+  .stat b { display: block; font-size: 1.12rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .stat span { color: var(--muted); font-size: .74rem; }
+
+  .strings { display: none; margin-top: 16px; }
+  .strings.show { display: block; }
+  .string-row { display: flex; gap: 5px; justify-content: center; flex-wrap: nowrap; }
+  .string-row button {
+    flex: 1 1 0; min-width: 0; border: 1px solid var(--line); background: var(--chip); color: var(--text);
+    border-radius: 12px; padding: 9px 4px 8px; cursor: pointer; font-family: var(--sans);
+    display: flex; flex-direction: column; align-items: center; gap: 1px;
+  }
+  .string-row button .n { font-family: var(--serif); font-weight: 700; font-size: 1.25rem; }
+  .string-row button .s { font-size: .7rem; color: var(--muted); }
+  .string-row button.target { border-color: var(--brass); box-shadow: inset 0 0 0 1px var(--brass); }
+  .string-row button.locked { background: var(--chip-on); color: var(--chip-on-text); border-color: var(--chip-on); }
+  .string-row button.locked .s { color: inherit; opacity: .7; }
+  .string-row button.done { border-color: var(--good); }
+  .strings .hint { text-align: center; margin-top: 8px; }
+
+  .ref { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+  .ref label { font-size: .9rem; font-weight: 500; }
+  .ref .ctl { display: flex; align-items: center; justify-content: center; flex-wrap: nowrap; gap: 6px; }
+  .ref .ctl button, .reset {
+    border: 1px solid var(--line); background: var(--chip); color: var(--text); border-radius: 9px;
+    min-width: 36px; height: 36px; font: 600 1.05rem var(--sans); cursor: pointer;
+  }
+  .ref input {
+    width: 76px; height: 36px; text-align: center; font: 600 1rem var(--sans); color: var(--text);
+    background: var(--bg); border: 1px solid var(--line); border-radius: 9px; font-variant-numeric: tabular-nums;
+  }
+  .reset { font-size: .78rem; font-weight: 500; padding: 0 10px; }
+
+  .start {
+    width: 100%; margin-top: 18px; border: 0; border-radius: 14px; padding: 15px; cursor: pointer;
+    font: 600 1rem var(--sans); background: var(--brass); color: #fff;
+  }
+  :root[data-theme="dark"] .start { color: #0b2025; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .start { color: #0b2025; } }
+  .start.on { background: var(--chip); color: var(--text); border: 1px solid var(--line); }
+  .error { color: var(--bad); font-size: .85rem; margin-top: 10px; text-align: center; min-height: 1em; }
+  @media (max-width: 420px) {
+    body { padding: 8px 8px 12px; }
+    .app { padding: 12px 12px 14px; border-radius: 18px; }
+    header { margin-bottom: 8px; }
+    .modes button { padding: 7px 4px; }
+    .readout { margin-top: 8px; min-height: 84px; }
+    .note { font-size: 3.9rem; }
+    .note sub { font-size: 1.2rem; margin: 2.4rem 0 0 .2rem; }
+    .solfege { font-size: .9rem; }
+    .gauge { max-height: 100px; margin-top: 2px; }
+    .status { font-size: .95rem; min-height: 1.4em; }
+    .stats { margin-top: 8px; gap: 6px; }
+    .stat { padding: 6px 4px; }
+    .stat b { font-size: 1rem; }
+    .stat span { font-size: .68rem; }
+    .strings { margin-top: 10px; }
+    .strings .hint { display: none; }
+    .string-row button { padding: 7px 0 6px; border-radius: 10px; }
+    .string-row button .n { font-size: 1.05rem; }
+    .string-row button .s { font-size: .62rem; }
+    .ref { margin-top: 12px; padding-top: 10px; gap: 6px; }
+    .start { margin-top: 12px; padding: 12px; }
+    .error { margin-top: 6px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<main class="app">
+  <header>
+    <h1 class="brand">
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M11 4v10a5 5 0 0 0 10 0V4"/>
+        <path d="M16 19v9"/>
+        <path d="M5.5 8.5c-1.3 1.6-1.3 4.4 0 6" opacity=".6"/>
+        <path d="M26.5 8.5c1.3 1.6 1.3 4.4 0 6" opacity=".6"/>
+      </svg>
+      <span>LmX Tuner <small>1.1</small></span>
+    </h1>
+    <span class="hint" id="hzHint">A4 = 440 Hz</span>
+  </header>
+
+  <div class="modes" role="group" aria-label="Mod">
+    <button data-mode="chromatic" aria-pressed="true">Kromatik</button>
+    <button data-mode="guitar" aria-pressed="false">Gitar</button>
+    <button data-mode="ukulele" aria-pressed="false">Ukulele</button>
+  </div>
+
+  <section class="readout idle" id="readout" aria-live="polite">
+    <div class="note"><span id="noteName">–</span><sub id="octave"></sub></div>
+    <div class="solfege" id="solfege">Mikrofonu başlatıp bir nota çal</div>
+    
+  </section>
+
+  <svg class="gauge" id="gauge" viewBox="0 0 320 188" aria-hidden="true"></svg>
+  <div class="status" id="status"></div>
+
+  <div class="stats">
+    <div class="stat"><b id="freq">–</b><span>Frekans (Hz)</span></div>
+    <div class="stat"><b id="target">–</b><span>Hedef (Hz)</span></div>
+    <div class="stat"><b id="cents">–</b><span>Sapma (cent)</span></div>
+  </div>
+
+  <section class="strings" id="strings">
+    <div class="string-row" id="stringRow"></div>
+    <div class="hint">Tel otomatik algılanır. Bir tele dokunursan kilitlenir ve sesi çalar; tekrar dokunursan serbest kalır.</div>
+  </section>
+
+  <div class="ref">
+    <label for="ref">Referans (A4)</label>
+    <div class="ctl">
+      <button type="button" id="refMinus" aria-label="Referansı azalt">−</button>
+      <input id="ref" type="number" min="400" max="480" step="0.5" value="440" inputmode="decimal">
+      <button type="button" id="refPlus" aria-label="Referansı artır">+</button>
+      <button type="button" class="reset" id="refReset">440</button>
+    </div>
+  </div>
+
+  <button class="start" id="start" type="button">Mikrofonu başlat</button>
+  <div class="error" id="error" role="alert"></div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- sabitler ---------- */
+  var NOTES = ["C","C♯","D","D♯","E","F","F♯","G","G♯","A","A♯","B"];
+  var SOL   = ["Do","Do♯","Re","Re♯","Mi","Fa","Fa♯","Sol","Sol♯","La","La♯","Si"];
+  // Standart akortlar (sabit)
+  var INSTRUMENTS = {
+    guitar:  [ {midi:40,s:"6. tel"}, {midi:45,s:"5. tel"}, {midi:50,s:"4. tel"}, {midi:55,s:"3. tel"}, {midi:59,s:"2. tel"}, {midi:64,s:"1. tel"} ],
+    ukulele: [ {midi:67,s:"4. tel"}, {midi:60,s:"3. tel"}, {midi:64,s:"2. tel"}, {midi:69,s:"1. tel"} ]
+  };
+  var IN_TUNE = 5;           // ± cent
+  var GATE_RMS = 0.006;      // sessizlik eşiği
+
+  /* ---------- durum ---------- */
+  var state = { mode: "chromatic", ref: 440, locked: null, running: false };
+  var $ = function (id) { return document.getElementById(id); };
+  var audioCtx = null, analyser = null, stream = null, source = null, buf = null;
+  var rafId = 0, lastAnalysis = 0, lastHit = 0, muteUntil = 0;
+  var history = [];
+  var needleDeg = 0, needleTarget = 0;
+  var wakeLock = null;
+  function requestWake() {
+    try {
+      if ("wakeLock" in navigator) {
+        navigator.wakeLock.request("screen").then(function (l) {
+          wakeLock = l;
+          l.addEventListener("release", function () { if (wakeLock === l) wakeLock = null; });
+        }).catch(function () {});
+      }
+    } catch (e) {}
+  }
+  function releaseWake() {
+    var l = wakeLock; wakeLock = null;
+    try { if (l) l.release(); } catch (e) {}
+  }
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "visible" && !wakeLock) requestWake();
+  });
+
+  /* ---------- kayıt ---------- */
+  function load() {
+    try {
+      var r = parseFloat(localStorage.getItem("tuner.ref"));
+      if (r >= 400 && r <= 480) state.ref = r;
+      var m = localStorage.getItem("tuner.mode");
+      if (m && (m === "chromatic" || INSTRUMENTS[m])) state.mode = m;
+    } catch (e) {}
+  }
+  function save() {
+    try {
+      localStorage.setItem("tuner.ref", String(state.ref));
+      localStorage.setItem("tuner.mode", state.mode);
+    } catch (e) {}
+  }
+
+  /* ---------- müzik matematiği ---------- */
+  function midiToFreq(m) { return state.ref * Math.pow(2, (m - 69) / 12); }
+  function freqToMidi(f) { return 12 * Math.log2(f / state.ref) + 69; }
+  function noteLabel(m) { return NOTES[((m % 12) + 12) % 12]; }
+  function solLabel(m)  { return SOL[((m % 12) + 12) % 12]; }
+  function octaveOf(m)  { return Math.floor(m / 12) - 1; }
+  function fmtHz(f) { return f.toFixed(f < 100 ? 2 : 1); }
+
+  /* ---------- YIN perde algılama ---------- */
+  var yinBuf = null;
+  function detect(data, sr) {
+    var W = data.length >> 1;
+    var tauMax = Math.min(W - 2, Math.floor(sr / 55));
+    var tauMin = Math.max(2, Math.floor(sr / 1400));
+    if (!yinBuf || yinBuf.length !== tauMax + 2) yinBuf = new Float32Array(tauMax + 2);
+    var d = yinBuf, run = 0, tau, i, x, s;
+    d[0] = 1;
+    for (tau = 1; tau <= tauMax; tau++) {
+      s = 0;
+      for (i = 0; i < W; i++) { x = data[i] - data[i + tau]; s += x * x; }
+      run += s;
+      d[tau] = run > 0 ? (s * tau) / run : 1;
+    }
+    var found = -1;
+    for (tau = tauMin; tau <= tauMax; tau++) {
+      if (d[tau] < 0.12) {
+        while (tau + 1 <= tauMax && d[tau + 1] < d[tau]) tau++;
+        found = tau; break;
+      }
+    }
+    if (found < 0) return null;
+    var better = found;
+    if (found > 1 && found < tauMax) {
+      var x0 = d[found - 1], x1 = d[found], x2 = d[found + 1];
+      var den = x0 + x2 - 2 * x1;
+      if (den !== 0) better = found + (x0 - x2) / (2 * den);
+    }
+    return { freq: sr / better, clarity: 1 - d[found] };
+  }
+
+  function median(arr) {
+    var a = arr.slice().sort(function (p, q) { return p - q; });
+    return a[a.length >> 1];
+  }
+
+  /* ---------- ibre (SVG) ---------- */
+  var CX = 160, CY = 172, R = 138, SPAN = 62; // ±62°
+  function degOf(c) { return (Math.max(-50, Math.min(50, c)) / 50) * SPAN; }
+  function pt(deg, r) {
+    var a = deg * Math.PI / 180;
+    return [CX + r * Math.sin(a), CY - r * Math.cos(a)];
+  }
+  function arcPath(c1, c2, r) {
+    var p1 = pt(degOf(c1), r), p2 = pt(degOf(c2), r);
+    var large = Math.abs(degOf(c2) - degOf(c1)) > 180 ? 1 : 0;
+    return "M" + p1[0].toFixed(2) + " " + p1[1].toFixed(2) + " A" + r + " " + r + " 0 " + large + " 1 " + p2[0].toFixed(2) + " " + p2[1].toFixed(2);
+  }
+  function buildGauge() {
+    var g = $("gauge"), h = "";
+    h += '<path d="' + arcPath(-50, 50, R) + '" fill="none" stroke="var(--line)" stroke-width="10" stroke-linecap="round"/>';
+    h += '<path d="' + arcPath(-IN_TUNE, IN_TUNE, R) + '" fill="none" stroke="var(--good)" stroke-width="10" opacity=".9"/>';
+    for (var c = -50; c <= 50; c += 5) {
+      var major = c % 25 === 0, mid = c % 10 === 0;
+      var len = major ? 20 : (mid ? 13 : 8);
+      var a = pt(degOf(c), R - 12), b = pt(degOf(c), R - 12 - len);
+      h += '<line x1="' + a[0].toFixed(2) + '" y1="' + a[1].toFixed(2) + '" x2="' + b[0].toFixed(2) + '" y2="' + b[1].toFixed(2) +
+           '" stroke="' + (c === 0 ? "var(--good)" : "var(--muted)") + '" stroke-width="' + (major ? 2.2 : 1.2) + '" stroke-linecap="round"/>';
+    }
+    [-50, -25, 0, 25, 50].forEach(function (c) {
+      var p = pt(degOf(c), R - 42);
+      var t = c > 0 ? "+" + c : String(c);
+      h += '<text x="' + p[0].toFixed(1) + '" y="' + (p[1] + 4).toFixed(1) + '" text-anchor="middle">' + t + '</text>';
+    });
+    h += '<text x="14" y="184" text-anchor="start">♭ pes</text><text x="306" y="184" text-anchor="end">tiz ♯</text>';
+    h += '<g id="needleG"><line class="needle" id="needle" x1="' + CX + '" y1="' + CY + '" x2="' + CX + '" y2="' + (CY - R + 6) +
+         '" stroke="var(--brass)" stroke-width="3.4" stroke-linecap="round"/></g>';
+    h += '<circle cx="' + CX + '" cy="' + CY + '" r="9" fill="var(--brass)"/><circle cx="' + CX + '" cy="' + CY + '" r="3.5" fill="var(--card)"/>';
+    g.innerHTML = h;
+  }
+  function setNeedleColor(cls) {
+    var n = $("needle");
+    n.setAttribute("stroke", cls === "good" ? "var(--good)" : cls === "bad" ? "var(--bad)" : cls === "warn" ? "var(--warn)" : "var(--brass)");
+  }
+  function applyNeedle() {
+    needleDeg += (needleTarget - needleDeg) * 0.22;
+    $("needleG").setAttribute("transform", "rotate(" + needleDeg.toFixed(2) + " " + CX + " " + CY + ")");
+  }
+
+  /* ---------- arayüz ---------- */
+  function setMode(m) {
+    state.mode = m; state.locked = null; history = [];
+    document.querySelectorAll(".modes button").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.dataset.mode === m));
+    });
+    renderStrings();
+    showIdle();
+    save();
+  }
+  function renderStrings() {
+    var wrap = $("strings"), row = $("stringRow");
+    var list = INSTRUMENTS[state.mode];
+    if (!list) { wrap.classList.remove("show"); row.innerHTML = ""; return; }
+    wrap.classList.add("show");
+    row.innerHTML = "";
+    list.forEach(function (st, i) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.dataset.idx = i;
+      b.innerHTML = '<span class="n">' + noteLabel(st.midi) + octaveOf(st.midi) + '</span><span class="s">' + st.s + '</span>';
+      b.addEventListener("click", function () {
+        if (state.locked === i) { state.locked = null; }
+        else { state.locked = i; playTone(midiToFreq(st.midi)); }
+        history = [];
+        refreshStringStyles(null);
+      });
+      row.appendChild(b);
+    });
+    refreshStringStyles(null);
+  }
+  function refreshStringStyles(targetIdx, inTune) {
+    var btns = $("stringRow").children;
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle("locked", state.locked === i);
+      btns[i].classList.toggle("target", targetIdx === i && state.locked !== i);
+      btns[i].classList.toggle("done", targetIdx === i && !!inTune);
+    }
+  }
+  function showIdle() {
+    $("readout").classList.add("idle");
+    $("noteName").textContent = "–";
+    $("octave").textContent = "";
+    $("solfege").textContent = state.running ? "Dinleniyor… bir nota çal" : "Mikrofonu başlatıp bir nota çal";
+    
+    $("freq").textContent = "–";
+    $("target").textContent = "–";
+    $("cents").textContent = "–";
+    var s = $("status"); s.textContent = ""; s.className = "status";
+    needleTarget = 0;
+    setNeedleColor("");
+    refreshStringStyles(null);
+  }
+  function showReading(freq) {
+    var midiTarget, cents, targetIdx = null;
+    var list = INSTRUMENTS[state.mode];
+    if (list) {
+      var idx = state.locked;
+      if (idx === null) {
+        var best = Infinity;
+        for (var i = 0; i < list.length; i++) {
+          var dc = Math.abs(1200 * Math.log2(freq / midiToFreq(list[i].midi)));
+          if (dc < best) { best = dc; idx = i; }
+        }
+      }
+      targetIdx = idx;
+      midiTarget = list[idx].midi;
+      cents = 1200 * Math.log2(freq / midiToFreq(midiTarget));
+    } else {
+      var mf = freqToMidi(freq);
+      midiTarget = Math.round(mf);
+      cents = (mf - midiTarget) * 100;
+    }
+    var tf = midiToFreq(midiTarget);
+    var inTune = Math.abs(cents) <= IN_TUNE;
+    var cls = inTune ? "good" : (Math.abs(cents) <= 15 ? "warn" : "bad");
+
+    $("readout").classList.remove("idle");
+    $("noteName").textContent = noteLabel(midiTarget);
+    $("octave").textContent = octaveOf(midiTarget);
+    $("solfege").textContent = solLabel(midiTarget) + " · " + octaveOf(midiTarget) + ". oktav";
+    
+    $("freq").textContent = fmtHz(freq);
+    $("target").textContent = fmtHz(tf);
+    var cr = Math.abs(cents) > 99 ? Math.round(cents) : cents.toFixed(1);
+    $("cents").textContent = (cents > 0 ? "+" : "") + cr;
+
+    var s = $("status"); s.className = "status " + cls;
+    if (inTune) s.textContent = "Doğru ✓";
+    else if (cents < 0) s.textContent = list ? "Pes · teli gerin" : "Pes";
+    else s.textContent = list ? "Tiz · teli gevşetin" : "Tiz";
+
+    needleTarget = degOf(cents);
+    setNeedleColor(cls);
+    refreshStringStyles(targetIdx, inTune);
+  }
+
+  /* ---------- ses ---------- */
+  function getCtx() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    return audioCtx;
+  }
+  function playTone(freq) {
+    try {
+      var ctx = getCtx(), t = ctx.currentTime;
+      var o1 = ctx.createOscillator(), o2 = ctx.createOscillator(), g = ctx.createGain();
+      o1.type = "triangle"; o2.type = "sine";
+      o1.frequency.value = freq; o2.frequency.value = freq * 2;
+      var g2 = ctx.createGain(); g2.gain.value = 0.25;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.35, t + 0.03);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 2.2);
+      o1.connect(g); o2.connect(g2); g2.connect(g); g.connect(ctx.destination);
+      o1.start(t); o2.start(t); o1.stop(t + 2.3); o2.stop(t + 2.3);
+      muteUntil = performance.now() + 2500;
+    } catch (e) {}
+  }
+
+  function loop(now) {
+    rafId = requestAnimationFrame(loop);
+    if (analyser && now > muteUntil && now - lastAnalysis > 30) {
+      lastAnalysis = now;
+      analyser.getFloatTimeDomainData(buf);
+      var sum = 0;
+      for (var i = 0; i < buf.length; i++) sum += buf[i] * buf[i];
+      var rms = Math.sqrt(sum / buf.length);
+      if (rms > GATE_RMS) {
+        var r = detect(buf, audioCtx.sampleRate);
+        if (r && r.clarity > 0.88) {
+          history.push(r.freq);
+          if (history.length > 5) history.shift();
+          lastHit = now;
+          showReading(median(history));
+        }
+      }
+      if (now - lastHit > 600 && !$("readout").classList.contains("idle")) {
+        history = [];
+        showIdle();
+      }
+    }
+    applyNeedle();
+  }
+
+  function start() {
+    $("error").textContent = "";
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      $("error").textContent = "Bu tarayıcı mikrofon erişimini desteklemiyor. Sayfayı HTTPS üzerinden açtığından emin ol.";
+      return;
+    }
+    navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+    }).then(function (s) {
+      stream = s;
+      var ctx = getCtx();
+      analyser = ctx.createAnalyser();
+      analyser.fftSize = 4096;
+      analyser.smoothingTimeConstant = 0;
+      buf = new Float32Array(analyser.fftSize);
+      source = ctx.createMediaStreamSource(stream);
+      source.connect(analyser);
+      state.running = true;
+      var b = $("start"); b.textContent = "Durdur"; b.classList.add("on");
+      showIdle();
+    }).catch(function () {
+      $("error").textContent = "Mikrofona erişilemedi. İzin vermen gerekiyor; sayfa bir çerçeve içinde açıldıysa yeni sekmede açmayı dene.";
+    });
+  }
+  function stop() {
+    if (stream) stream.getTracks().forEach(function (t) { t.stop(); });
+    if (source) source.disconnect();
+    stream = null; source = null; analyser = null;
+    state.running = false; history = [];
+    var b = $("start"); b.textContent = "Mikrofonu başlat"; b.classList.remove("on");
+    showIdle();
+  }
+
+  /* ---------- referans frekans ---------- */
+  function setRef(v) {
+    v = parseFloat(v);
+    if (isNaN(v)) v = 440;
+    v = Math.max(400, Math.min(480, Math.round(v * 10) / 10));
+    state.ref = v;
+    $("ref").value = v;
+    $("hzHint").textContent = "A4 = " + v + " Hz";
+    renderStrings();
+    save();
+  }
+
+  /* ---------- başlat ---------- */
+  load();
+  buildGauge();
+  $("ref").value = state.ref;
+  $("hzHint").textContent = "A4 = " + state.ref + " Hz";
+  document.querySelectorAll(".modes button").forEach(function (b) {
+    b.addEventListener("click", function () { setMode(b.dataset.mode); });
+  });
+  setMode(state.mode);
+  $("start").addEventListener("click", function () { state.running ? stop() : start(); });
+  $("ref").addEventListener("change", function (e) { setRef(e.target.value); });
+  $("refMinus").addEventListener("click", function () { setRef(state.ref - 0.5); });
+  $("refPlus").addEventListener("click", function () { setRef(state.ref + 0.5); });
+  $("refReset").addEventListener("click", function () { setRef(440); });
+  document.addEventListener("gesturestart", function (e) { e.preventDefault(); });
+  // Sayfa açık olduğu sürece ekran uyumasın (mikrofondan bağımsız)
+  requestWake();
+  // Yedek: ekran kilidi API'si çalışmazsa (eski iOS, Düşük Güç Modu) sessiz, görünmez bir video döngüsü ekranı uyanık tutar
+  var keepVideo = null;
+  function ensureVideo() {
+    if (keepVideo) return keepVideo;
+    var v = document.createElement("video");
+    v.setAttribute("playsinline", ""); v.setAttribute("webkit-playsinline", "");
+    v.setAttribute("muted", ""); v.muted = true;
+    v.setAttribute("loop", ""); v.loop = true;
+    v.setAttribute("aria-hidden", "true"); v.tabIndex = -1;
+    v.style.cssText = "position:fixed;left:0;bottom:0;width:2px;height:2px;opacity:.01;pointer-events:none;";
+    var a = document.createElement("source");
+    a.type = "video/mp4"; a.src = "data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAAANMbW9vdgAAAGxtdmhkAAAAAAAAAAAAAAAAAAAD6AAAB9AAAQAAAQAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAnZ0cmFrAAAAXHRraGQAAAADAAAAAAAAAAAAAAABAAAAAAAAB9AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAEAAAABAAAAAAAAkZWR0cwAAABxlbHN0AAAAAAAAAAEAAAfQAAAAAAABAAAAAAHubWRpYQAAACBtZGhkAAAAAAAAAAAAAAAAAAAoAAAAUABVxAAAAAAALWhkbHIAAAAAAAAAAHZpZGUAAAAAAAAAAAAAAABWaWRlb0hhbmRsZXIAAAABmW1pbmYAAAAUdm1oZAAAAAEAAAAAAAAAAAAAACRkaW5mAAAAHGRyZWYAAAAAAAAAAQAAAAx1cmwgAAAAAQAAAVlzdGJsAAAAuXN0c2QAAAAAAAAAAQAAAKlhdmMxAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAEAAQABIAAAASAAAAAAAAAABFUxhdmM2MC4zMS4xMDIgbGlieDI2NAAAAAAAAAAAAAAAGP//AAAAL2F2Y0MBQsAe/+EAF2dCwB7ZBCbARAAAAwAEAAADACg8WLkgAQAFaMuDyyAAAAAQcGFzcAAAAAEAAAABAAAAFGJ0cnQAAAAAAAALqAAAC6gAAAAYc3R0cwAAAAAAAAABAAAACgAACAAAAAAUc3RzcwAAAAAAAAABAAAAAQAAABxzdHNjAAAAAAAAAAEAAAABAAAACgAAAAEAAAA8c3RzegAAAAAAAAAAAAAACgAAAo8AAAAKAAAACwAAAAoAAAAKAAAACgAAAAoAAAAKAAAACgAAAAoAAAAUc3RjbwAAAAAAAAABAAADfAAAAGJ1ZHRhAAAAWm1ldGEAAAAAAAAAIWhkbHIAAAAAAAAAAG1kaXJhcHBsAAAAAAAAAAAAAAAALWlsc3QAAAAlqXRvbwAAAB1kYXRhAAAAAQAAAABMYXZmNjAuMTYuMTAwAAAACGZyZWUAAALybWRhdAAAAnAGBf//bNxF6b3m2Ui3lizYINkj7u94MjY0IC0gY29yZSAxNjQgcjMxMDggMzFlMTlmOSAtIEguMjY0L01QRUctNCBBVkMgY29kZWMgLSBDb3B5bGVmdCAyMDAzLTIwMjMgLSBodHRwOi8vd3d3LnZpZGVvbGFuLm9yZy94MjY0Lmh0bWwgLSBvcHRpb25zOiBjYWJhYz0wIHJlZj0zIGRlYmxvY2s9MTowOjAgYW5hbHlzZT0weDE6MHgxMTEgbWU9aGV4IHN1Ym1lPTcgcHN5PTEgcHN5X3JkPTEuMDA6MC4wMCBtaXhlZF9yZWY9MSBtZV9yYW5nZT0xNiBjaHJvbWFfbWU9MSB0cmVsbGlzPTEgOHg4ZGN0PTAgY3FtPTAgZGVhZHpvbmU9MjEsMTEgZmFzdF9wc2tpcD0xIGNocm9tYV9xcF9vZmZzZXQ9LTIgdGhyZWFkcz0xIGxvb2thaGVhZF90aHJlYWRzPTEgc2xpY2VkX3RocmVhZHM9MCBucj0wIGRlY2ltYXRlPTEgaW50ZXJsYWNlZD0wIGJsdXJheV9jb21wYXQ9MCBjb25zdHJhaW5lZF9pbnRyYT0wIGJmcmFtZXM9MCB3ZWlnaHRwPTAga2V5aW50PTI1MCBrZXlpbnRfbWluPTUgc2NlbmVjdXQ9NDAgaW50cmFfcmVmcmVzaD0wIHJjX2xvb2thaGVhZD00MCByYz1jcmYgbWJ0cmVlPTEgY3JmPTIzLjAgcWNvbXA9MC42MCBxcG1pbj0wIHFwbWF4PTY5IHFwc3RlcD00IGlwX3JhdGlvPTEuNDAgYXE9MToxLjAwAIAAAAAXZYiEBHyYoAA2IycnJ1111111111114AAAAAGQZo4CPhGAAAAB0GaVAI+EYAAAAAGQZpgEfCMAAAABkGagBHwjAAAAAZBmqAR8IwAAAAGQZrAEfCMAAAABkGa4BHwjAAAAAZBmwAQ8IwAAAAGQZsgP8Iw";
+    var b = document.createElement("source");
+    b.type = "video/webm"; b.src = "data:video/webm;base64,GkXfo59ChoEBQveBAULygQRC84EIQoKEd2VibUKHgQJChYECGFOAZwEAAAAAAALCEU2bdLpNu4tTq4QVSalmU6yBoU27i1OrhBZUrmtTrIHYTbuMU6uEElTDZ1OsggEeTbuMU6uEHFO7a1OsggKs7AEAAAAAAABZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVSalmsirXsYMPQkBNgI1MYXZmNjAuMTYuMTAwV0GNTGF2ZjYwLjE2LjEwMESJiECfQAAAAAAAFlSua8GuAQAAAAAAADjXgQFzxYhj/zTCjpswHJyBACK1nIN1bmSIgQCGhVZfVlA4g4EBI+ODhAvrwgDgibCBQLqBQJqBAhJUw2f8c3OgY8CAZ8iaRaOHRU5DT0RFUkSHjUxhdmY2MC4xNi4xMDBzc9ZjwItjxYhj/zTCjpswHGfIoUWjh0VOQ09ERVJEh5RMYXZjNjAuMzEuMTAyIGxpYnZweGfIoUWjiERVUkFUSU9ORIeTMDA6MDA6MDIuMDAwMDAwMDAwAB9DtnVBB+eBAKOqgQAAgPACAJ0BKkAAQAAARwiFhYiFhIgCAgAGcDxCYAqyIPcwAP7/q1CAo5aBAMgA0QEAARAQABgAGFgv9AAIjoAAo5aBAZAA0QEAARAQABgAGFgv9AAIjoAAo5aBAlgA0QEAARAQABgAGFgv9AAIjoAAo5aBAyAA0QEAARAQABgAGFgv9AAIjoAAo5aBA+gA0QEAARAQABgAGFgv9AAIjoAAo5aBBLAA0QEAARAQABgAGFgv9AAIjoAAo5aBBXgA0QEAARAQFGAAYWC/0AAiOgAAo5aBBkAA0QEAARAQABgAGFgv9AAIjoAAo5aBBwgA0QEAARAQABgAGFgv9AAIjoAAHFO7a5G7j7OBALeK94EB8YIBn/CBAw==";
+    v.appendChild(a); v.appendChild(b);
+    document.body.appendChild(v);
+    keepVideo = v;
+    return v;
+  }
+  function playKeepAwake() {
+    try {
+      var v = ensureVideo();
+      if (v.paused) { var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); }
+    } catch (e) {}
+  }
+  function keepAwake() {
+    if (!wakeLock) requestWake();
+    playKeepAwake();
+  }
+  keepAwake();
+  document.addEventListener("touchend", keepAwake, { passive: true });
+  document.addEventListener("click", keepAwake);
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "visible") keepAwake();
+  });
+  setInterval(keepAwake, 5000);
+  rafId = requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
