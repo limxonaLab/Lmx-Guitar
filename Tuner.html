@@ -2,8 +2,8 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Hassas Akort Aleti</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>LmX Tuner 1.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -65,10 +65,19 @@
     color: var(--text);
     font-family: var(--sans);
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     justify-content: center;
     padding: 20px 14px 32px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-text-size-adjust: 100%;
   }
+  html { touch-action: manipulation; }
+  button { touch-action: manipulation; }
+  input { -webkit-user-select: text; user-select: text; touch-action: manipulation; }
   .app {
     width: 100%;
     max-width: 460px;
@@ -80,6 +89,9 @@
   header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
   h1 { font-family: var(--serif); font-size: 1.15rem; font-weight: 700; margin: 0; letter-spacing: .01em; }
   .hint { color: var(--muted); font-size: .78rem; }
+  .brand { display: flex; align-items: center; gap: 8px; }
+  .brand svg { width: 26px; height: 26px; flex: none; color: var(--brass); }
+  .brand small { font-family: var(--sans); font-weight: 500; font-size: .72rem; color: var(--muted); margin-left: 2px; }
 
   .modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: var(--chip); padding: 4px; border-radius: 12px; }
   .modes button {
@@ -112,9 +124,9 @@
 
   .strings { display: none; margin-top: 16px; }
   .strings.show { display: block; }
-  .string-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .string-row { display: flex; gap: 5px; justify-content: center; flex-wrap: nowrap; }
   .string-row button {
-    flex: 1 1 0; min-width: 56px; border: 1px solid var(--line); background: var(--chip); color: var(--text);
+    flex: 1 1 0; min-width: 0; border: 1px solid var(--line); background: var(--chip); color: var(--text);
     border-radius: 12px; padding: 9px 4px 8px; cursor: pointer; font-family: var(--sans);
     display: flex; flex-direction: column; align-items: center; gap: 1px;
   }
@@ -126,9 +138,9 @@
   .string-row button.done { border-color: var(--good); }
   .strings .hint { text-align: center; margin-top: 8px; }
 
-  .ref { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+  .ref { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
   .ref label { font-size: .9rem; font-weight: 500; }
-  .ref .ctl { display: flex; align-items: center; gap: 6px; }
+  .ref .ctl { display: flex; align-items: center; justify-content: center; flex-wrap: nowrap; gap: 6px; }
   .ref .ctl button, .reset {
     border: 1px solid var(--line); background: var(--chip); color: var(--text); border-radius: 9px;
     min-width: 36px; height: 36px; font: 600 1.05rem var(--sans); cursor: pointer;
@@ -147,13 +159,45 @@
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .start { color: #0b2025; } }
   .start.on { background: var(--chip); color: var(--text); border: 1px solid var(--line); }
   .error { color: var(--bad); font-size: .85rem; margin-top: 10px; text-align: center; min-height: 1em; }
+  @media (max-width: 420px) {
+    body { padding: 8px 8px 12px; }
+    .app { padding: 12px 12px 14px; border-radius: 18px; }
+    header { margin-bottom: 8px; }
+    .modes button { padding: 7px 4px; }
+    .readout { margin-top: 8px; min-height: 84px; }
+    .note { font-size: 3.9rem; }
+    .note sub { font-size: 1.2rem; margin: 2.4rem 0 0 .2rem; }
+    .solfege { font-size: .9rem; }
+    .gauge { max-height: 100px; margin-top: 2px; }
+    .status { font-size: .95rem; min-height: 1.4em; }
+    .stats { margin-top: 8px; gap: 6px; }
+    .stat { padding: 6px 4px; }
+    .stat b { font-size: 1rem; }
+    .stat span { font-size: .68rem; }
+    .strings { margin-top: 10px; }
+    .strings .hint { display: none; }
+    .string-row button { padding: 7px 0 6px; border-radius: 10px; }
+    .string-row button .n { font-size: 1.05rem; }
+    .string-row button .s { font-size: .62rem; }
+    .ref { margin-top: 12px; padding-top: 10px; gap: 6px; }
+    .start { margin-top: 12px; padding: 12px; }
+    .error { margin-top: 6px; }
+  }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
 <body>
 <main class="app">
   <header>
-    <h1>Hassas Akort Aleti</h1>
+    <h1 class="brand">
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M11 4v10a5 5 0 0 0 10 0V4"/>
+        <path d="M16 19v9"/>
+        <path d="M5.5 8.5c-1.3 1.6-1.3 4.4 0 6" opacity=".6"/>
+        <path d="M26.5 8.5c1.3 1.6 1.3 4.4 0 6" opacity=".6"/>
+      </svg>
+      <span>LmX Tuner <small>1.0</small></span>
+    </h1>
     <span class="hint" id="hzHint">A4 = 440 Hz</span>
   </header>
 
@@ -166,7 +210,7 @@
   <section class="readout idle" id="readout" aria-live="polite">
     <div class="note"><span id="noteName">–</span><sub id="octave"></sub></div>
     <div class="solfege" id="solfege">Mikrofonu başlatıp bir nota çal</div>
-    <div class="octave-label" id="octaveLabel"></div>
+    
   </section>
 
   <svg class="gauge" id="gauge" viewBox="0 0 320 188" aria-hidden="true"></svg>
@@ -219,6 +263,24 @@
   var rafId = 0, lastAnalysis = 0, lastHit = 0, muteUntil = 0;
   var history = [];
   var needleDeg = 0, needleTarget = 0;
+  var wakeLock = null;
+  function requestWake() {
+    try {
+      if ("wakeLock" in navigator) {
+        navigator.wakeLock.request("screen").then(function (l) {
+          wakeLock = l;
+          l.addEventListener("release", function () { if (wakeLock === l) wakeLock = null; });
+        }).catch(function () {});
+      }
+    } catch (e) {}
+  }
+  function releaseWake() {
+    var l = wakeLock; wakeLock = null;
+    try { if (l) l.release(); } catch (e) {}
+  }
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "visible" && !wakeLock) requestWake();
+  });
 
   /* ---------- kayıt ---------- */
   function load() {
@@ -368,7 +430,7 @@
     $("noteName").textContent = "–";
     $("octave").textContent = "";
     $("solfege").textContent = state.running ? "Dinleniyor… bir nota çal" : "Mikrofonu başlatıp bir nota çal";
-    $("octaveLabel").textContent = "";
+    
     $("freq").textContent = "–";
     $("target").textContent = "–";
     $("cents").textContent = "–";
@@ -404,8 +466,8 @@
     $("readout").classList.remove("idle");
     $("noteName").textContent = noteLabel(midiTarget);
     $("octave").textContent = octaveOf(midiTarget);
-    $("solfege").textContent = solLabel(midiTarget);
-    $("octaveLabel").textContent = octaveOf(midiTarget) + ". oktav · MIDI " + midiTarget;
+    $("solfege").textContent = solLabel(midiTarget) + " · " + octaveOf(midiTarget) + ". oktav";
+    
     $("freq").textContent = fmtHz(freq);
     $("target").textContent = fmtHz(tf);
     var cr = Math.abs(cents) > 99 ? Math.round(cents) : cents.toFixed(1);
@@ -527,6 +589,16 @@
   $("refMinus").addEventListener("click", function () { setRef(state.ref - 0.5); });
   $("refPlus").addEventListener("click", function () { setRef(state.ref + 0.5); });
   $("refReset").addEventListener("click", function () { setRef(440); });
+  document.addEventListener("gesturestart", function (e) { e.preventDefault(); });
+  // Sayfa açık olduğu sürece ekran uyumasın (mikrofondan bağımsız)
+  requestWake();
+  function wakeOnTouch() {
+    if (!wakeLock) requestWake();
+    document.removeEventListener("touchend", wakeOnTouch);
+    document.removeEventListener("click", wakeOnTouch);
+  }
+  document.addEventListener("touchend", wakeOnTouch);
+  document.addEventListener("click", wakeOnTouch);
   rafId = requestAnimationFrame(loop);
 })();
 </script>
