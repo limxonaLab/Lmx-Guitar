@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">LMX Metronom</title>
+  <rect width="512" height="512" rx="108" fill="#087d68"/>
+  <g fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <svg x="64" y="64" width="384" height="384" viewBox="0 0 32 32">
+      <path d="M12 5h8l6 23H6L12 5Z"/>
+      <path d="m16 23 7-17M11 24h10M15 10h3"/>
+      <circle cx="20.5" cy="11.5" r="2" fill="#ffffff" stroke="none"/>
+    </svg>
+  </g>
+</svg>
