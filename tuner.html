@@ -3,10 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>LmX Tuner 1.1</title>
-<link rel="icon" type="image/svg+xml" href="lmx-tuner-icon.svg">
-<link rel="icon" type="image/x-icon" href="lmx-tuner-icon.ico">
-<link rel="apple-touch-icon" href="lmx-tuner-icon-512.png">
+<title>LmX Tuner v1.1</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -199,7 +196,7 @@
         <path d="M5.5 8.5c-1.3 1.6-1.3 4.4 0 6" opacity=".6"/>
         <path d="M26.5 8.5c1.3 1.6 1.3 4.4 0 6" opacity=".6"/>
       </svg>
-      <span>LmX Tuner <small>1.1</small></span>
+      <span>LmX Tuner <small>v1.1</small></span>
     </h1>
     <span class="hint" id="hzHint">A4 = 440 Hz</span>
   </header>
@@ -326,7 +323,7 @@
     }
     var found = -1;
     for (tau = tauMin; tau <= tauMax; tau++) {
-      if (d[tau] < 0.12) {
+      if (d[tau] < 0.15) {
         while (tau + 1 <= tauMax && d[tau + 1] < d[tau]) tau++;
         found = tau; break;
       }
@@ -516,16 +513,17 @@
       var sum = 0;
       for (var i = 0; i < buf.length; i++) sum += buf[i] * buf[i];
       var rms = Math.sqrt(sum / buf.length);
-      if (rms > GATE_RMS) {
+      var gate = (now - lastHit < 1500) ? 0.0006 : 0.0018;
+      if (rms > gate) {
         var r = detect(buf, audioCtx.sampleRate);
-        if (r && r.clarity > 0.88) {
+        if (r && r.clarity > 0.85) {
           history.push(r.freq);
           if (history.length > 5) history.shift();
           lastHit = now;
           showReading(median(history));
         }
       }
-      if (now - lastHit > 600 && !$("readout").classList.contains("idle")) {
+      if (now - lastHit > 1200 && !$("readout").classList.contains("idle")) {
         history = [];
         showIdle();
       }
@@ -533,7 +531,7 @@
     applyNeedle();
   }
 
-  function start() {
+  function start(silent) {
     $("error").textContent = "";
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       $("error").textContent = "Bu tarayıcı mikrofon erişimini desteklemiyor. Sayfayı HTTPS üzerinden açtığından emin ol.";
@@ -550,11 +548,13 @@
       buf = new Float32Array(analyser.fftSize);
       source = ctx.createMediaStreamSource(stream);
       source.connect(analyser);
+      stream.getAudioTracks().forEach(function (t) { t.addEventListener("ended", restartMic); });
       state.running = true;
+      try { localStorage.setItem("tuner.auto", "1"); } catch (e) {}
       var b = $("start"); b.textContent = "Durdur"; b.classList.add("on");
       showIdle();
     }).catch(function () {
-      $("error").textContent = "Mikrofona erişilemedi. İzin vermen gerekiyor; sayfa bir çerçeve içinde açıldıysa yeni sekmede açmayı dene.";
+      $("error").textContent = silent ? "Mikrofonu başlatmak için düğmeye bas." : "Mikrofona erişilemedi. İzin vermen gerekiyor; sayfa bir çerçeve içinde açıldıysa yeni sekmede açmayı dene.";
     });
   }
   function stop() {
@@ -565,6 +565,24 @@
     var b = $("start"); b.textContent = "Mikrofonu başlat"; b.classList.remove("on");
     showIdle();
   }
+
+  /* ---------- mikrofon izleme: kopma / askıya alma durumunda otomatik toparla ---------- */
+  var mutedChecks = 0;
+  function restartMic() {
+    if (!state.running) return;
+    stop();
+    try { localStorage.setItem("tuner.auto", "1"); } catch (e) {}
+    setTimeout(function () { start(true); }, 400);
+  }
+  setInterval(function () {
+    if (!state.running) { mutedChecks = 0; return; }
+    var t = stream && stream.getAudioTracks()[0];
+    if (!t || t.readyState === "ended") { restartMic(); return; }
+    if (audioCtx && audioCtx.state !== "running" && now0() > muteUntil) { try { audioCtx.resume(); } catch (e) {} }
+    if (t.muted) { mutedChecks++; if (mutedChecks >= 3) { mutedChecks = 0; restartMic(); } }
+    else mutedChecks = 0;
+  }, 2000);
+  function now0() { return performance.now(); }
 
   /* ---------- referans frekans ---------- */
   function setRef(v) {
@@ -587,7 +605,20 @@
     b.addEventListener("click", function () { setMode(b.dataset.mode); });
   });
   setMode(state.mode);
-  $("start").addEventListener("click", function () { state.running ? stop() : start(); });
+  $("start").addEventListener("click", function () {
+    if (state.running) { stop(); try { localStorage.setItem("tuner.auto", "0"); } catch (e) {} }
+    else start();
+  });
+  // Daha önce başlatıldıysa açılışta mikrofonu kendiliğinden başlat
+  try {
+    if (localStorage.getItem("tuner.auto") === "1") {
+      if (navigator.permissions && navigator.permissions.query) {
+        navigator.permissions.query({ name: "microphone" }).then(function (p) {
+          if (p.state !== "denied") start(true);
+        }).catch(function () { start(true); });
+      } else { start(true); }
+    }
+  } catch (e) {}
   $("ref").addEventListener("change", function (e) { setRef(e.target.value); });
   $("refMinus").addEventListener("click", function () { setRef(state.ref - 0.5); });
   $("refPlus").addEventListener("click", function () { setRef(state.ref + 0.5); });
@@ -621,6 +652,7 @@
     } catch (e) {}
   }
   function keepAwake() {
+    if (audioCtx && audioCtx.state === "suspended") { try { audioCtx.resume(); } catch (e) {} }
     if (!wakeLock) requestWake();
     playKeepAwake();
   }
