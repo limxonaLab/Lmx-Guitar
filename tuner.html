@@ -72,11 +72,11 @@
   .modes button[aria-pressed="true"] { background: var(--chip-on); color: var(--chip-on-text); }
   button:focus-visible, input:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
 
-  .readout { text-align: center; margin: 22px 0 0; min-height: 138px; transition: opacity .25s; }
-  .readout.idle { opacity: .38; }
-  .note { font-family: var(--serif); font-weight: 700; font-size: 5.6rem; line-height: 1; letter-spacing: -.02em; display: inline-flex; align-items: flex-start; justify-content: center; }
-  .note sub { font-family: var(--sans); font-weight: 600; font-size: 1.7rem; vertical-align: baseline; margin: 3.6rem 0 0 .25rem; color: var(--brass); letter-spacing: 0; }
-  .solfege { color: var(--muted); font-size: .95rem; margin-top: 2px; min-height: 1.4em; }
+  #readout { transition: opacity .25s; }
+  #readout.idle { opacity: .38; }
+  .gauge text.gn { fill: var(--text); font-family: var(--serif); font-weight: 700; font-size: 58px; letter-spacing: -.02em; }
+  .gauge #readout .go { fill: var(--brass); font-family: var(--sans); font-weight: 600; font-size: 22px; letter-spacing: 0; }
+  .gauge text.gs { font-size: 11px; }
 
   .views { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: var(--chip); padding: 4px; border-radius: 12px; margin-top: 8px; }
   .views button {
@@ -85,10 +85,8 @@
   }
   .views button[aria-pressed="true"] { background: var(--chip-on); color: var(--chip-on-text); }
   /* Sahne: iki görünüm aynı hücreyi paylaşır, yükseklik görünüm değişince sabit kalır */
-  .stage { display: grid; grid-template-columns: minmax(0, 1fr); }
-  .stage > .readout { grid-row: 1; grid-column: 1; }
-  #barView, #rollView { grid-row: 2; grid-column: 1; }
-  #rollView { align-self: center; }
+  .stage { display: grid; grid-template-columns: minmax(0, 1fr); margin-top: 28px; }
+  #barView, #rollView { grid-row: 1; grid-column: 1; align-self: center; }
   .app[data-view="bar"] #rollView { visibility: hidden; pointer-events: none; }
   .app[data-view="roll"] #barView { visibility: hidden; pointer-events: none; }
 
@@ -150,15 +148,10 @@
     .app { padding: 12px 12px 14px; border-radius: 18px; }
     header { margin-bottom: 8px; }
     .modes button { padding: 7px 4px; }
-    .readout { margin-top: 6px; min-height: 76px; }
-    .note { font-size: 3.6rem; }
-    .note sub { font-size: 1.15rem; margin: 2.3rem 0 0 .2rem; }
-    .solfege { font-size: .88rem; }
     .views { margin-top: 6px; }
     .views button { padding: 7px 4px; }
-    .app[data-view="roll"] .readout { visibility: hidden; }
-    .app[data-view="roll"] #rollView { grid-row: 1 / 3; }
-    .gauge { max-height: 92px; margin-top: 2px; }
+    .gauge { max-height: none; margin-top: 0; }
+    .stage { margin-top: 24px; }
     #rollSvg { margin: 0; max-height: 100%; }
     .status { font-size: .95rem; min-height: 1.4em; margin-top: 4px; }
     .stats { margin-top: 8px; gap: 6px; }
@@ -205,11 +198,7 @@
   </div>
 
   <div class="stage">
-    <section class="readout idle" id="readout" aria-live="polite">
-      <div class="note"><span id="noteName">–</span><sub id="octave"></sub></div>
-      <div class="solfege" id="solfege">Mikrofonu başlatıp bir nota çal</div>
-    </section>
-    <div id="barView"><svg class="gauge" id="gauge" viewBox="0 0 320 188" aria-hidden="true"></svg></div>
+    <div id="barView"><svg class="gauge" id="gauge" viewBox="0 26 320 162" role="img" aria-label="Çubuk akort göstergesi"></svg></div>
     <div id="rollView"><svg id="rollSvg" class="idle" viewBox="0 0 340 156" role="img" aria-label="Kayan notalar akort göstergesi"></svg></div>
   </div>
   <div class="status" id="status"></div>
@@ -371,6 +360,7 @@
       h += '<text x="' + p[0].toFixed(1) + '" y="' + (p[1] + 4).toFixed(1) + '" text-anchor="middle">' + (c > 0 ? "+" + c : String(c)) + '</text>';
     });
     h += '<text x="14" y="184" text-anchor="start">♭ pes</text><text x="306" y="184" text-anchor="end">tiz ♯</text>';
+    h += '<g id="readout" class="idle" aria-live="polite"><text class="gn" x="160" y="134" text-anchor="middle"><tspan id="noteName">–</tspan><tspan id="octave" class="go" dx="3"></tspan></text><text id="solfege" class="gs" x="160" y="154" text-anchor="middle">Mikrofonu başlatıp bir nota çal</text></g>';
     h += '<g id="needleG"><line class="needle" id="needle" x1="' + CX + '" y1="' + CY + '" x2="' + CX + '" y2="' + (CY - R + 6) +
          '" stroke="var(--brass)" stroke-width="3.4" stroke-linecap="round"/></g>';
     h += '<circle cx="' + CX + '" cy="' + CY + '" r="9" fill="var(--brass)"/><circle cx="' + CX + '" cy="' + CY + '" r="3.5" fill="var(--card)"/>';
@@ -419,7 +409,7 @@
     // alt: kayan nota şeridi
     h += '<g class="dyn" id="rn-pool">';
     for (i = 0; i < RPOOL; i++) {
-      h += '<text class="rl" text-anchor="middle" dy=".35em" font-size="40" font-weight="700" fill="' + RINK + '" font-family="Fraunces, Georgia, serif" opacity="0">–</text>';
+      h += '<text class="rl" text-anchor="middle" dy=".35em" font-size="40" font-weight="700" fill="' + RINK + '" font-family="Fraunces, Georgia, serif" opacity="0"><tspan class="rn">–</tspan><tspan class="ro" font-size="15" font-weight="600" dx="1" dy="6" fill="#8a5a14"></tspan></text>';
     }
     h += '</g>';
     h += '<rect x="9" y="104" width="322" height="14" fill="url(#rt)" id="rtk"/>';
@@ -436,7 +426,7 @@
     h += '<rect x="9.5" y="9.5" width="321" height="137" rx="14.5" fill="none" stroke="#000" stroke-opacity=".4" stroke-width="1.5"/>';
     $("rollSvg").innerHTML = h;
     var texts = $("rn-pool").querySelectorAll("text");
-    for (i = 0; i < texts.length; i++) RO.pool.push({ el: texts[i], m: null });
+    for (i = 0; i < texts.length; i++) RO.pool.push({ el: texts[i], m: null, t1: texts[i].querySelector(".rn"), t2: texts[i].querySelector(".ro") });
     RO.marker = $("rm"); RO.zone = $("rz"); RO.tick = $("rt");
     RO.n1 = $("rn1"); RO.n2 = $("rn2"); RO.c = $("rc");
   }
@@ -448,7 +438,7 @@
     var base = Math.floor(viewPos) - 4;
     for (var j = 0; j < RPOOL; j++) {
       var m = base + j, p = RO.pool[j];
-      if (p.m !== m) { p.m = m; p.el.textContent = noteLabel(m); }
+      if (p.m !== m) { p.m = m; p.t1.textContent = noteLabel(m); p.t2.textContent = octaveOf(m); }
       var d = m - viewPos, ad = Math.abs(d);
       var far = Math.min(1, ad / 1.8);
       var op = ad > 2.0 ? 0 : 1 - 0.7 * far;
@@ -534,7 +524,7 @@
     $("solfege").textContent = idleText();
     $("freq").textContent = "–"; $("target").textContent = "–"; $("cents").textContent = "–";
     var s = $("status"); s.textContent = ""; s.className = "status";
-    if (RO.n1) { RO.n1.textContent = "–"; RO.n2.textContent = ""; RO.c.textContent = "–"; }
+    if (RO.n1) { RO.n1.textContent = "–"; RO.n2.textContent = idleText(); RO.c.textContent = ""; }
     refreshStringStyles(null);
   }
   function showReading(freq) {
@@ -591,7 +581,7 @@
   }
 
   /* ---------- ses ---------- */
-  function onCtxState() { if (!hasReading) { $("solfege").textContent = idleText(); } }
+  function onCtxState() { if (!hasReading) { $("solfege").textContent = idleText(); if (RO.n2) RO.n2.textContent = idleText(); } }
   function getCtx() {
     if (!audioCtx || audioCtx.state === "closed") {
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
