@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>LmX Tuner v1.1</title>
+<title>LmX Tuner v1.2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -29,67 +29,38 @@
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #0b2025;
-      --card: #12313a;
-      --text: #e9f1ed;
-      --muted: #8fa9ab;
-      --line: #25474f;
-      --brass: #e2b155;
-      --good: #6fe3b0;
-      --warn: #e2b155;
-      --bad: #ff7a62;
-      --chip: #1a3d46;
-      --chip-on: #e9f1ed;
-      --chip-on-text: #0b2025;
+      --bg: #0b2025; --card: #12313a; --text: #e9f1ed; --muted: #8fa9ab; --line: #25474f;
+      --brass: #e2b155; --good: #6fe3b0; --warn: #e2b155; --bad: #ff7a62;
+      --chip: #1a3d46; --chip-on: #e9f1ed; --chip-on-text: #0b2025;
     }
   }
   :root[data-theme="dark"] {
-    --bg: #0b2025;
-    --card: #12313a;
-    --text: #e9f1ed;
-    --muted: #8fa9ab;
-    --line: #25474f;
-    --brass: #e2b155;
-    --good: #6fe3b0;
-    --warn: #e2b155;
-    --bad: #ff7a62;
-    --chip: #1a3d46;
-    --chip-on: #e9f1ed;
-    --chip-on-text: #0b2025;
+    --bg: #0b2025; --card: #12313a; --text: #e9f1ed; --muted: #8fa9ab; --line: #25474f;
+    --brass: #e2b155; --good: #6fe3b0; --warn: #e2b155; --bad: #ff7a62;
+    --chip: #1a3d46; --chip-on: #e9f1ed; --chip-on-text: #0b2025;
   }
-  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); touch-action: manipulation; }
   * { box-sizing: border-box; }
   body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    min-height: 100vh;
-    min-height: 100dvh;
-    display: flex;
-    justify-content: center;
-    padding: 20px 14px 32px;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-user-select: none;
-    user-select: none;
-    -webkit-text-size-adjust: 100%;
+    margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans);
+    min-height: 100vh; min-height: 100dvh;
+    display: flex; justify-content: center; padding: 20px 14px 32px;
+    touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none; user-select: none; -webkit-text-size-adjust: 100%;
   }
-  html { touch-action: manipulation; }
   button { touch-action: manipulation; }
   input { -webkit-user-select: text; user-select: text; touch-action: manipulation; }
   .app {
-    width: 100%;
-    max-width: 460px;
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 22px;
-    padding: 18px 18px 22px;
+    width: 100%; max-width: 460px; background: var(--card); border: 1px solid var(--line);
+    border-radius: 22px; padding: 18px 18px 22px;
   }
   header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
   h1 { font-family: var(--serif); font-size: 1.15rem; font-weight: 700; margin: 0; letter-spacing: .01em; }
   .hint { color: var(--muted); font-size: .78rem; }
-  .brand { display: flex; align-items: center; gap: 8px; }
+  .brand {
+    display: flex; align-items: center; gap: 8px; background: none; border: 0; padding: 0;
+    color: inherit; font: inherit; letter-spacing: inherit; cursor: pointer; text-align: left;
+  }
   .brand svg { width: 26px; height: 26px; flex: none; color: var(--brass); }
   .brand small { font-family: var(--sans); font-weight: 500; font-size: .72rem; color: var(--muted); margin-left: 2px; }
 
@@ -106,13 +77,29 @@
   .note { font-family: var(--serif); font-weight: 700; font-size: 5.6rem; line-height: 1; letter-spacing: -.02em; display: inline-flex; align-items: flex-start; justify-content: center; }
   .note sub { font-family: var(--sans); font-weight: 600; font-size: 1.7rem; vertical-align: baseline; margin: 3.6rem 0 0 .25rem; color: var(--brass); letter-spacing: 0; }
   .solfege { color: var(--muted); font-size: .95rem; margin-top: 2px; min-height: 1.4em; }
-  .octave-label { color: var(--muted); font-size: .78rem; margin-top: 2px; min-height: 1.2em; }
+
+  .views { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: var(--chip); padding: 4px; border-radius: 12px; margin-top: 8px; }
+  .views button {
+    border: 0; background: transparent; color: var(--muted); font: 500 .9rem var(--sans);
+    padding: 9px 4px; border-radius: 9px; cursor: pointer;
+  }
+  .views button[aria-pressed="true"] { background: var(--chip-on); color: var(--chip-on-text); }
+  /* Sahne: iki görünüm aynı hücreyi paylaşır, yükseklik görünüm değişince sabit kalır */
+  .stage { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .stage > .readout { grid-row: 1; grid-column: 1; }
+  #barView, #rollView { grid-row: 2; grid-column: 1; }
+  #rollView { align-self: center; }
+  .app[data-view="bar"] #rollView { visibility: hidden; pointer-events: none; }
+  .app[data-view="roll"] #barView { visibility: hidden; pointer-events: none; }
 
   .gauge { width: 100%; height: auto; display: block; margin-top: 4px; }
   .gauge text { font-family: var(--sans); fill: var(--muted); font-size: 11px; }
   .needle { transition: stroke .2s; }
+  #rollSvg { width: 100%; height: auto; display: block; margin: 0; filter: drop-shadow(0 3px 5px rgba(0,0,0,.28)); }
+  #rollSvg .dyn { transition: opacity .25s; }
+  #rollSvg.idle .dyn { opacity: .45; }
 
-  .status { text-align: center; font-weight: 600; font-size: 1.02rem; min-height: 1.6em; margin-top: -2px; }
+  .status { text-align: center; font-weight: 600; font-size: 1.02rem; min-height: 1.6em; margin-top: 6px; }
   .status.good { color: var(--good); }
   .status.warn { color: var(--warn); }
   .status.bad { color: var(--bad); }
@@ -151,52 +138,57 @@
   }
   .reset { font-size: .78rem; font-weight: 500; padding: 0 10px; }
 
-  .start {
-    width: 100%; margin-top: 18px; border: 0; border-radius: 14px; padding: 15px; cursor: pointer;
-    font: 600 1rem var(--sans); background: var(--brass); color: #fff;
-  }
+  .start { width: 100%; margin-top: 18px; border: 0; border-radius: 14px; padding: 15px; cursor: pointer; font: 600 1rem var(--sans); background: var(--brass); color: #fff; }
   :root[data-theme="dark"] .start { color: #0b2025; }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .start { color: #0b2025; } }
   .start.on { background: var(--chip); color: var(--text); border: 1px solid var(--line); }
   .error { color: var(--bad); font-size: .85rem; margin-top: 10px; text-align: center; min-height: 1em; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
   @media (max-width: 420px) {
     body { padding: 8px 8px 12px; }
     .app { padding: 12px 12px 14px; border-radius: 18px; }
     header { margin-bottom: 8px; }
     .modes button { padding: 7px 4px; }
-    .readout { margin-top: 8px; min-height: 84px; }
-    .note { font-size: 3.9rem; }
-    .note sub { font-size: 1.2rem; margin: 2.4rem 0 0 .2rem; }
-    .solfege { font-size: .9rem; }
-    .gauge { max-height: 100px; margin-top: 2px; }
-    .status { font-size: .95rem; min-height: 1.4em; }
+    .readout { margin-top: 6px; min-height: 76px; }
+    .note { font-size: 3.6rem; }
+    .note sub { font-size: 1.15rem; margin: 2.3rem 0 0 .2rem; }
+    .solfege { font-size: .88rem; }
+    .views { margin-top: 6px; }
+    .views button { padding: 7px 4px; }
+    .app[data-view="roll"] .readout { visibility: hidden; }
+    .app[data-view="roll"] #rollView { grid-row: 1 / 3; }
+    .gauge { max-height: 92px; margin-top: 2px; }
+    #rollSvg { margin: 0; max-height: 100%; }
+    .status { font-size: .95rem; min-height: 1.4em; margin-top: 4px; }
     .stats { margin-top: 8px; gap: 6px; }
     .stat { padding: 6px 4px; }
     .stat b { font-size: 1rem; }
     .stat span { font-size: .68rem; }
-    .strings { margin-top: 10px; }
+    .strings { margin-top: 8px; }
     .strings .hint { display: none; }
-    .string-row button { padding: 7px 0 6px; border-radius: 10px; }
+    .string-row button { padding: 6px 0 5px; border-radius: 10px; }
     .string-row button .n { font-size: 1.05rem; }
     .string-row button .s { font-size: .62rem; }
-    .ref { margin-top: 12px; padding-top: 10px; gap: 6px; }
-    .start { margin-top: 12px; padding: 12px; }
-    .error { margin-top: 6px; }
+    .ref { margin-top: 10px; padding-top: 8px; gap: 6px; }
+    .start { margin-top: 10px; padding: 12px; }
+    .error { margin-top: 5px; }
   }
-  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
 <body>
-<main class="app">
+<main class="app" id="app" data-view="roll">
   <header>
-    <h1 class="brand">
-      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M11 4v10a5 5 0 0 0 10 0V4"/>
-        <path d="M16 19v9"/>
-        <path d="M5.5 8.5c-1.3 1.6-1.3 4.4 0 6" opacity=".6"/>
-        <path d="M26.5 8.5c1.3 1.6 1.3 4.4 0 6" opacity=".6"/>
-      </svg>
-      <span>LmX Tuner <small>v1.1</small></span>
+    <h1>
+      <button class="brand" id="brand" type="button" aria-label="Sayfayı yenile">
+        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M11 4v10a5 5 0 0 0 10 0V4"/>
+          <path d="M16 19v9"/>
+          <path d="M5.5 8.5c-1.3 1.6-1.3 4.4 0 6" opacity=".6"/>
+          <path d="M26.5 8.5c1.3 1.6 1.3 4.4 0 6" opacity=".6"/>
+        </svg>
+        <span>LmX Tuner <small>v1.2</small></span>
+      </button>
     </h1>
     <span class="hint" id="hzHint">A4 = 440 Hz</span>
   </header>
@@ -207,13 +199,19 @@
     <button data-mode="ukulele" aria-pressed="false">Ukulele</button>
   </div>
 
-  <section class="readout idle" id="readout" aria-live="polite">
-    <div class="note"><span id="noteName">–</span><sub id="octave"></sub></div>
-    <div class="solfege" id="solfege">Mikrofonu başlatıp bir nota çal</div>
-    
-  </section>
+  <div class="views" role="group" aria-label="Görünüm">
+    <button type="button" data-view="bar" aria-pressed="false">Çubuk</button>
+    <button type="button" data-view="roll" aria-pressed="true">Şerit</button>
+  </div>
 
-  <svg class="gauge" id="gauge" viewBox="0 0 320 188" aria-hidden="true"></svg>
+  <div class="stage">
+    <section class="readout idle" id="readout" aria-live="polite">
+      <div class="note"><span id="noteName">–</span><sub id="octave"></sub></div>
+      <div class="solfege" id="solfege">Mikrofonu başlatıp bir nota çal</div>
+    </section>
+    <div id="barView"><svg class="gauge" id="gauge" viewBox="0 0 320 188" aria-hidden="true"></svg></div>
+    <div id="rollView"><svg id="rollSvg" class="idle" viewBox="0 0 340 156" role="img" aria-label="Kayan notalar akort göstergesi"></svg></div>
+  </div>
   <div class="status" id="status"></div>
 
   <div class="stats">
@@ -248,39 +246,22 @@
   /* ---------- sabitler ---------- */
   var NOTES = ["C","C♯","D","D♯","E","F","F♯","G","G♯","A","A♯","B"];
   var SOL   = ["Do","Do♯","Re","Re♯","Mi","Fa","Fa♯","Sol","Sol♯","La","La♯","Si"];
-  // Standart akortlar (sabit)
   var INSTRUMENTS = {
     guitar:  [ {midi:40,s:"6. tel"}, {midi:45,s:"5. tel"}, {midi:50,s:"4. tel"}, {midi:55,s:"3. tel"}, {midi:59,s:"2. tel"}, {midi:64,s:"1. tel"} ],
     ukulele: [ {midi:67,s:"4. tel"}, {midi:60,s:"3. tel"}, {midi:64,s:"2. tel"}, {midi:69,s:"1. tel"} ]
   };
-  var IN_TUNE = 5;           // ± cent
-  var GATE_RMS = 0.006;      // sessizlik eşiği
+  var IN_TUNE = 5;            // ± cent: "Doğru"
+  var YIN_WINDOW = 3072;      // örnek: daha uzun pencere = daha hassas ölçüm
+  var FFT_SIZE = 8192;
 
   /* ---------- durum ---------- */
-  var state = { mode: "chromatic", ref: 440, locked: null, running: false };
+  var state = { mode: "chromatic", ref: 440, locked: null, running: false, starting: false, want: false, view: "roll", autoIdx: null };
   var $ = function (id) { return document.getElementById(id); };
   var audioCtx = null, analyser = null, stream = null, source = null, buf = null;
-  var rafId = 0, lastAnalysis = 0, lastHit = 0, muteUntil = 0;
-  var history = [];
-  var needleDeg = 0, needleTarget = 0;
-  var wakeLock = null;
-  function requestWake() {
-    try {
-      if ("wakeLock" in navigator) {
-        navigator.wakeLock.request("screen").then(function (l) {
-          wakeLock = l;
-          l.addEventListener("release", function () { if (wakeLock === l) wakeLock = null; });
-        }).catch(function () {});
-      }
-    } catch (e) {}
-  }
-  function releaseWake() {
-    var l = wakeLock; wakeLock = null;
-    try { if (l) l.release(); } catch (e) {}
-  }
-  document.addEventListener("visibilitychange", function () {
-    if (document.visibilityState === "visible" && !wakeLock) requestWake();
-  });
+  var rafId = 0, lastAnalysis = 0, lastHit = 0, muteUntil = 0, lastFrame = 0, zeroFrames = 0, hasReading = false;
+  var hist = [], smoothLf = null, pendLf = null, pendN = 0;
+  // Görünüm durumu (iki görünüm de bunlardan beslenir)
+  var viewPos = 69, viewTargetPos = 69, viewMidi = 69, snapNext = true, statusCls = "";
 
   /* ---------- kayıt ---------- */
   function load() {
@@ -289,14 +270,19 @@
       if (r >= 400 && r <= 480) state.ref = r;
       var m = localStorage.getItem("tuner.mode");
       if (m && (m === "chromatic" || INSTRUMENTS[m])) state.mode = m;
+      var v = localStorage.getItem("tuner.view2");
+      if (v === "bar" || v === "roll") state.view = v;
+      state.want = localStorage.getItem("tuner.auto") === "1";
     } catch (e) {}
   }
   function save() {
     try {
       localStorage.setItem("tuner.ref", String(state.ref));
       localStorage.setItem("tuner.mode", state.mode);
+      localStorage.setItem("tuner.view2", state.view);
     } catch (e) {}
   }
+  function saveWant(v) { try { localStorage.setItem("tuner.auto", v ? "1" : "0"); } catch (e) {} }
 
   /* ---------- müzik matematiği ---------- */
   function midiToFreq(m) { return state.ref * Math.pow(2, (m - 69) / 12); }
@@ -305,8 +291,9 @@
   function solLabel(m)  { return SOL[((m % 12) + 12) % 12]; }
   function octaveOf(m)  { return Math.floor(m / 12) - 1; }
   function fmtHz(f) { return f.toFixed(f < 100 ? 2 : 1); }
+  function median(arr) { var a = arr.slice().sort(function (p, q) { return p - q; }); return a[a.length >> 1]; }
 
-  /* ---------- YIN perde algılama ---------- */
+  /* ---------- YIN perde algılama (tek analiz sistemi) ---------- */
   var yinBuf = null;
   function detect(data, sr) {
     var W = data.length >> 1;
@@ -338,22 +325,35 @@
     return { freq: sr / better, clarity: 1 - d[found] };
   }
 
-  function median(arr) {
-    var a = arr.slice().sort(function (p, q) { return p - q; });
-    return a[a.length >> 1];
+  /* ---------- ölçüm yumuşatma: medyan + üstel filtre + sıçrama koruması ---------- */
+  function resetTracking() { hist = []; smoothLf = null; pendLf = null; pendN = 0; state.autoIdx = null; }
+  function track(freq) {
+    var lf = Math.log2(freq);
+    if (smoothLf !== null) {
+      var dc = Math.abs(lf - smoothLf) * 1200;
+      if (dc > 80) {                       // ani büyük sıçrama: 3 ardışık tutarlı ölçüm gelmeden kabul etme
+        if (pendLf !== null && Math.abs(lf - pendLf) * 1200 < 40) {
+          pendN++;
+          if (pendN >= 3) { smoothLf = lf; hist = [lf]; pendLf = null; pendN = 0; }
+        } else { pendLf = lf; pendN = 1; }
+        return Math.pow(2, smoothLf);
+      }
+      pendLf = null; pendN = 0;
+    }
+    hist.push(lf);
+    if (hist.length > 7) hist.shift();
+    var med = median(hist);
+    smoothLf = smoothLf === null ? med : smoothLf + (med - smoothLf) * 0.35;
+    return Math.pow(2, smoothLf);
   }
 
-  /* ---------- ibre (SVG) ---------- */
-  var CX = 160, CY = 172, R = 138, SPAN = 62; // ±62°
+  /* ---------- Bar Meter (SVG) ---------- */
+  var CX = 160, CY = 172, R = 138, SPAN = 62;
   function degOf(c) { return (Math.max(-50, Math.min(50, c)) / 50) * SPAN; }
-  function pt(deg, r) {
-    var a = deg * Math.PI / 180;
-    return [CX + r * Math.sin(a), CY - r * Math.cos(a)];
-  }
+  function pt(deg, r) { var a = deg * Math.PI / 180; return [CX + r * Math.sin(a), CY - r * Math.cos(a)]; }
   function arcPath(c1, c2, r) {
     var p1 = pt(degOf(c1), r), p2 = pt(degOf(c2), r);
-    var large = Math.abs(degOf(c2) - degOf(c1)) > 180 ? 1 : 0;
-    return "M" + p1[0].toFixed(2) + " " + p1[1].toFixed(2) + " A" + r + " " + r + " 0 " + large + " 1 " + p2[0].toFixed(2) + " " + p2[1].toFixed(2);
+    return "M" + p1[0].toFixed(2) + " " + p1[1].toFixed(2) + " A" + r + " " + r + " 0 0 1 " + p2[0].toFixed(2) + " " + p2[1].toFixed(2);
   }
   function buildGauge() {
     var g = $("gauge"), h = "";
@@ -368,8 +368,7 @@
     }
     [-50, -25, 0, 25, 50].forEach(function (c) {
       var p = pt(degOf(c), R - 42);
-      var t = c > 0 ? "+" + c : String(c);
-      h += '<text x="' + p[0].toFixed(1) + '" y="' + (p[1] + 4).toFixed(1) + '" text-anchor="middle">' + t + '</text>';
+      h += '<text x="' + p[0].toFixed(1) + '" y="' + (p[1] + 4).toFixed(1) + '" text-anchor="middle">' + (c > 0 ? "+" + c : String(c)) + '</text>';
     });
     h += '<text x="14" y="184" text-anchor="start">♭ pes</text><text x="306" y="184" text-anchor="end">tiz ♯</text>';
     h += '<g id="needleG"><line class="needle" id="needle" x1="' + CX + '" y1="' + CY + '" x2="' + CX + '" y2="' + (CY - R + 6) +
@@ -377,40 +376,135 @@
     h += '<circle cx="' + CX + '" cy="' + CY + '" r="9" fill="var(--brass)"/><circle cx="' + CX + '" cy="' + CY + '" r="3.5" fill="var(--card)"/>';
     g.innerHTML = h;
   }
-  function setNeedleColor(cls) {
-    var n = $("needle");
-    n.setAttribute("stroke", cls === "good" ? "var(--good)" : cls === "bad" ? "var(--bad)" : cls === "warn" ? "var(--warn)" : "var(--brass)");
+  var colorOf = function (cls) { return cls === "good" ? "var(--good)" : cls === "bad" ? "var(--bad)" : cls === "warn" ? "var(--warn)" : "var(--brass)"; };
+
+  /* ---------- Rolling Notes (vintage kayan nota göstergesi) ---------- */
+  var RCX = 170, RKR = 3.0, RSP = 108, RPOOL = 9;
+  var RINK = "#2b2118";
+  var RO = { pool: [] };
+  function buildRoll() {
+    var i, k, x, h = "";
+    var ticks = '<line x1="1" y1="0" x2="1" y2="12" stroke="' + RINK + '" stroke-width="2"/>';
+    for (k = 1; k <= 9; k++) {
+      x = 1 + RSP * k / 10;
+      ticks += '<line x1="' + x.toFixed(2) + '" y1="0" x2="' + x.toFixed(2) + '" y2="' + (k === 5 ? 8 : 5) + '" stroke="' + RINK + '" stroke-width="1" opacity=".75"/>';
+    }
+    h += '<defs>' +
+      '<linearGradient id="rb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5d452e"/><stop offset="1" stop-color="#1e1610"/></linearGradient>' +
+      '<linearGradient id="rp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4e9ca"/><stop offset="1" stop-color="#d5c18c"/></linearGradient>' +
+      '<linearGradient id="rg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset=".4" stop-color="#fff" stop-opacity=".07"/><stop offset=".41" stop-color="#fff" stop-opacity="0"/></linearGradient>' +
+      '<linearGradient id="rv" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a1b0c" stop-opacity=".6"/><stop offset=".22" stop-color="#2a1b0c" stop-opacity="0"/><stop offset=".78" stop-color="#2a1b0c" stop-opacity="0"/><stop offset="1" stop-color="#2a1b0c" stop-opacity=".6"/></linearGradient>' +
+      '<clipPath id="rw"><rect x="9" y="9" width="322" height="138" rx="15"/></clipPath>' +
+      '<pattern id="rt" patternUnits="userSpaceOnUse" x="0" y="104" width="' + RSP + '" height="14">' + ticks + '</pattern>' +
+      '</defs>';
+    h += '<rect x="1" y="1" width="338" height="154" rx="22" fill="url(#rb)" stroke="#b8893a" stroke-width="1.4"/>';
+    h += '<rect x="4" y="4" width="332" height="148" rx="19" fill="none" stroke="#ffffff" stroke-opacity=".12"/>';
+    h += '<rect x="9" y="9" width="322" height="138" rx="15" fill="url(#rp)"/>';
+    h += '<g clip-path="url(#rw)">';
+    // üst: akort hassasiyet cetveli (-50…+50 cent)
+    h += '<rect id="rz" x="' + (RCX - 10 * RKR) + '" y="18" width="' + (20 * RKR) + '" height="36" fill="#2f9e63" opacity=".3"/>';
+    for (var c = -50; c <= 50; c += 5) {
+      x = RCX + c * RKR;
+      var big = c % 25 === 0, mid = c % 10 === 0;
+      h += '<line x1="' + x + '" y1="22" x2="' + x + '" y2="' + (22 + (big ? 15 : mid ? 11 : 7)) + '" stroke="' + RINK + '" stroke-width="' + (big ? 1.8 : 1) + '"/>';
+    }
+    [-50, -25, 0, 25, 50].forEach(function (c) {
+      h += '<text x="' + (RCX + c * RKR) + '" y="51" text-anchor="middle" font-size="9" font-weight="600" fill="' + RINK + '" font-family="Instrument Sans, system-ui, sans-serif">' + (c > 0 ? "+" + c : c) + '</text>';
+    });
+    h += '<text x="17" y="38" font-size="15" fill="' + RINK + '" font-family="Georgia, serif">♭</text>';
+    h += '<text x="323" y="38" text-anchor="end" font-size="15" fill="' + RINK + '" font-family="Georgia, serif">♯</text>';
+    h += '<line x1="9" y1="56" x2="331" y2="56" stroke="' + RINK + '" stroke-opacity=".25"/>';
+    // gösterge imleci (üst cetvelde)
+    h += '<polygon id="rm" class="dyn" points="0,0 0,0 0,0" fill="#8a5a14"/>';
+    // alt: kayan nota şeridi
+    h += '<g class="dyn" id="rn-pool">';
+    for (i = 0; i < RPOOL; i++) {
+      h += '<text class="rl" text-anchor="middle" dy=".35em" font-size="40" font-weight="700" fill="' + RINK + '" font-family="Fraunces, Georgia, serif" opacity="0">–</text>';
+    }
+    h += '</g>';
+    h += '<rect x="9" y="104" width="322" height="14" fill="url(#rt)" id="rtk"/>';
+    // alt bilgi bandı
+    h += '<rect x="9" y="122" width="322" height="26" fill="#2a2016"/>';
+    h += '<line x1="9" y1="122.5" x2="331" y2="122.5" stroke="#b8893a" stroke-opacity=".7"/>';
+    h += '<text x="20" y="140" font-family="Fraunces, Georgia, serif" font-weight="700" font-size="18" fill="#f4e9ca"><tspan id="rn1">–</tspan><tspan id="rn2" font-family="Instrument Sans, system-ui, sans-serif" font-weight="500" font-size="11" fill="#c9b684" dx="7"></tspan></text>';
+    h += '<text id="rc" x="322" y="139" text-anchor="end" font-family="Instrument Sans, system-ui, sans-serif" font-weight="600" font-size="11.5" fill="#f4e9ca">–</text>';
+    h += '<rect x="9" y="9" width="322" height="113" fill="url(#rv)"/>';
+    // sabit kırmızı referans çizgisi
+    h += '<line x1="' + RCX + '" y1="11" x2="' + RCX + '" y2="121" stroke="#d0432f" stroke-width="2.4" stroke-linecap="round"/>';
+    h += '<rect x="9" y="9" width="322" height="113" fill="url(#rg)" pointer-events="none"/>';
+    h += '</g>';
+    h += '<rect x="9.5" y="9.5" width="321" height="137" rx="14.5" fill="none" stroke="#000" stroke-opacity=".4" stroke-width="1.5"/>';
+    $("rollSvg").innerHTML = h;
+    var texts = $("rn-pool").querySelectorAll("text");
+    for (i = 0; i < texts.length; i++) RO.pool.push({ el: texts[i], m: null });
+    RO.marker = $("rm"); RO.zone = $("rz"); RO.tick = $("rt");
+    RO.n1 = $("rn1"); RO.n2 = $("rn2"); RO.c = $("rc");
   }
-  function applyNeedle() {
-    needleDeg += (needleTarget - needleDeg) * 0.22;
-    $("needleG").setAttribute("transform", "rotate(" + needleDeg.toFixed(2) + " " + CX + " " + CY + ")");
+  function renderRoll(cents) {
+    var cc = Math.max(-50, Math.min(50, cents));
+    var mx = RCX + cc * RKR;
+    RO.marker.setAttribute("points", (mx - 5.5) + ",11 " + (mx + 5.5) + ",11 " + mx + ",21");
+    RO.marker.setAttribute("fill", statusCls === "good" ? "#16864f" : statusCls === "bad" ? "#c8462f" : statusCls === "warn" ? "#b9801a" : "#8a5a14");
+    var base = Math.floor(viewPos) - 4;
+    for (var j = 0; j < RPOOL; j++) {
+      var m = base + j, p = RO.pool[j];
+      if (p.m !== m) { p.m = m; p.el.textContent = noteLabel(m); }
+      var d = m - viewPos, ad = Math.abs(d);
+      var far = Math.min(1, ad / 1.8);
+      var op = ad > 2.0 ? 0 : 1 - 0.7 * far;
+      var sc = 1 - 0.34 * far;
+      p.el.setAttribute("transform", "translate(" + (RCX + d * RSP).toFixed(2) + ",84) scale(" + sc.toFixed(3) + ")");
+      p.el.setAttribute("opacity", op.toFixed(2));
+      p.el.setAttribute("fill", (statusCls === "good" && ad < 0.5) ? "#16864f" : RINK);
+    }
+    var x0 = RCX - viewPos * RSP - 1;
+    x0 = ((x0 % RSP) + RSP) % RSP;
+    $("rt").setAttribute("x", x0.toFixed(2));
+    RO.zone.setAttribute("opacity", statusCls === "good" ? ".8" : ".3");
+  }
+
+  /* ---------- her karede görünümü güncelle (yumuşak hareket) ---------- */
+  function animate(now) {
+    var dt = lastFrame ? Math.min(100, now - lastFrame) : 16; lastFrame = now;
+    var a = 1 - Math.exp(-dt / 80);
+    var diff = viewTargetPos - viewPos;
+    if (snapNext) { viewPos = viewTargetPos; snapNext = false; }
+    else if (Math.abs(diff) < 0.0004) viewPos = viewTargetPos;
+    else viewPos += diff * a;
+    var cents = (viewPos - viewMidi) * 100;
+    if (state.view === "bar") {
+      $("needleG").setAttribute("transform", "rotate(" + degOf(cents).toFixed(2) + " " + CX + " " + CY + ")");
+      $("needle").setAttribute("stroke", colorOf(statusCls));
+    } else {
+      renderRoll(cents);
+    }
   }
 
   /* ---------- arayüz ---------- */
-  function setMode(m) {
-    state.mode = m; state.locked = null; history = [];
-    document.querySelectorAll(".modes button").forEach(function (b) {
-      b.setAttribute("aria-pressed", String(b.dataset.mode === m));
-    });
-    renderStrings();
-    showIdle();
+  function setView(v) {
+    state.view = v;
+    $("app").setAttribute("data-view", v);
+    document.querySelectorAll(".views button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.view === v)); });
     save();
   }
+  function setMode(m) {
+    state.mode = m; state.locked = null; resetTracking();
+    document.querySelectorAll(".modes button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.mode === m)); });
+    renderStrings(); showIdle(); save();
+  }
   function renderStrings() {
-    var wrap = $("strings"), row = $("stringRow");
-    var list = INSTRUMENTS[state.mode];
+    var wrap = $("strings"), row = $("stringRow"), list = INSTRUMENTS[state.mode];
     if (!list) { wrap.classList.remove("show"); row.innerHTML = ""; return; }
     wrap.classList.add("show");
     row.innerHTML = "";
     list.forEach(function (st, i) {
       var b = document.createElement("button");
       b.type = "button";
-      b.dataset.idx = i;
       b.innerHTML = '<span class="n">' + noteLabel(st.midi) + octaveOf(st.midi) + '</span><span class="s">' + st.s + '</span>';
       b.addEventListener("click", function () {
-        if (state.locked === i) { state.locked = null; }
+        if (state.locked === i) state.locked = null;
         else { state.locked = i; playTone(midiToFreq(st.midi)); }
-        history = [];
+        resetTracking(); snapNext = true;
         refreshStringStyles(null);
       });
       row.appendChild(b);
@@ -425,77 +519,94 @@
       btns[i].classList.toggle("done", targetIdx === i && !!inTune);
     }
   }
+  function idleText() {
+    if (!state.want && !state.running) return "Mikrofonu başlatıp bir nota çal";
+    if (state.running && audioCtx && audioCtx.state === "running") return "Dinleniyor… bir nota çal";
+    return "Başlatmak için ekrana dokun";
+  }
   function showIdle() {
+    hasReading = false; statusCls = "";
+    viewTargetPos = viewMidi;
     $("readout").classList.add("idle");
+    $("rollSvg").classList.add("idle");
     $("noteName").textContent = "–";
     $("octave").textContent = "";
-    $("solfege").textContent = state.running ? "Dinleniyor… bir nota çal" : "Mikrofonu başlatıp bir nota çal";
-    
-    $("freq").textContent = "–";
-    $("target").textContent = "–";
-    $("cents").textContent = "–";
+    $("solfege").textContent = idleText();
+    $("freq").textContent = "–"; $("target").textContent = "–"; $("cents").textContent = "–";
     var s = $("status"); s.textContent = ""; s.className = "status";
-    needleTarget = 0;
-    setNeedleColor("");
+    if (RO.n1) { RO.n1.textContent = "–"; RO.n2.textContent = ""; RO.c.textContent = "–"; }
     refreshStringStyles(null);
   }
   function showReading(freq) {
-    var midiTarget, cents, targetIdx = null;
-    var list = INSTRUMENTS[state.mode];
+    var midiTarget, cents, targetIdx = null, list = INSTRUMENTS[state.mode];
     if (list) {
       var idx = state.locked;
       if (idx === null) {
-        var best = Infinity;
+        var best = 0, bd = Infinity, curd = Infinity;
         for (var i = 0; i < list.length; i++) {
           var dc = Math.abs(1200 * Math.log2(freq / midiToFreq(list[i].midi)));
-          if (dc < best) { best = dc; idx = i; }
+          if (dc < bd) { bd = dc; best = i; }
+          if (i === state.autoIdx) curd = dc;
         }
+        idx = (state.autoIdx !== null && curd < bd + 40) ? state.autoIdx : best;   // tel seçiminde histerezis
+        state.autoIdx = idx;
       }
       targetIdx = idx;
       midiTarget = list[idx].midi;
       cents = 1200 * Math.log2(freq / midiToFreq(midiTarget));
+      if (midiTarget !== viewMidi) snapNext = true;
     } else {
       var mf = freqToMidi(freq);
       midiTarget = Math.round(mf);
       cents = (mf - midiTarget) * 100;
     }
+    if (!hasReading) snapNext = true;
+    hasReading = true;
+    viewMidi = midiTarget;
+    viewTargetPos = midiTarget + cents / 100;
+
     var tf = midiToFreq(midiTarget);
     var inTune = Math.abs(cents) <= IN_TUNE;
-    var cls = inTune ? "good" : (Math.abs(cents) <= 15 ? "warn" : "bad");
+    statusCls = inTune ? "good" : (Math.abs(cents) <= 15 ? "warn" : "bad");
 
     $("readout").classList.remove("idle");
+    $("rollSvg").classList.remove("idle");
     $("noteName").textContent = noteLabel(midiTarget);
     $("octave").textContent = octaveOf(midiTarget);
     $("solfege").textContent = solLabel(midiTarget) + " · " + octaveOf(midiTarget) + ". oktav";
-    
     $("freq").textContent = fmtHz(freq);
     $("target").textContent = fmtHz(tf);
     var cr = Math.abs(cents) > 99 ? Math.round(cents) : cents.toFixed(1);
-    $("cents").textContent = (cents > 0 ? "+" : "") + cr;
+    var cs = (cents > 0 ? "+" : "") + cr;
+    $("cents").textContent = cs;
+    RO.n1.textContent = noteLabel(midiTarget) + octaveOf(midiTarget);
+    RO.n2.textContent = solLabel(midiTarget);
+    RO.c.textContent = cs + "¢  ·  " + fmtHz(freq) + " Hz";
 
-    var s = $("status"); s.className = "status " + cls;
+    var s = $("status"); s.className = "status " + statusCls;
     if (inTune) s.textContent = "Doğru ✓";
     else if (cents < 0) s.textContent = list ? "Pes · teli gerin" : "Pes";
     else s.textContent = list ? "Tiz · teli gevşetin" : "Tiz";
-
-    needleTarget = degOf(cents);
-    setNeedleColor(cls);
     refreshStringStyles(targetIdx, inTune);
   }
 
   /* ---------- ses ---------- */
+  function onCtxState() { if (!hasReading) { $("solfege").textContent = idleText(); } }
   function getCtx() {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (audioCtx.state === "suspended") audioCtx.resume();
+    if (!audioCtx || audioCtx.state === "closed") {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      audioCtx.onstatechange = onCtxState;
+    }
+    if (audioCtx.state === "suspended" || audioCtx.state === "interrupted") { try { audioCtx.resume(); } catch (e) {} }
     return audioCtx;
   }
   function playTone(freq) {
     try {
       var ctx = getCtx(), t = ctx.currentTime;
-      var o1 = ctx.createOscillator(), o2 = ctx.createOscillator(), g = ctx.createGain();
+      var o1 = ctx.createOscillator(), o2 = ctx.createOscillator(), g = ctx.createGain(), g2 = ctx.createGain();
       o1.type = "triangle"; o2.type = "sine";
       o1.frequency.value = freq; o2.frequency.value = freq * 2;
-      var g2 = ctx.createGain(); g2.gain.value = 0.25;
+      g2.gain.value = 0.25;
       g.gain.setValueAtTime(0.0001, t);
       g.gain.exponentialRampToValueAtTime(0.35, t + 0.03);
       g.gain.exponentialRampToValueAtTime(0.0001, t + 2.2);
@@ -505,84 +616,105 @@
     } catch (e) {}
   }
 
+  /* ---------- ana döngü ---------- */
   function loop(now) {
     rafId = requestAnimationFrame(loop);
-    if (analyser && now > muteUntil && now - lastAnalysis > 30) {
+    if (analyser && now > muteUntil && now - lastAnalysis > 40) {
       lastAnalysis = now;
       analyser.getFloatTimeDomainData(buf);
-      var sum = 0;
-      for (var i = 0; i < buf.length; i++) sum += buf[i] * buf[i];
+      var sum = 0, i;
+      for (i = 0; i < buf.length; i++) sum += buf[i] * buf[i];
+      if (sum === 0) {                       // tamamen sıfır = ölü akış (arama/medya kesintisi sonrası)
+        zeroFrames++;
+        if (zeroFrames > 100) { zeroFrames = 0; restartMic(); }
+      } else zeroFrames = 0;
       var rms = Math.sqrt(sum / buf.length);
-      var gate = (now - lastHit < 1500) ? 0.0006 : 0.0018;
+      var gate = (now - lastHit < 1500) ? 0.0005 : 0.0015;
       if (rms > gate) {
-        var r = detect(buf, audioCtx.sampleRate);
+        var r = detect(buf.subarray(buf.length - 2 * YIN_WINDOW), audioCtx.sampleRate);
         if (r && r.clarity > 0.85) {
-          history.push(r.freq);
-          if (history.length > 5) history.shift();
           lastHit = now;
-          showReading(median(history));
+          showReading(track(r.freq));
         }
       }
-      if (now - lastHit > 1200 && !$("readout").classList.contains("idle")) {
-        history = [];
-        showIdle();
-      }
+      if (hasReading && now - lastHit > 1200) { resetTracking(); showIdle(); }
     }
-    applyNeedle();
+    animate(now);
   }
 
+  /* ---------- mikrofon yaşam döngüsü ---------- */
+  function setStartUI() {
+    var b = $("start");
+    b.textContent = state.want ? "Durdur" : "Mikrofonu başlat";
+    b.classList.toggle("on", state.want);
+  }
+  function teardown() {
+    try { if (stream) stream.getTracks().forEach(function (t) { t.stop(); }); } catch (e) {}
+    try { if (source) source.disconnect(); } catch (e) {}
+    stream = null; source = null; analyser = null;
+    state.running = false;
+    if (audioCtx) { var c = audioCtx; audioCtx = null; try { c.onstatechange = null; c.close(); } catch (e) {} }
+  }
   function start(silent) {
-    $("error").textContent = "";
+    if (state.running || state.starting) return;
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       $("error").textContent = "Bu tarayıcı mikrofon erişimini desteklemiyor. Sayfayı HTTPS üzerinden açtığından emin ol.";
       return;
     }
+    if (!silent) { state.want = true; saveWant(true); setStartUI(); }
+    state.starting = true;
+    $("error").textContent = "";
     navigator.mediaDevices.getUserMedia({
       audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
     }).then(function (s) {
+      state.starting = false;
+      if (!state.want || document.visibilityState === "hidden") { s.getTracks().forEach(function (t) { t.stop(); }); return; }
+      teardown();
       stream = s;
       var ctx = getCtx();
       analyser = ctx.createAnalyser();
-      analyser.fftSize = 4096;
+      analyser.fftSize = FFT_SIZE;
       analyser.smoothingTimeConstant = 0;
       buf = new Float32Array(analyser.fftSize);
       source = ctx.createMediaStreamSource(stream);
       source.connect(analyser);
       stream.getAudioTracks().forEach(function (t) { t.addEventListener("ended", restartMic); });
-      state.running = true;
-      try { localStorage.setItem("tuner.auto", "1"); } catch (e) {}
-      var b = $("start"); b.textContent = "Durdur"; b.classList.add("on");
-      showIdle();
+      state.running = true; state.want = true; saveWant(true);
+      resetTracking(); zeroFrames = 0;
+      setStartUI(); showIdle(); keepAwake();
     }).catch(function () {
-      $("error").textContent = silent ? "Mikrofonu başlatmak için düğmeye bas." : "Mikrofona erişilemedi. İzin vermen gerekiyor; sayfa bir çerçeve içinde açıldıysa yeni sekmede açmayı dene.";
+      state.starting = false;
+      if (silent) {
+        $("error").textContent = "Mikrofonu açmak için ekrana dokun.";
+      } else {
+        state.want = false; saveWant(false);
+        $("error").textContent = "Mikrofona erişilemedi. İzin vermen gerekiyor; sayfa bir çerçeve içinde açıldıysa yeni sekmede açmayı dene.";
+      }
+      setStartUI(); showIdle();
     });
   }
-  function stop() {
-    if (stream) stream.getTracks().forEach(function (t) { t.stop(); });
-    if (source) source.disconnect();
-    stream = null; source = null; analyser = null;
-    state.running = false; history = [];
-    var b = $("start"); b.textContent = "Mikrofonu başlat"; b.classList.remove("on");
-    showIdle();
+  function userStop() {
+    state.want = false; saveWant(false);
+    teardown(); setStartUI(); showIdle();
+    $("error").textContent = "";
   }
-
-  /* ---------- mikrofon izleme: kopma / askıya alma durumunda otomatik toparla ---------- */
-  var mutedChecks = 0;
+  var lastRestart = 0;
   function restartMic() {
-    if (!state.running) return;
-    stop();
-    try { localStorage.setItem("tuner.auto", "1"); } catch (e) {}
-    setTimeout(function () { start(true); }, 400);
+    var n = performance.now();
+    if (n - lastRestart < 8000 || !state.want) return;
+    lastRestart = n;
+    teardown();
+    setTimeout(function () { start(true); }, 300);
   }
+  var mutedChecks = 0;
   setInterval(function () {
     if (!state.running) { mutedChecks = 0; return; }
     var t = stream && stream.getAudioTracks()[0];
     if (!t || t.readyState === "ended") { restartMic(); return; }
-    if (audioCtx && audioCtx.state !== "running" && now0() > muteUntil) { try { audioCtx.resume(); } catch (e) {} }
-    if (t.muted) { mutedChecks++; if (mutedChecks >= 3) { mutedChecks = 0; restartMic(); } }
+    if (audioCtx && audioCtx.state !== "running" && performance.now() > muteUntil) { try { audioCtx.resume(); } catch (e) {} }
+    if (t.muted) { mutedChecks++; if (mutedChecks >= 2) { mutedChecks = 0; restartMic(); } }
     else mutedChecks = 0;
   }, 2000);
-  function now0() { return performance.now(); }
 
   /* ---------- referans frekans ---------- */
   function setRef(v) {
@@ -592,41 +724,21 @@
     state.ref = v;
     $("ref").value = v;
     $("hzHint").textContent = "A4 = " + v + " Hz";
-    renderStrings();
-    save();
+    renderStrings(); save();
   }
 
-  /* ---------- başlat ---------- */
-  load();
-  buildGauge();
-  $("ref").value = state.ref;
-  $("hzHint").textContent = "A4 = " + state.ref + " Hz";
-  document.querySelectorAll(".modes button").forEach(function (b) {
-    b.addEventListener("click", function () { setMode(b.dataset.mode); });
-  });
-  setMode(state.mode);
-  $("start").addEventListener("click", function () {
-    if (state.running) { stop(); try { localStorage.setItem("tuner.auto", "0"); } catch (e) {} }
-    else start();
-  });
-  // Daha önce başlatıldıysa açılışta mikrofonu kendiliğinden başlat
-  try {
-    if (localStorage.getItem("tuner.auto") === "1") {
-      if (navigator.permissions && navigator.permissions.query) {
-        navigator.permissions.query({ name: "microphone" }).then(function (p) {
-          if (p.state !== "denied") start(true);
-        }).catch(function () { start(true); });
-      } else { start(true); }
-    }
-  } catch (e) {}
-  $("ref").addEventListener("change", function (e) { setRef(e.target.value); });
-  $("refMinus").addEventListener("click", function () { setRef(state.ref - 0.5); });
-  $("refPlus").addEventListener("click", function () { setRef(state.ref + 0.5); });
-  $("refReset").addEventListener("click", function () { setRef(440); });
-  document.addEventListener("gesturestart", function (e) { e.preventDefault(); });
-  // Sayfa açık olduğu sürece ekran uyumasın (mikrofondan bağımsız)
-  requestWake();
-  // Yedek: ekran kilidi API'si çalışmazsa (eski iOS, Düşük Güç Modu) sessiz, görünmez bir video döngüsü ekranı uyanık tutar
+  /* ---------- ekranı açık tut ---------- */
+  var wakeLock = null;
+  function requestWake() {
+    try {
+      if ("wakeLock" in navigator) {
+        navigator.wakeLock.request("screen").then(function (l) {
+          wakeLock = l;
+          l.addEventListener("release", function () { if (wakeLock === l) wakeLock = null; });
+        }).catch(function () {});
+      }
+    } catch (e) {}
+  }
   var keepVideo = null;
   function ensureVideo() {
     if (keepVideo) return keepVideo;
@@ -652,17 +764,54 @@
     } catch (e) {}
   }
   function keepAwake() {
-    if (audioCtx && audioCtx.state === "suspended") { try { audioCtx.resume(); } catch (e) {} }
+    if (audioCtx && (audioCtx.state === "suspended" || audioCtx.state === "interrupted")) { try { audioCtx.resume(); } catch (e) {} }
     if (!wakeLock) requestWake();
-    playKeepAwake();
+    if (document.visibilityState === "visible") playKeepAwake();
   }
-  keepAwake();
-  document.addEventListener("touchend", keepAwake, { passive: true });
-  document.addEventListener("click", keepAwake);
-  document.addEventListener("visibilitychange", function () {
-    if (document.visibilityState === "visible") keepAwake();
+
+  /* ---------- başlat ---------- */
+  load();
+  buildGauge();
+  buildRoll();
+  $("ref").value = state.ref;
+  $("hzHint").textContent = "A4 = " + state.ref + " Hz";
+  document.querySelectorAll(".modes button").forEach(function (b) { b.addEventListener("click", function () { setMode(b.dataset.mode); }); });
+  document.querySelectorAll(".views button").forEach(function (b) { b.addEventListener("click", function () { setView(b.dataset.view); }); });
+  setView(state.view);
+  setMode(state.mode);
+  setStartUI();
+  $("brand").addEventListener("click", function () { location.reload(); });
+  $("start").addEventListener("click", function () {
+    if (state.want || state.running) userStop(); else start(false);
   });
-  setInterval(keepAwake, 5000);
+  $("ref").addEventListener("change", function (e) { setRef(e.target.value); });
+  $("refMinus").addEventListener("click", function () { setRef(state.ref - 0.5); });
+  $("refPlus").addEventListener("click", function () { setRef(state.ref + 0.5); });
+  $("refReset").addEventListener("click", function () { setRef(440); });
+  document.addEventListener("gesturestart", function (e) { e.preventDefault(); });
+
+  // Dokunuş: ses motorunu uyandır, ekranı açık tut, istenen mikrofon kapalıysa yeniden dene
+  document.addEventListener("touchend", function () {
+    keepAwake();
+    if (state.want && !state.running && !state.starting) start(true);
+  }, { passive: true });
+  document.addEventListener("click", keepAwake);
+
+  // Başka uygulamaya geçiş / arama / medya sonrası dönüş
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "hidden") {
+      teardown();                                   // mikrofonu bırak, bozuk oturum kalmasın
+      try { if (keepVideo) keepVideo.pause(); } catch (e) {}
+    } else {
+      keepAwake();
+      if (state.want) setTimeout(function () { start(true); }, 250);
+    }
+  });
+  window.addEventListener("pageshow", function () { if (state.want && !state.running) start(true); });
+  window.addEventListener("focus", function () { if (state.want && !state.running && !state.starting) start(true); });
+
+  requestWake();
+  if (state.want) start(true);
   rafId = requestAnimationFrame(loop);
 })();
 </script>
