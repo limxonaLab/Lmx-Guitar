@@ -1,0 +1,16 @@
+{
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/", "destination": "/tr", "permanent": true },
+    { "source": "/metronome", "destination": "/tr/metronome", "permanent": true },
+    { "source": "/tuner", "destination": "/tr/tuner", "permanent": true }
+  ],
+  "rewrites": [
+    { "source": "/tr", "destination": "/index.html" },
+    { "source": "/en", "destination": "/index.html" },
+    { "source": "/tr/metronome", "destination": "/metronome.html" },
+    { "source": "/en/metronome", "destination": "/metronome.html" },
+    { "source": "/tr/tuner", "destination": "/tuner.html" },
+    { "source": "/en/tuner", "destination": "/tuner.html" }
+  ]
+}

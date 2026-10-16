@@ -5,31 +5,34 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-<title>Limxona Tuner Tuner – Online Gitar & Enstrüman Akort Aleti</title>
+<title>LmXMetro Tuner – Online Gitar & Enstrüman Akort Aleti</title>
 <meta name="description" content="Mikrofon destekli, yüksek hassasiyetli online enstrüman akort aleti. Gitar, ukulele ve bağlamanızı tarayıcınızdan hızlıca ücretsiz akort edin.">
-<link rel="canonical" href="https://limxona.vercel.app/tuner.html">
+<link rel="alternate" hreflang="tr" href="https://limxona.vercel.app/tr/tuner">
+<link rel="alternate" hreflang="en" href="https://limxona.vercel.app/en/tuner">
+<link rel="alternate" hreflang="x-default" href="https://limxona.vercel.app/tr/tuner">
+<link rel="canonical" href="https://limxona.vercel.app/tr/tuner">
 
 <!-- Google Search Console Doğrulama -->
 <meta name="google-site-verification" content="BXQYRq0FzpFqQAi3HTzZPCIpY7Ohp1PLgaTGQBz2Xt0" />
 
 <!-- Favicon & İkonlar -->
-<link rel="icon" href="./lmx-tuner-icon.ico" sizes="any">
-<link rel="icon" href="./lmx-tuner-icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="./lmx-tuner-icon-512.png" sizes="512x512">
+<link rel="icon" href="/lmx-tuner-icon.ico" sizes="any">
+<link rel="icon" href="/lmx-tuner-icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/lmx-tuner-icon-512.png" sizes="512x512">
 
 <!-- Open Graph / Facebook / WhatsApp -->
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="tr_TR" />
-<meta property="og:site_name" content="Limxona Tuner" />
-<meta property="og:url" content="https://limxona.vercel.app/tuner.html" />
-<meta property="og:title" content="Limxona Tuner Tuner – Online Gitar & Enstrüman Akort Aleti" />
+<meta property="og:site_name" content="LmXMetro" />
+<meta property="og:url" content="https://limxona.vercel.app/tr/tuner" />
+<meta property="og:title" content="LmXMetro Tuner – Online Gitar & Enstrüman Akort Aleti" />
 <meta property="og:description" content="Mikrofon destekli, yüksek hassasiyetli online enstrüman akort aleti. Gitar, ukulele ve bağlamanızı kolayca ücretsiz akort edin." />
 <meta property="og:image" content="https://limxona.vercel.app/og-image.png" />
 
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:url" content="https://limxona.vercel.app/tuner.html" />
-<meta name="twitter:title" content="Limxona Tuner Tuner – Online Gitar & Enstrüman Akort Aleti" />
+<meta name="twitter:url" content="https://limxona.vercel.app/tr/tuner" />
+<meta name="twitter:title" content="LmXMetro Tuner – Online Gitar & Enstrüman Akort Aleti" />
 <meta name="twitter:description" content="Mikrofon destekli, yüksek hassasiyetli online enstrüman akort aleti. Gitar, ukulele ve bağlamanızı kolayca ücretsiz akort edin." />
 <meta name="twitter:image" content="https://limxona.vercel.app/og-image.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -294,7 +297,7 @@
   var I18N = {
     tr: {
       htmlLang: "tr",
-      docTitle:"Limxona Tuner Tuner - Online Gitar & Enstrüman Akort Aleti",
+      docTitle:"LmXMetro Tuner - Online Gitar & Enstrüman Akort Aleti",
       docDesc:"Mikrofon destekli, yüksek hassasiyetli online enstrüman akort aleti. Gitar, ukulele ve bağlamağınızı tarayıcınızdan hızlıca ücretsiz akort edin.",
       mChrom:"Kromatik", mGuitar:"Gitar", mUku:"Ukulele",
       vBar:"Çubuk", vRoll:"Şerit",
@@ -320,7 +323,7 @@
     },
     en: {
       htmlLang: "en",
-      docTitle:"Limxona Tuner Tuner – Online Guitar & Instrument Tuner",
+      docTitle:"LmXMetro Tuner – Online Guitar & Instrument Tuner",
       docDesc:"Microphone-based, highly accurate online instrument tuner. Tune your guitar, ukulele or bağlama for free right in your browser.",
       mChrom:"Chromatic", mGuitar:"Guitar", mUku:"Ukulele",
       vBar:"Bar", vRoll:"Roll",
@@ -347,6 +350,8 @@
   };
   var LANG = "tr";
   function detectLang(){
+    var pathLang = location.pathname.match(/^\/(tr|en)\/tuner\/?$/);
+    if (pathLang) return pathLang[1];
     var saved;
     try{saved=localStorage.getItem("lmx-lang");}catch(e){}
     if(saved==="tr"||saved==="en")return saved;
@@ -356,13 +361,18 @@
   function t(key){var d=I18N[LANG];return d&&d[key]!==undefined?d[key]:key;}
   function applyLang(lang){
     LANG=lang;
+    var pageUrl="https://limxona.vercel.app/"+lang+"/tuner";
     document.documentElement.lang=I18N[lang].htmlLang;
     document.title=t("docTitle");
+    var canonical=document.querySelector('link[rel="canonical"]');if(canonical)canonical.href=pageUrl;
     function setMeta(sel,attr,val){var el=document.querySelector(sel);if(el)el.setAttribute(attr,val);}
     setMeta('meta[name="description"]',"content",t("docDesc"));
     setMeta('meta[property="og:title"]',"content",t("docTitle"));
+    setMeta('meta[property="og:url"]',"content",pageUrl);
+    setMeta('meta[property="og:locale"]',"content",lang==="tr"?"tr_TR":"en_US");
     setMeta('meta[property="og:description"]',"content",t("docDesc"));
     setMeta('meta[name="twitter:title"]',"content",t("docTitle"));
+    setMeta('meta[name="twitter:url"]',"content",pageUrl);
     setMeta('meta[name="twitter:description"]',"content",t("docDesc"));
     document.querySelectorAll("[data-i18n]").forEach(function(el){
       var v=t(el.getAttribute("data-i18n"));
@@ -385,6 +395,10 @@
   document.querySelectorAll(".lang button[data-lang]").forEach(function(b){
     b.addEventListener("click",function(){
       try{localStorage.setItem("lmx-lang",b.dataset.lang);}catch(e){}
+      if (/^\/(tr|en)\/tuner\/?$/.test(location.pathname)) {
+        location.assign("/" + b.dataset.lang + "/tuner");
+        return;
+      }
       applyLang(b.dataset.lang);
       if(typeof setStartUI==="function"&&!state.running)showIdle();
     });

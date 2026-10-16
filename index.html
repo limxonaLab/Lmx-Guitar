@@ -6,17 +6,20 @@
 
 <title>Limxona – Online Metronom ve Akort Aleti</title>
 <meta name="description" content="Ücretsiz online metronom ve mikrofon destekli akort aleti. Tempoyu ayarla, ritmini kur, enstrümanını tarayıcıdan akort et.">
-<link rel="canonical" href="https://limxona.vercel.app/">
+<link rel="alternate" hreflang="tr" href="https://limxona.vercel.app/tr">
+<link rel="alternate" hreflang="en" href="https://limxona.vercel.app/en">
+<link rel="alternate" hreflang="x-default" href="https://limxona.vercel.app/tr">
+<link rel="canonical" href="https://limxona.vercel.app/tr">
 <meta name="google-site-verification" content="BXQYRq0FzpFqQAi3HTzZPCIpY7Ohp1PLgaTGQBz2Xt0" />
 
-<link rel="icon" href="./lmx-metronom-logo.ico" sizes="any">
-<link rel="icon" href="./lmx-metronom-logo.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="./lmx-metronom-logo.png" sizes="512x512">
+<link rel="icon" href="/lmx-metronom-logo.ico" sizes="any">
+<link rel="icon" href="/lmx-metronom-logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/lmx-metronom-logo.png" sizes="512x512">
 
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="tr_TR" />
 <meta property="og:site_name" content="Lmx Metronome Tuner" />
-<meta property="og:url" content="https://limxona.vercel.app/" />
+<meta property="og:url" content="https://limxona.vercel.app/tr" />
 <meta property="og:title" content="Lmx Metronome Tuner – Online Metronom ve Akort Aleti" />
 <meta property="og:description" content="Ücretsiz online metronom ve mikrofon destekli akort aleti." />
 <meta property="og:image" content="https://limxona.vercel.app/og-image.png" />
@@ -183,7 +186,7 @@
   </header>
 
   <main class="choices">
-    <a class="tool metro" href="/metronome.html" id="linkMetro">
+    <a class="tool metro" href="/metronome" id="linkMetro">
       <svg class="mark" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M12 5h8l6 23H6L12 5Z"/><path d="m16 23 7-17M11 24h10M15 10h3"/><circle cx="20.5" cy="11.5" r="2" fill="currentColor" stroke="none"/>
       </svg>
@@ -200,7 +203,7 @@
       <span class="cta" data-i18n="mCta">Metronomu aç</span>
     </a>
 
-    <a class="tool tuner" href="/tuner.html" id="linkTuner">
+    <a class="tool tuner" href="/tuner" id="linkTuner">
       <svg class="mark" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M11 4v10a5 5 0 0 0 10 0V4"/><path d="M16 19v9"/>
         <path d="M5.5 8.5c-1.3 1.6-1.3 4.4 0 6" opacity=".6"/><path d="M26.5 8.5c1.3 1.6 1.3 4.4 0 6" opacity=".6"/>
@@ -261,6 +264,8 @@
   };
 
   function detect() {
+    var pathLang = location.pathname.match(/^\/(tr|en)\/?$/);
+    if (pathLang) return pathLang[1];
     var saved;
     try { saved = localStorage.getItem('lmx-lang'); } catch (e) {}
     if (saved === 'tr' || saved === 'en') return saved;
@@ -275,8 +280,15 @@
 
   function apply(lang) {
     var d = I18N[lang];
+    var pageUrl = 'https://limxona.vercel.app/' + lang;
     document.documentElement.lang = d.htmlLang;
     document.title = d.docTitle;
+    var canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) canonical.href = pageUrl;
+    setMeta('meta[property="og:url"]', 'content', pageUrl);
+    setMeta('meta[property="og:locale"]', 'content', d.locale);
+    document.getElementById('linkMetro').href = '/' + lang + '/metronome';
+    document.getElementById('linkTuner').href = '/' + lang + '/tuner';
     setMeta('meta[name="description"]', 'content', d.docDesc);
     setMeta('meta[property="og:title"]', 'content', d.docTitle);
     setMeta('meta[property="og:description"]', 'content', d.docDesc);
@@ -317,6 +329,10 @@
   document.querySelectorAll('.lang button').forEach(function (b) {
     b.addEventListener('click', function () {
       try { localStorage.setItem('lmx-lang', b.dataset.lang); } catch (e) {}
+      if (/^\/(tr|en)\/?$/.test(location.pathname)) {
+        location.assign('/' + b.dataset.lang);
+        return;
+      }
       apply(b.dataset.lang);
     });
   });

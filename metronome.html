@@ -8,28 +8,31 @@
 
 <title>Online Metronom – Ücretsiz Tempo ve Ritim Aracı | LmXMetro</title>
 <meta name="description" content="Ücretsiz online metronom ile 30–300 BPM tempo ayarlayın. Farklı ölçüler, vuruş vurguları ve ritmik bölümler oluşturun, ritimlerinizi kaydedin.">
-<link rel="canonical" href="https://limxona.vercel.app/">
+<link rel="alternate" hreflang="tr" href="https://limxona.vercel.app/tr/metronome">
+<link rel="alternate" hreflang="en" href="https://limxona.vercel.app/en/metronome">
+<link rel="alternate" hreflang="x-default" href="https://limxona.vercel.app/tr/metronome">
+<link rel="canonical" href="https://limxona.vercel.app/tr/metronome">
 
 <!-- Google Search Console Doğrulama -->
 <meta name="google-site-verification" content="BXQYRq0FzpFqQAi3HTzZPCIpY7Ohp1PLgaTGQBz2Xt0" />
 
 <!-- Favicon & İkonlar -->
-<link rel="icon" href="./lmx-metronom-logo.ico" sizes="any">
-<link rel="icon" href="./lmx-metronom-logo.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="./lmx-metronom-logo.png" sizes="512x512">
+<link rel="icon" href="/lmx-metronom-logo.ico" sizes="any">
+<link rel="icon" href="/lmx-metronom-logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/lmx-metronom-logo.png" sizes="512x512">
 
 <!-- Open Graph / Facebook / WhatsApp -->
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="tr_TR" />
 <meta property="og:site_name" content="LmXMetro" />
-<meta property="og:url" content="https://limxona.vercel.app/" />
+<meta property="og:url" content="https://limxona.vercel.app/tr/metronome" />
 <meta property="og:title" content="Online Metronom – Ücretsiz Tempo ve Ritim Aracı | LmXMetro" />
 <meta property="og:description" content="Temponu ayarla, ritmini oluştur ve kaydet. 30–300 BPM, farklı ölçüler ve özelleştirilebilir vuruşlarla ücretsiz online metronom." />
 <meta property="og:image" content="https://limxona.vercel.app/og-image.png" />
 
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:url" content="https://limxona.vercel.app/" />
+<meta name="twitter:url" content="https://limxona.vercel.app/tr/metronome" />
 <meta name="twitter:title" content="Online Metronom – Ücretsiz Tempo ve Ritim Aracı | LmXMetro" />
 <meta name="twitter:description" content="Temponu ayarla, ritmini oluştur ve kaydet. 30–300 BPM, farklı ölçüler ve özelleştirilebilir vuruşlarla ücretsiz online metronom." />
 <meta name="twitter:image" content="https://limxona.vercel.app/og-image.png" />
@@ -849,6 +852,8 @@ presetDelete:"delete",presetEdit:"Edit",
 }};
 let MET_LANG="tr";
 function metDetectLang(){
+  const pathLang=location.pathname.match(/^\/(tr|en)\/metronome\/?$/);
+  if(pathLang)return pathLang[1];
   let saved;try{saved=localStorage.getItem("lmx-lang");}catch{}
   if(saved==="tr"||saved==="en")return saved;
   const l=(navigator.languages&&navigator.languages[0])||navigator.language||"tr";
@@ -858,9 +863,17 @@ function mt(key){const d=MET_I18N[MET_LANG];return d&&d[key]!==undefined?d[key]:
 const MET_HTML_CACHE=new Map();
 function metApplyLang(lang){
   MET_LANG=lang;
+  const pageUrl='https://limxona.vercel.app/'+lang+'/metronome';
   document.documentElement.lang=MET_I18N[lang].htmlLang;
   document.title=mt("docTitle");
+  const canonical=document.querySelector('link[rel="canonical"]');if(canonical)canonical.href=pageUrl;
+  const ogUrl=document.querySelector('meta[property="og:url"]');if(ogUrl)ogUrl.content=pageUrl;
+  const twitterUrl=document.querySelector('meta[name="twitter:url"]');if(twitterUrl)twitterUrl.content=pageUrl;
+  const ogLocale=document.querySelector('meta[property="og:locale"]');if(ogLocale)ogLocale.content=lang==='tr'?'tr_TR':'en_US';
   const md=document.querySelector('meta[name="description"]');if(md)md.content=mt("docDesc");
+  for(const [selector,key] of [['meta[property="og:title"]','docTitle'],['meta[name="twitter:title"]','docTitle'],['meta[property="og:description"]','docDesc'],['meta[name="twitter:description"]','docDesc']]){
+    const el=document.querySelector(selector);if(el)el.content=mt(key);
+  }
   document.querySelectorAll("[data-i18n]").forEach(el=>{
     const v=mt(el.getAttribute("data-i18n"));
     if(v)el.textContent=v;
@@ -891,6 +904,9 @@ document.addEventListener("click",e=>{
   const b=e.target.closest(".lang button[data-lang]");
   if(!b)return;
   try{localStorage.setItem("lmx-lang",b.dataset.lang);}catch{}
+  if(/^\/(tr|en)\/metronome\/?$/.test(location.pathname)){
+    location.assign('/'+b.dataset.lang+'/metronome');return;
+  }
   metApplyLang(b.dataset.lang);
   try{drawMeasureTabs();drawSigs();drawSubs();drawPulses();drawPresets();drawTempoPresets();updateSummary();
     $('status-text').textContent=playing?(demoPhase?mt("statusDemo"):mt("statusPlaying")):mt("statusReady");
