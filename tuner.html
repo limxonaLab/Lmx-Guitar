@@ -5,9 +5,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-<title>LmXMetro Tuner – Online Gitar & Enstrüman Akort Aleti</title>
+<title>Limxona Tuner Tuner – Online Gitar & Enstrüman Akort Aleti</title>
 <meta name="description" content="Mikrofon destekli, yüksek hassasiyetli online enstrüman akort aleti. Gitar, ukulele ve bağlamanızı tarayıcınızdan hızlıca ücretsiz akort edin.">
-<link rel="canonical" href="https://limxona.vercel.app/tuner">
+<link rel="canonical" href="https://limxona.vercel.app/tuner.html">
 
 <!-- Google Search Console Doğrulama -->
 <meta name="google-site-verification" content="BXQYRq0FzpFqQAi3HTzZPCIpY7Ohp1PLgaTGQBz2Xt0" />
@@ -20,16 +20,16 @@
 <!-- Open Graph / Facebook / WhatsApp -->
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="tr_TR" />
-<meta property="og:site_name" content="LmXMetro" />
-<meta property="og:url" content="https://limxona.vercel.app/tuner" />
-<meta property="og:title" content="LmXMetro Tuner – Online Gitar & Enstrüman Akort Aleti" />
+<meta property="og:site_name" content="Limxona Tuner" />
+<meta property="og:url" content="https://limxona.vercel.app/tuner.html" />
+<meta property="og:title" content="Limxona Tuner Tuner – Online Gitar & Enstrüman Akort Aleti" />
 <meta property="og:description" content="Mikrofon destekli, yüksek hassasiyetli online enstrüman akort aleti. Gitar, ukulele ve bağlamanızı kolayca ücretsiz akort edin." />
 <meta property="og:image" content="https://limxona.vercel.app/og-image.png" />
 
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:url" content="https://limxona.vercel.app/tuner" />
-<meta name="twitter:title" content="LmXMetro Tuner – Online Gitar & Enstrüman Akort Aleti" />
+<meta name="twitter:url" content="https://limxona.vercel.app/tuner.html" />
+<meta name="twitter:title" content="Limxona Tuner Tuner – Online Gitar & Enstrüman Akort Aleti" />
 <meta name="twitter:description" content="Mikrofon destekli, yüksek hassasiyetli online enstrüman akort aleti. Gitar, ukulele ve bağlamanızı kolayca ücretsiz akort edin." />
 <meta name="twitter:image" content="https://limxona.vercel.app/og-image.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -294,7 +294,7 @@
   var I18N = {
     tr: {
       htmlLang: "tr",
-      docTitle:"LmXMetro Tuner - Online Gitar & Enstrüman Akort Aleti",
+      docTitle:"Limxona Tuner Tuner - Online Gitar & Enstrüman Akort Aleti",
       docDesc:"Mikrofon destekli, yüksek hassasiyetli online enstrüman akort aleti. Gitar, ukulele ve bağlamağınızı tarayıcınızdan hızlıca ücretsiz akort edin.",
       mChrom:"Kromatik", mGuitar:"Gitar", mUku:"Ukulele",
       vBar:"Çubuk", vRoll:"Şerit",
@@ -320,7 +320,7 @@
     },
     en: {
       htmlLang: "en",
-      docTitle:"LmXMetro Tuner – Online Guitar & Instrument Tuner",
+      docTitle:"Limxona Tuner Tuner – Online Guitar & Instrument Tuner",
       docDesc:"Microphone-based, highly accurate online instrument tuner. Tune your guitar, ukulele or bağlama for free right in your browser.",
       mChrom:"Chromatic", mGuitar:"Guitar", mUku:"Ukulele",
       vBar:"Bar", vRoll:"Roll",
@@ -849,19 +849,17 @@
   var lastRestart = 0;
   function restartMic() {
     var n = performance.now();
-    if (n - lastRestart < 8000 || !state.want) return;
+    if (n - lastRestart < 8000 || !state.want || document.visibilityState === "hidden") return;
     lastRestart = n;
     teardown();
     setTimeout(function () { start(true); }, 300);
   }
-  var mutedChecks = 0;
   setInterval(function () {
-    if (!state.running) { mutedChecks = 0; return; }
+    if (!state.running || document.visibilityState === "hidden") return;
     var t = stream && stream.getAudioTracks()[0];
     if (!t || t.readyState === "ended") { restartMic(); return; }
     if (audioCtx && audioCtx.state !== "running" && performance.now() > muteUntil) { try { audioCtx.resume(); } catch (e) {} }
-    if (t.muted) { mutedChecks++; if (mutedChecks >= 2) { mutedChecks = 0; restartMic(); } }
-    else mutedChecks = 0;
+    // iOS geçici susturmayı kendisi kaldırır; canlı track'i yeniden isteme.
   }, 2000);
 
   /* ---------- referans frekans ---------- */
@@ -876,14 +874,17 @@
   }
 
   /* ---------- ekranı açık tut ---------- */
-  var wakeLock = null;
+  var wakeLock = null, wakePending = false;
   function requestWake() {
     try {
-      if ("wakeLock" in navigator) {
+      if (!wakeLock && !wakePending && document.visibilityState === "visible" && "wakeLock" in navigator) {
+        wakePending = true;
         navigator.wakeLock.request("screen").then(function (l) {
+          wakePending = false;
+          if (document.visibilityState === "hidden") { l.release().catch(function () {}); return; }
           wakeLock = l;
           l.addEventListener("release", function () { if (wakeLock === l) wakeLock = null; });
-        }).catch(function () {});
+        }).catch(function () { wakePending = false; });
       }
     } catch (e) {}
   }
@@ -915,6 +916,14 @@
     if (audioCtx && (audioCtx.state === "suspended" || audioCtx.state === "interrupted")) { try { audioCtx.resume(); } catch (e) {} }
     if (!wakeLock) requestWake();
     if (document.visibilityState === "visible") playKeepAwake();
+  }
+  function resumeMic() {
+    if (!state.want || document.visibilityState === "hidden") return;
+    var track = stream && stream.getAudioTracks()[0];
+    if (track && track.readyState === "live") {
+      if (audioCtx && audioCtx.state !== "running") audioCtx.resume().catch(function () {});
+      keepAwake();
+    } else if (!state.starting) start(true);
   }
 
   /* ---------- başlat ---------- */
@@ -954,22 +963,23 @@
   // Dokunuş: ses motorunu uyandır, ekranı açık tut, istenen mikrofon kapalıysa yeniden dene
   document.addEventListener("touchend", function () {
     keepAwake();
-    if (state.want && !state.running && !state.starting) start(true);
+    resumeMic();
   }, { passive: true });
   document.addEventListener("click", keepAwake);
 
   // Başka uygulamaya geçiş / arama / medya sonrası dönüş
   document.addEventListener("visibilitychange", function () {
     if (document.visibilityState === "hidden") {
-      teardown();                                   // mikrofonu bırak, bozuk oturum kalmasın
+      // Canlı mikrofonu durdurma: iOS dönüşte tekrar izin isteyebilir.
+      if (wakeLock) { var lock = wakeLock; wakeLock = null; lock.release().catch(function () {}); }
       try { if (keepVideo) keepVideo.pause(); } catch (e) {}
     } else {
       keepAwake();
-      if (state.want) setTimeout(function () { start(true); }, 250);
+      resumeMic();
     }
   });
-  window.addEventListener("pageshow", function () { if (state.want && !state.running) start(true); });
-  window.addEventListener("focus", function () { if (state.want && !state.running && !state.starting) start(true); });
+  window.addEventListener("pageshow", resumeMic);
+  window.addEventListener("focus", resumeMic);
 
   requestWake();
   if (state.want) start(true);
