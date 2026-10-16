@@ -193,6 +193,19 @@ body.win-open .topbar,body.win-open .transport,body.win-open .controls,body.win-
 
 .top-actions{display:flex;align-items:center;gap:8px}
 .help-btn{width:40px;height:40px;padding:0;border-radius:50%;font-weight:700;font-size:17px;background:var(--card);color:var(--acc);border:1px solid var(--line)}
+@media(max-width:580px){
+  .topbar{gap:6px;min-width:0}
+  #brand-btn{flex:0 0 auto;gap:0}
+  #brand-btn>div:last-child{display:none}
+  #brand-btn .brand-mark{width:34px;height:34px;border-radius:10px}
+  #brand-btn .brand-mark svg{width:20px;height:20px}
+  .top-actions{gap:5px;min-width:0;margin-left:auto}
+  .top-actions .lang,.top-actions .theme-switch{padding:2px;gap:2px;border-radius:9px;flex:none}
+  .top-actions .lang button{min-width:32px;padding:6px 5px;font-size:11px}
+  .top-actions .theme-switch button{width:32px;height:30px;padding:0;justify-content:center}
+  .top-actions .theme-switch svg{width:16px;height:16px}
+  .top-actions .help-btn{width:34px;height:34px;font-size:15px;flex:none}
+}
 .help-overlay[hidden]{display:none}
 .help-overlay{position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.5);backdrop-filter:blur(4px)}
 .help-dialog{position:relative;width:100%;max-width:640px;max-height:min(88vh,820px);overflow-y:auto;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:22px;padding:30px 28px 24px;box-shadow:0 20px 70px #0004;overscroll-behavior:contain}
