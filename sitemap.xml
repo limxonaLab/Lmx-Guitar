@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://lmxmetro.vercel.app/</loc>
-    <lastmod>2026-10-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <loc>https://limxona.vercel.app/tr</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://limxona.vercel.app/tr" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://limxona.vercel.app/en" />
   </url>
   <url>
-    <loc>https://lmxmetro.vercel.app/tuner</loc>
-    <lastmod>2026-10-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://limxona.vercel.app/en</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://limxona.vercel.app/tr" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://limxona.vercel.app/en" />
+  </url>
+  <url>
+    <loc>https://limxona.vercel.app/tr/metronome</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://limxona.vercel.app/tr/metronome" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://limxona.vercel.app/en/metronome" />
+  </url>
+  <url>
+    <loc>https://limxona.vercel.app/en/metronome</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://limxona.vercel.app/tr/metronome" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://limxona.vercel.app/en/metronome" />
+  </url>
+  <url>
+    <loc>https://limxona.vercel.app/tr/tuner</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://limxona.vercel.app/tr/tuner" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://limxona.vercel.app/en/tuner" />
+  </url>
+  <url>
+    <loc>https://limxona.vercel.app/en/tuner</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://limxona.vercel.app/tr/tuner" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://limxona.vercel.app/en/tuner" />
   </url>
 </urlset>

@@ -1,16 +1,22 @@
 {
   "trailingSlash": false,
+  "functions": {
+    "api/page.js": { "includeFiles": "*.html" }
+  },
   "redirects": [
     { "source": "/", "destination": "/tr", "permanent": true },
+    { "source": "/index.html", "destination": "/tr", "permanent": true },
     { "source": "/metronome", "destination": "/tr/metronome", "permanent": true },
-    { "source": "/tuner", "destination": "/tr/tuner", "permanent": true }
+    { "source": "/tuner", "destination": "/tr/tuner", "permanent": true },
+    { "source": "/metronome.html", "destination": "/tr/metronome", "permanent": true },
+    { "source": "/tuner.html", "destination": "/tr/tuner", "permanent": true }
   ],
   "rewrites": [
-    { "source": "/tr", "destination": "/index.html" },
-    { "source": "/en", "destination": "/index.html" },
-    { "source": "/tr/metronome", "destination": "/metronome.html" },
-    { "source": "/en/metronome", "destination": "/metronome.html" },
-    { "source": "/tr/tuner", "destination": "/tuner.html" },
-    { "source": "/en/tuner", "destination": "/tuner.html" }
+    { "source": "/tr", "destination": "/api/page?lang=tr&page=index" },
+    { "source": "/en", "destination": "/api/page?lang=en&page=index" },
+    { "source": "/tr/metronome", "destination": "/api/page?lang=tr&page=metronome" },
+    { "source": "/en/metronome", "destination": "/api/page?lang=en&page=metronome" },
+    { "source": "/tr/tuner", "destination": "/api/page?lang=tr&page=tuner" },
+    { "source": "/en/tuner", "destination": "/api/page?lang=en&page=tuner" }
   ]
 }
