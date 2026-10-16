@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-<title>LmXMetro – Online Metronom ve Akort Aleti</title>
+<title>Limxona – Online Metronom ve Akort Aleti</title>
 <meta name="description" content="Ücretsiz online metronom ve mikrofon destekli akort aleti. Tempoyu ayarla, ritmini kur, enstrümanını tarayıcıdan akort et.">
 <link rel="canonical" href="https://lmxmetro.vercel.app/">
 <meta name="google-site-verification" content="BXQYRq0FzpFqQAi3HTzZPCIpY7Ohp1PLgaTGQBz2Xt0" />
@@ -93,7 +93,7 @@
   .hero p { margin: 0; color: var(--mut); font-size: clamp(1rem, 2.2vw, 1.15rem); max-width: 46ch; }
 
   /* Seçim kartları */
-  .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: clamp(28px, 5vw, 56px); }
   .tool {
     --c-bg: var(--card); --c-fg: var(--fg); --c-mut: var(--mut); --c-line: var(--line);
     --c-acc: var(--acc); --c-chip: var(--soft); --c-btn-bg: var(--acc); --c-btn-fg: var(--acc-ink);
@@ -150,7 +150,7 @@
     .tool h2 { font-size: 1.35rem; }
     .tool .desc { font-size: .9rem; max-width: 22ch; }
     .chips li { font-size: .72rem; padding: 5px 9px; }
-    .demo { margin-top: 0; }
+    .demo { margin-top: auto; }
     .cta { align-self: stretch; padding: 11px 16px; font-size: .95rem; }
     .beats { gap: 10px; }
     .beats i { width: 10px; height: 10px; }
@@ -181,11 +181,6 @@
       </div>
     </div>
   </header>
-
-  <section class="hero">
-    <h1 data-i18n="title">Çalmadan önce hazırlan.</h1>
-    <p data-i18n="sub">Tempo için metronom, ses için akort aleti. İkisi de ücretsiz, tarayıcında açılır.</p>
-  </section>
 
   <main class="choices">
     <a class="tool metro" href="/metronome" id="linkMetro">
@@ -223,6 +218,11 @@
       <span class="cta" data-i18n="tCta">Akort aletini aç</span>
     </a>
   </main>
+
+  <section class="hero">
+    <h1 data-i18n="title">Çalmadan önce hazırlan.</h1>
+    <p data-i18n="sub">Tempo için metronom, ses için akort aleti. İkisi de ücretsiz, tarayıcında açılır.</p>
+  </section>
 
   <footer data-i18n="foot">Ücretsiz, kayıt gerektirmez.</footer>
 </div>
