@@ -196,6 +196,12 @@
   .error { color: var(--bad); font-size: .85rem; margin-top: 10px; text-align: center; min-height: 1em; }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
+  @media (max-width: 580px) {
+    .brand span { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    .brand { padding: 4px; }
+    .brand svg { width: 24px; height: 24px; }
+  }
+
   @media (max-width: 420px) {
     body { padding: 8px 8px 12px; }
     .app { padding: 12px 12px 14px; border-radius: 18px; }
