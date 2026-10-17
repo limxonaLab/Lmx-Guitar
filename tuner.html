@@ -100,13 +100,13 @@
     .lang { display: flex; flex: none; gap: 3px; padding: 3px; border: 1px solid var(--line); border-radius: 10px; background: var(--chip); }
     .lang button {
       border: 0; background: transparent; color: var(--muted); font: 600 .75rem var(--sans);
-      padding: 5px 10px; border-radius: 7px; cursor: pointer; min-width: 38px;
+      padding: 5px 10px; border-radius: 7px; cursor: pointer; min-width: 38px; transition: background-color .18s ease, color .18s ease, box-shadow .18s ease;
     }
     .lang button[aria-pressed="true"] { background: var(--text); color: var(--bg); }
     .theme-switch { display: flex; flex: none; gap: 3px; padding: 3px; border: 1px solid var(--line); border-radius: 10px; background: var(--chip); }
     .theme-switch button {
       border: 0; background: transparent; color: var(--muted); cursor: pointer;
-      padding: 5px; border-radius: 7px; display: flex; align-items: center;
+      padding: 5px; border-radius: 7px; display: flex; align-items: center; transition: background-color .18s ease, color .18s ease, box-shadow .18s ease;
     }
     .theme-switch button[aria-pressed="true"] { background: var(--text); color: var(--bg); }
     .theme-switch svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; display: block; }
@@ -120,9 +120,20 @@
   .modes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; background: var(--chip); padding: 4px; border-radius: 12px; }
   .modes button {
     border: 0; background: transparent; color: var(--muted); font: 500 .9rem var(--sans);
-    padding: 9px 4px; border-radius: 9px; cursor: pointer;
+    padding: 9px 4px; border-radius: 9px; cursor: pointer; transition: background-color .18s ease, color .18s ease, box-shadow .18s ease;
   }
   .modes button[aria-pressed="true"] { background: var(--chip-on); color: var(--chip-on-text); }
+  @media (hover: hover) and (pointer: fine) {
+    .modes button:not([aria-pressed="true"]):hover { background: var(--card); color: var(--text); box-shadow: inset 0 0 0 1px var(--line); }
+    .modes button[aria-pressed="true"]:hover { box-shadow: inset 0 0 0 2px var(--brass); }
+    .tuning-option:hover { background: var(--chip); }
+    .views button:not([aria-pressed="true"]):hover,
+    .lang button:not([aria-pressed="true"]):hover,
+    .theme-switch button:not([aria-pressed="true"]):hover { background: var(--card); color: var(--text); box-shadow: inset 0 0 0 1px var(--line); }
+    .views button[aria-pressed="true"]:hover,
+    .lang button[aria-pressed="true"]:hover,
+    .theme-switch button[aria-pressed="true"]:hover { box-shadow: inset 0 0 0 2px var(--brass); }
+  }
   .tuning-current { margin: 8px 4px 0; color: var(--muted); font-size: .76rem; text-align: center; }
   .tuning-current[hidden], .tuning-overlay[hidden] { display: none; }
   .tuning-overlay { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom)); background: rgba(4, 20, 24, .7); }
@@ -131,6 +142,8 @@
   .tuning-head h2 { margin: 0; font: 700 1.1rem var(--serif); }
   .tuning-close { background: var(--chip); color: var(--text); border: 0; border-radius: 9px; min-width: 36px; height: 36px; font-size: 1.25rem; cursor: pointer; }
   .tuning-list { overflow-y: auto; padding: 8px; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+  .tuning-section + .tuning-section { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .tuning-section h3 { margin: 4px 12px 8px; color: var(--muted); font: 600 .78rem var(--sans); text-transform: uppercase; letter-spacing: .07em; }
   .tuning-option { width: 100%; display: block; text-align: left; padding: 11px 12px; margin-bottom: 4px; border: 1px solid transparent; border-radius: 11px; color: var(--text); background: transparent; cursor: pointer; font: inherit; }
   .tuning-option[aria-pressed="true"] { background: var(--chip); border-color: var(--brass); }
   .tuning-option strong { display: block; font-size: .94rem; }
@@ -147,7 +160,7 @@
   .views { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: var(--chip); padding: 4px; border-radius: 12px; margin-top: 8px; }
   .views button {
     border: 0; background: transparent; color: var(--muted); font: 500 .9rem var(--sans);
-    padding: 9px 4px; border-radius: 9px; cursor: pointer;
+    padding: 9px 4px; border-radius: 9px; cursor: pointer; transition: background-color .18s ease, color .18s ease, box-shadow .18s ease;
   }
   .views button[aria-pressed="true"] { background: var(--chip-on); color: var(--chip-on-text); }
   /* Sahne: iki görünüm aynı hücreyi paylaşır, yükseklik görünüm değişince sabit kalır */
@@ -251,7 +264,7 @@
           <path d="M5.5 8.5c-1.3 1.6-1.3 4.4 0 6" opacity=".6"/>
           <path d="M26.5 8.5c1.3 1.6 1.3 4.4 0 6" opacity=".6"/>
         </svg>
-        <span>LmX Tuner <small>v1.3</small></span>
+        <span>LmX Tuner <small>v1.4</small></span>
       </button>
     </h1>
     <div class="lang" role="group" aria-label="Dil / Language">
@@ -307,7 +320,7 @@
 </main>
 <div class="tuning-overlay" id="tuningOverlay" hidden>
   <section class="tuning-dialog" role="dialog" aria-modal="true" aria-labelledby="tuningTitle">
-    <div class="tuning-head"><h2 id="tuningTitle" data-i18n="tuningTitle">Gitar akortları</h2><button class="tuning-close" id="tuningClose" type="button" aria-label="Kapat">×</button></div>
+    <div class="tuning-head"><h2 id="tuningTitle" data-i18n="tuningTitle">Akort seç</h2><button class="tuning-close" id="tuningClose" type="button" aria-label="Kapat">×</button></div>
     <div class="tuning-list" id="tuningList"></div>
   </section>
 </div>
@@ -322,7 +335,7 @@
       htmlLang: "tr",
       docTitle:"LmXMetro Tuner - Online Gitar & Enstrüman Akort Aleti",
       docDesc:"Mikrofon destekli online akort aletiyle gitar, ukulele ve bağlamanızı tarayıcıdan akort edin. Kromatik mod ve ayarlanabilir A4 referansı ücretsizdir.",
-      mChrom:"Kromatik", mGuitar:"Gitar", mUku:"Ukulele", mChoose:"Seç", tuningTitle:"Gitar akortları", tuningClose:"Kapat",
+      mChrom:"Kromatik", mGuitar:"Gitar", mUku:"Ukulele", mChoose:"Seç", tuningTitle:"Akort seç", tuningGuitar:"Gitar", tuningUkulele:"Ukulele", tuningClose:"Kapat",
       vBar:"Çubuk", vRoll:"Şerit",
       sFreq:"Frekans (Hz)", sTarget:"Hedef (Hz)", sCents:"Sapma (cent)",
       startBtn:"Mikrofonu başlat", stopBtn:"Durdur",
@@ -347,7 +360,7 @@
       htmlLang: "en",
       docTitle:"LmXMetro Tuner – Online Guitar & Instrument Tuner",
       docDesc:"Microphone-based, highly accurate online instrument tuner. Tune your guitar, ukulele or bağlama for free right in your browser.",
-      mChrom:"Chromatic", mGuitar:"Guitar", mUku:"Ukulele", mChoose:"Choose", tuningTitle:"Guitar tunings", tuningClose:"Close",
+      mChrom:"Chromatic", mGuitar:"Guitar", mUku:"Ukulele", mChoose:"Choose", tuningTitle:"Choose tuning", tuningGuitar:"Guitar", tuningUkulele:"Ukulele", tuningClose:"Close",
       vBar:"Bar", vRoll:"Roll",
       sFreq:"Frequency (Hz)", sTarget:"Target (Hz)", sCents:"Cents off",
       startBtn:"Start microphone", stopBtn:"Stop",
@@ -450,8 +463,17 @@
     {id:"guitarOpenA", tr:"Açık A", en:"Open A", midi:[40,45,52,57,61,64], notes:"E2 · A2 · E3 · A3 · C♯4 · E4", trUse:"Blues ve slide gitar; açık teller A majör verir.", enUse:"Blues and slide guitar; open strings form A major."},
     {id:"guitarOpenC", tr:"Açık C", en:"Open C", midi:[36,43,48,55,60,64], notes:"C2 · G2 · C3 · G3 · C4 · E4", trUse:"Akustik fingerstyle; geniş C majör tınısı.", enUse:"Acoustic fingerstyle; spacious C major sound."}
   ];
+  var UKULELE_TUNINGS = [
+    {id:"ukulele", tr:"Standart · High G", en:"Standard · High G", midi:[67,60,64,69], notes:"G4 · C4 · E4 · A4", trUse:"Soprano, konser ve tenor ukulele için yaygın akort.", enUse:"Common tuning for soprano, concert and tenor ukulele."},
+    {id:"ukuleleLowG", tr:"Low G", en:"Low G", midi:[55,60,64,69], notes:"G3 · C4 · E4 · A4", trUse:"Pes G teliyle daha geniş ses aralığı; uygun tel gerekir.", enUse:"Lower G string for a wider range; requires a suitable string."},
+    {id:"ukuleleD", tr:"D akordu", en:"D tuning", midi:[69,62,66,71], notes:"A4 · D4 · F♯4 · B4", trUse:"Geleneksel düzen; uygun tellerle bir tam ses tiz.", enUse:"Traditional tuning, a whole step higher with suitable strings."},
+    {id:"ukuleleBaritone", tr:"Bariton", en:"Baritone", midi:[50,55,59,64], notes:"D3 · G3 · B3 · E4", trUse:"Bariton ukulele; gitarın en ince dört teliyle aynı notalar.", enUse:"Baritone ukulele; same notes as the four highest guitar strings."}
+  ];
   GUITAR_TUNINGS.forEach(function (item) {
     INSTRUMENTS[item.id] = item.midi.map(function (midi, i) { return {midi:midi, s:"str" + (6-i)}; });
+  });
+  UKULELE_TUNINGS.forEach(function (item) {
+    INSTRUMENTS[item.id] = item.midi.map(function (midi, i) { return {midi:midi, s:"str" + (4-i)}; });
   });
   var IN_TUNE = 5;            // ± cent: "Doğru"
   var YIN_WINDOW = 3072;      // örnek: daha uzun pencere = daha hassas ölçüm
@@ -699,7 +721,7 @@
     renderStrings(); showIdle(); save();
   }
   function updateTuningCurrent() {
-    var item = GUITAR_TUNINGS.find(function (x) { return x.id === state.mode && x.id !== "guitar"; });
+    var item = GUITAR_TUNINGS.concat(UKULELE_TUNINGS).find(function (x) { return x.id === state.mode && x.id !== "guitar" && x.id !== "ukulele"; });
     var el = $("tuningCurrent");
     el.hidden = !item;
     if (item) el.textContent = (LANG === "tr" ? item.tr : item.en) + " · " + item.notes;
@@ -707,7 +729,10 @@
   function renderTuningList() {
     var row = $("tuningList");
     row.textContent = "";
-    GUITAR_TUNINGS.forEach(function (item) {
+    function section(titleKey, items) {
+      var group = document.createElement("section"); group.className = "tuning-section";
+      var title = document.createElement("h3"); title.textContent = t(titleKey); group.appendChild(title);
+      items.forEach(function (item) {
       var b = document.createElement("button");
       b.type = "button"; b.className = "tuning-option";
       b.setAttribute("aria-pressed", String(state.mode === item.id));
@@ -716,8 +741,12 @@
       var use = document.createElement("span"); use.className = "usage"; use.textContent = LANG === "tr" ? item.trUse : item.enUse;
       b.appendChild(name); b.appendChild(notes); b.appendChild(use);
       b.addEventListener("click", function () { setMode(item.id); closeTunings(); });
-      row.appendChild(b);
-    });
+      group.appendChild(b);
+      });
+      row.appendChild(group);
+    }
+    section("tuningGuitar", GUITAR_TUNINGS);
+    section("tuningUkulele", UKULELE_TUNINGS);
   }
   function openTunings() {
     $("tuningOverlay").hidden = false;
