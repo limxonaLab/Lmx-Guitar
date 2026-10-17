@@ -341,7 +341,8 @@ html,body{touch-action:pan-x pan-y}
   body{padding-left:2px;padding-right:2px}
   .pwrap:not(.win):not(.fs){padding-left:4px;padding-right:4px}
   .pwrap:not(.win):not(.fs) .pulses{flex-direction:column;align-items:center;overflow-x:hidden;padding-left:4px;padding-right:4px;gap:18px}
-  .pwrap:not(.win):not(.fs) .mblock{width:100%;flex-wrap:wrap;justify-content:center;gap:12px 4px}
+  .pwrap:not(.win):not(.fs) .mblock{width:100%;flex-wrap:wrap;justify-content:flex-start;gap:12px 4px}
+  .pwrap:not(.win):not(.fs) .cell.measure-start{margin-left:0}
   .pwrap:not(.win):not(.fs) .cell::before{display:none}
   .pwrap.win .pulses{overflow-x:hidden;padding-left:4px;padding-right:4px;justify-content:flex-start;align-items:center}
   .pwrap.win .pulses .frow{width:100%;max-width:100%;flex-wrap:wrap;justify-content:center;gap:12px 4px}
@@ -352,7 +353,7 @@ html,body{touch-action:pan-x pan-y}
 
 <div class="app">
  <header class="topbar">
-  <div class="brand" id="brand-btn" role="button" tabindex="0" data-i18n-title="brandTitle" title="Sayfayı yenile" style="cursor:pointer"><div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5h8l6 23H6L12 5Z"/><path d="m16 23 7-17M11 24h10M15 10h3"/><circle cx="20.5" cy="11.5" r="2" fill="currentColor" stroke="none"/></svg></div><div><h1><span data-i18n="brandName">Lmx Metronom v3.7</span><span style="color:var(--acc)">.</span></h1><div class="tagline" data-i18n="tagline">Kendi ritmini bul.</div></div></div>
+  <div class="brand" id="brand-btn" role="button" tabindex="0" data-i18n-title="brandTitle" title="Sayfayı yenile" style="cursor:pointer"><div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5h8l6 23H6L12 5Z"/><path d="m16 23 7-17M11 24h10M15 10h3"/><circle cx="20.5" cy="11.5" r="2" fill="currentColor" stroke="none"/></svg></div><div><h1><span data-i18n="brandName">Lmx Metronom v3.8</span><span style="color:var(--acc)">.</span></h1><div class="tagline" data-i18n="tagline">Kendi ritmini bul.</div></div></div>
   <div class="top-actions"><div class="lang" role="group" data-i18n-aria="langGroup" aria-label="Dil / Language"><button type="button" data-lang="tr" aria-pressed="true">TR</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div><div class="theme-switch" role="group" data-i18n-aria="themeGroup" aria-label="Görünüm"><button id="theme-light" data-i18n-aria="themeLightAria" aria-label="Gündüz teması" aria-pressed="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button id="theme-dark" data-i18n-aria="themeNightAria" aria-label="Gece teması" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M20.8 14A9 9 0 0 1 10 3.2 9 9 0 1 0 20.8 14Z"/></svg></button></div><button id="help-open" class="help-btn" data-i18n-aria="helpOpenAria" data-i18n-title="helpOpen" aria-label="Nasıl kullanılır? Yardımı aç" title="Nasıl kullanılır?">?</button></div>
  </header>
  <section class="pwrap" aria-labelledby="beats-title">
@@ -407,7 +408,7 @@ html,body{touch-action:pan-x pan-y}
     veya başka bir cihaza taşıyabilirsiniz.
   </p>
 </section>
-  <footer class="footer"><div class="shortcuts"><span data-i18n-html="kbdSpace"><kbd>Boşluk</kbd> veya boş alana tıkla: başlat / durdur</span><span data-i18n-html="kbdCtrlSpace"><kbd>Ctrl</kbd> + <kbd>Boşluk</kbd>: demo başlat</span><span data-i18n-html="kbdArrows"><kbd>↑ ↓</kbd> Tempo</span><span data-i18n-html="kbdCtrlClick"><kbd>Ctrl + tık</kbd> Tek vuruşu sustur</span></div><span class="footer-note"><span data-i18n="footerNote">Pratik için tasarlandı.</span> v3.7</span></footer>
+  <footer class="footer"><div class="shortcuts"><span data-i18n-html="kbdSpace"><kbd>Boşluk</kbd> veya boş alana tıkla: başlat / durdur</span><span data-i18n-html="kbdCtrlSpace"><kbd>Ctrl</kbd> + <kbd>Boşluk</kbd>: demo başlat</span><span data-i18n-html="kbdArrows"><kbd>↑ ↓</kbd> Tempo</span><span data-i18n-html="kbdCtrlClick"><kbd>Ctrl + tık</kbd> Tek vuruşu sustur</span></div><span class="footer-note"><span data-i18n="footerNote">Pratik için tasarlandı.</span> v3.8</span></footer>
 </div>
 
 <div class="help-overlay" id="help-overlay" hidden>
@@ -563,7 +564,7 @@ tr:{htmlLang:"tr",
 docTitle:"Online Metronom – Ücretsiz Tempo ve Ritim Aracı | LmXMetro",
 docDesc:"Ücretsiz online metronom ile 30–300 BPM tempo ayarlayın. Farklı ölçüler, vuruş vurguları ve ritmik bölümler oluşturun, ritimlerinizi kaydedin.",
 tagline:"Kendi ritmini bul.",
-brandName:"Lmx Metronom v3.7",
+brandName:"Lmx Metronom v3.8",
 statusReady:"Çalmaya hazır",statusPlaying:"Ritim akıyor",statusDemo:"Demo: 1. ölçü",
 playStart:"▶ Başlat",playStop:"■ Durdur",
  themeDay:"Gündüz",themeNight:"Gece",
@@ -661,7 +662,7 @@ en:{htmlLang:"en",
 docTitle:"Online Metronome – Free Tempo & Rhythm Tool | LmXMetro",
 docDesc:"Set a tempo from 30–300 BPM with this free online metronome. Build different meters, beat accents and rhythmic subdivisions, and save your rhythms.",
 tagline:"Find your rhythm.",
-brandName:"Lmx Metronome v3.7",
+brandName:"Lmx Metronome v3.8",
 statusReady:"Ready to play",statusPlaying:"Rhythm running",statusDemo:"Demo: Measure 1",
 playStart:"▶ Start",playStop:"■ Stop",
  themeDay:"Day",themeNight:"Night",
@@ -1167,7 +1168,7 @@ function layoutFs(el){
   const ref=Math.max(...NOT.map(specW))+2,R=Math.max(1,measures.length),maxN=Math.max(...measures.map(m=>m.num)),gap=10,rg=18,pad=22;
   if(winMode&&window.matchMedia('(max-width:580px)').matches){
     const columns=Math.min(4,maxN),mobileGap=4,available=Math.max(0,el.clientWidth-8);
-    const cw=Math.max(48,Math.min(88,Math.floor((available-(columns-1)*mobileGap)/columns)));
+    const cw=Math.max(48,Math.min(84,Math.floor((available-(columns-1)*mobileGap)/columns)));
     el.style.setProperty('--cw',cw+'px');el.style.setProperty('--sq',cw+'px');
     el.style.setProperty('--fs',Math.max(9,cw*.33)+'px');
     el.style.setProperty('--fgap',mobileGap+'px');el.style.setProperty('--rowgap',rg+'px');
