@@ -30,4 +30,14 @@
     <xhtml:link rel="alternate" hreflang="tr" href="https://limxona.vercel.app/tr/tuner" />
     <xhtml:link rel="alternate" hreflang="en" href="https://limxona.vercel.app/en/tuner" />
   </url>
+    <url>
+    <loc>https://limxona.vercel.app/tr/chords</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://limxona.vercel.app/tr/chords" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://limxona.vercel.app/en/chords" />
+  </url>
+  <url>
+    <loc>https://limxona.vercel.app/en/chords</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://limxona.vercel.app/tr/chords" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://limxona.vercel.app/en/chords" />
+  </url>
 </urlset>

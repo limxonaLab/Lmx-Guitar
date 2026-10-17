@@ -35,7 +35,8 @@ function render(kind, lang) {
     ['name', 'twitter:url', url], ['name', 'twitter:title', dict.docTitle], ['name', 'twitter:description', dict.docDesc]
   ]) html = setMeta(html, attribute, name, value);
   if (kind === 'index') html = html.replace('href="/metronome"', `href="/${lang}/metronome"`)
-                                   .replace('href="/tuner"', `href="/${lang}/tuner"`);
+                                   .replace('href="/tuner"', `href="/${lang}/tuner"`)
+							   .replace('href="/chords"', `href="/${lang}/chords"`);
   html = html.replace(/(<[^>]*data-i18n="([^"]+)"[^>]*>)([^<]*)(<\/[^>]+>)/g,
     (all, opening, key, oldText, closing) => dict[key] == null ? all : opening + escapeHtml(dict[key]) + closing);
   if (kind === 'metronome' && lang === 'en') {
@@ -50,7 +51,7 @@ function render(kind, lang) {
 }
 module.exports = function handler(req, res) {
   const {lang, page} = req.query || {};
-  if (!['tr', 'en'].includes(lang) || !['index', 'metronome', 'tuner'].includes(page)) {
+  if (!['tr', 'en'].includes(lang) || !['index', 'metronome', 'tuner', 'chords'].includes(page)) {
     res.statusCode = 404; res.end('Not found'); return;
   }
   res.setHeader('Content-Type', 'text/html; charset=utf-8');

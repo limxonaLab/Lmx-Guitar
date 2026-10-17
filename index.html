@@ -110,6 +110,15 @@
     --c-bg: #0b2025; --c-fg: #e9f1ed; --c-mut: #8fa9ab; --c-line: #25474f;
     --c-acc: #e2b155; --c-chip: #1a3d46; --c-btn-bg: #e2b155; --c-btn-fg: #0b2025;
   }
+  
+    .tool.chords { --c-acc: #b84a22; --c-chip: #f6e9e2; --c-btn-fg: #ffffff; }
+  :root[data-theme="dark"] .tool.chords { --c-acc: #f08a5d; --c-chip: #3a2822; --c-btn-fg: #1b1210; }
+  .mini { width: 100%; max-width: 150px; height: 44px; }
+  .mini .g { stroke: var(--c-line); stroke-width: 1.4; }
+  .mini circle { fill: var(--c-acc); transition: transform .2s; transform-box: fill-box; transform-origin: center; }
+  .chords:hover .mini circle { transform: scale(1.35); }
+  
+  
   .mark { width: 72px; height: 72px; color: var(--c-acc); }
   .tool h2 { margin: 0; font-family: var(--serif); font-weight: 700; font-size: clamp(1.6rem, 3.4vw, 2.1rem); letter-spacing: -.01em; line-height: 1.1; }
   .tool .desc { margin: 8px 0 0; color: var(--c-mut); max-width: 32ch; }
@@ -219,6 +228,23 @@
       </ul>
       <div class="demo" aria-hidden="true"><div class="needle"><span class="scale"></span><span class="mid"></span><span class="arm"></span></div></div>
       <span class="cta" data-i18n="tCta">Akort aletini aç</span>
+    </a>
+	
+	    <a class="tool chords" href="/chords" id="linkChords">
+      <svg class="mark" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+        <path d="M8 4v24M14.7 4v24M21.3 4v24M28 4v24M8 11h20M8 19h20"/><circle cx="14.7" cy="15" r="2.6" fill="currentColor" stroke="none"/><circle cx="21.3" cy="23" r="2.6" fill="currentColor" stroke="none"/>
+      </svg>
+      <div>
+        <h2 data-i18n="cName">Akor bulucu</h2>
+        <p class="desc" data-i18n="cDesc">Akoru seç, gitar sapında nota ve parmak konumlarını gör.</p>
+      </div>
+      <ul class="chips">
+        <li data-i18n="cC1">Tüm kök notalar</li>
+        <li data-i18n="cC2">Maj · Min · 7 · Sus</li>
+        <li data-i18n="cC3">5 varyasyon</li>
+      </ul>
+      <div class="demo" aria-hidden="true"><svg class="mini" viewBox="0 0 150 44"><path class="g" d="M10 4v36M40 4v36M70 4v36M100 4v36M130 4v36M10 14h120M10 26h120"/><circle cx="40" cy="20" r="6"/><circle cx="70" cy="32" r="6"/><circle cx="100" cy="8" r="6"/></svg></div>
+      <span class="cta" data-i18n="cCta">Akor bulucuyu aç</span>
     </a>
   </main>
 
