@@ -341,7 +341,7 @@ html,body{touch-action:pan-x pan-y}
   body{padding-left:2px;padding-right:2px}
   .pwrap:not(.win):not(.fs){padding-left:4px;padding-right:4px}
   .pwrap:not(.win):not(.fs) .pulses{flex-direction:column;align-items:center;overflow-x:hidden;padding-left:4px;padding-right:4px;gap:18px}
-  .pwrap:not(.win):not(.fs) .mblock{width:100%;flex-wrap:wrap;justify-content:flex-start;gap:12px 4px}
+  .pwrap:not(.win):not(.fs) .mblock{width:min(100%,var(--mobile-row-width,100%));flex-wrap:wrap;justify-content:flex-start;gap:12px 4px}
   .pwrap:not(.win):not(.fs) .cell.measure-start{margin-left:0}
   .pwrap:not(.win):not(.fs) .cell::before{display:none}
   .pwrap.win .pulses{overflow-x:hidden;padding-left:4px;padding-right:4px;justify-content:flex-start;align-items:center}
@@ -1255,6 +1255,7 @@ function drawPulses(){
    const n=mobile?Math.min(4,Math.max(...measures.map(m=>m.num))):Math.max(1,levels.length),gap=mobile?4:14;
    const edgeSpace=mobile?8:24,dividerSpace=mobile?0:Math.max(0,measures.length-1)*14;
    const cw=Math.max(48,Math.min(mobile?88:Math.round(ref),Math.floor((el.clientWidth-edgeSpace-dividerSpace-(n-1)*gap)/n)));
+   if(mobile)el.style.setProperty('--mobile-row-width',(n*cw+(n-1)*gap)+'px');
    sc=cw/ref;const sq=Math.min(88,cw);
    el.style.setProperty("--cw",cw+"px");el.style.setProperty("--sq",sq+"px");el.style.setProperty("--fs",Math.max(9,sq*.33)+"px");}
   levels.forEach((l,i)=>{
