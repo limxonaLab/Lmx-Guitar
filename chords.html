@@ -157,7 +157,7 @@ svg .mx{stroke:var(--mut);stroke-width:1.4}
 "use strict";
 var LANG=window.LMX_LANG||"tr";
 var TX={tr:{h1:"Akor bulucu",sub:"Kök notayı ve akor türünü seç, gitar sapında parmak konumlarını gör.",root:"Kök nota",type:"Akor türü",
-hint:"Diyagrama dokunarak akoru dinle, diğer varyasyonlar için kaydır. Koyu nokta kök notadır.",voicing:"Varyasyon",prevL:"Önceki varyasyon",nextL:"Sonraki varyasyon",finger:"Parmak",note:"Nota",open:"Açık pozisyon",fret:"Perde",knownOn:"Bu basılışı biliyorum",knownOff:"Bu basılışı bildiklerimden çıkar",
+hint:"Diyagrama bir kez dokununca akor, tekrar dokununca teller tek tek çalar. Koyu nokta kök notadır.",voicing:"Varyasyon",prevL:"Önceki varyasyon",nextL:"Sonraki varyasyon",finger:"Parmak",note:"Nota",open:"Açık pozisyon",fret:"Perde",knownOn:"Bu basılışı biliyorum",knownOff:"Bu basılışı bildiklerimden çıkar",
 find:"Bul",findTitle:"Bu hangi akor?",findLead:"Kapoyu ve telleri seç. Tel başındaki işaret boş → açık ○ → susturulmuş × olarak değişir; sapta basılan perdeye dokun.",capo:"Kapo",noCapo:"Kapo yok",clearFind:"Temizle",findNotes:"Duyulan notalar",findEmpty:"En az iki farklı nota seç.",findNone:"Bu notalara uyan bir akor bulunamadı. Telleri kontrol et.",findOther:"Diğer olası adlar",stringLabel:"tel",fretLabel:"perde",openString:"açık",mutedString:"susturulmuş",unsetString:"seçilmedi",
 none:"Bu akor için uygun bir dizilim bulunamadı.",title:"Lmx Chords Akor Bulucu – Gitar Akorları ve Parmak Pozisyonları",
 htitle:"Akor bulucu nasıl kullanılır?",hlead:"Kök notayı ve akor türünü seç, gitar sapında nota ve parmak konumlarını gör. Başlıklara tıklayarak ayrıntıları açabilirsin. Pencerenin dışına tıklayarak, Esc ile ya da ✕ ile kapatabilirsin.",helpL:"Nasıl kullanılır?",closeL:"Kapat",day:"Gündüz",night:"Gece",themeL:"Görünüm",
@@ -165,7 +165,7 @@ hs:[["Hızlı başlangıç",`<ol>
 <li><b>Kök notayı seç:</b> üstteki C D E F G A B düğmelerinden birine bas. Bemol ya da diyez için soldaki ♭ ♮ ♯ düğmelerini kullan (örneğin B + ♭ = B♭).</li>
 <li><b>Akor türünü seç:</b> Maj, Min, 7, Sus gibi bir tür seç. Akorun adı ve içindeki notalar diyagramın altında yazar.</li>
 <li><b>Varyasyonlara bak:</b> diyagramı sağa sola kaydırarak aynı akorun farklı basılışlarını gez.</li>
-<li><b>Dinle:</b> diyagrama dokun ya da tıkla, akor çalınır.</li></ol>`],
+<li><b>Dinle:</b> diyagrama ilk dokunuşta akor birlikte, ikinci dokunuşta teller tek tek çalınır.</li></ol>`],
 ["Diyagramı okumak",`<p>Diyagram gitar sapını karşıdan gösterir. Soldan sağa teller 6. (en kalın), 5., 4., 3., 2. ve 1. (en ince) tel; yukarıdan aşağıya perdelerdir.</p>
 <ul>
 <li><i class="sw r"></i><b>Koyu nokta:</b> akorun kök notası. (Gece temasında açık renk görünür.)</li>
@@ -203,7 +203,7 @@ hs:[["Hızlı başlangıç",`<ol>
 <p><b>Bu sayfa seni hatırlar:</b> son seçtiğin kök, akor türü, Parmak / Nota tercihi, dil ve her varyasyon kartındaki ✓ ile işaretlediğin basılışlar bu tarayıcıda saklanır.</p>`]],
 desc:"Online gitar akor bulucu. Kök notayı ve akor türünü seç, gitar sapında nota ve parmak konumlarını 10 farklı varyasyonla gör.",play:"Dinle"},
 en:{h1:"Chord finder",sub:"Pick a root note and a chord type to see finger positions on the fretboard.",root:"Root note",type:"Chord type",
-hint:"Tap the diagram to hear the chord, swipe for other voicings. The dark dot is the root note.",voicing:"Voicing",prevL:"Previous voicing",nextL:"Next voicing",finger:"Finger",note:"Note",open:"Open position",fret:"Fret",knownOn:"I know this voicing",knownOff:"Remove this voicing from known",
+hint:"Tap the diagram once to hear the chord, then again to hear each string in turn. The dark dot is the root note.",voicing:"Voicing",prevL:"Previous voicing",nextL:"Next voicing",finger:"Finger",note:"Note",open:"Open position",fret:"Fret",knownOn:"I know this voicing",knownOff:"Remove this voicing from known",
 find:"Find",findTitle:"Which chord is this?",findLead:"Choose the capo and strings. The string marker cycles unset → open ○ → muted ×; tap a fret to add a finger.",capo:"Capo",noCapo:"No capo",clearFind:"Clear",findNotes:"Sounding notes",findEmpty:"Choose at least two different notes.",findNone:"No matching chord found. Check the selected strings.",findOther:"Other possible names",stringLabel:"string",fretLabel:"fret",openString:"open",mutedString:"muted",unsetString:"unset",
 none:"No suitable voicing found for this chord.",title:"Lmx Chords Chord Finder – Guitar Chords and Finger Positions",
 htitle:"How to use the chord finder",hlead:"Pick a root note and a chord type to see notes and finger positions on the fretboard. Tap a heading to open the details. Close this window by clicking outside it, pressing Esc, or using ✕.",helpL:"How to use",closeL:"Close",day:"Day",night:"Night",themeL:"Theme",
@@ -211,7 +211,7 @@ hs:[["Quick start",`<ol>
 <li><b>Pick a root note:</b> press one of the C D E F G A B buttons at the top. For a flat or sharp use the ♭ ♮ ♯ buttons on the left (for example B + ♭ = B♭).</li>
 <li><b>Pick a chord type:</b> choose something like Maj, Min, 7 or Sus. The chord name and its notes are shown below the diagram.</li>
 <li><b>Browse the voicings:</b> slide the diagram left or right to see different ways to play the same chord.</li>
-<li><b>Listen:</b> tap or click the diagram to hear the chord.</li></ol>`],
+<li><b>Listen:</b> tap the diagram once to hear the chord together, then again to hear each string separately.</li></ol>`],
 ["Reading the diagram",`<p>The diagram shows the guitar neck face-on. From left to right the strings are 6th (thickest), 5th, 4th, 3rd, 2nd and 1st (thinnest); frets run from top to bottom.</p>
 <ul>
 <li><i class="sw r"></i><b>Dark dot:</b> the root note of the chord. (It looks light in the dark theme.)</li>
@@ -494,19 +494,57 @@ function draw(v,rp){
   return h+"</svg>";
 }
 /* ---- ses ---- */
-var AC;
-function strum(v){
+var AC,activeAudio,activeAudioUrl,pluckWave;
+var STRING_LEVEL=[.52,.66,.8,.96,1.08,1.18];
+var IOS_AUDIO=/iPad|iPhone|iPod/.test(navigator.userAgent)||navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1;
+function strumWebAudio(v,oneByOne){
   AC=AC||new(window.AudioContext||window.webkitAudioContext)();
-  if(AC.state==="suspended")AC.resume();
-  var t0=AC.currentTime+.02,k=0;
-  v.fr.forEach(function(f,i){
-    if(f<0)return;
-    var o=AC.createOscillator(),g=AC.createGain(),lp=AC.createBiquadFilter(),tt=t0+k++*.045;
-    o.type="triangle";o.frequency.value=440*Math.pow(2,(TUN[i]+f-69)/12);
-    lp.type="lowpass";lp.frequency.value=2200;
-    g.gain.setValueAtTime(0,tt);g.gain.linearRampToValueAtTime(.2,tt+.008);g.gain.exponentialRampToValueAtTime(.0001,tt+1.6);
-    o.connect(lp);lp.connect(g);g.connect(AC.destination);o.start(tt);o.stop(tt+1.7);
-  });
+  if(!pluckWave){
+    pluckWave=AC.createPeriodicWave(new Float32Array(6),new Float32Array([0,1,.48,.27,.16,.08]));
+  }
+  function schedule(){
+    var t0=AC.currentTime+.02,k=0;
+    v.fr.forEach(function(f,i){
+      if(f<0)return;
+      var o=AC.createOscillator(),g=AC.createGain(),lp=AC.createBiquadFilter(),tt=t0+k++*(oneByOne?.3:.045);
+      o.setPeriodicWave(pluckWave);o.frequency.value=440*Math.pow(2,(TUN[i]+f-69)/12);
+      lp.type="lowpass";lp.frequency.setValueAtTime(6500,tt);lp.frequency.exponentialRampToValueAtTime(1900,tt+.9);
+      g.gain.setValueAtTime(0,tt);g.gain.linearRampToValueAtTime(.17*STRING_LEVEL[i],tt+.004);g.gain.exponentialRampToValueAtTime(.0001,tt+(oneByOne?.85:1.6));
+      o.connect(lp);lp.connect(g);g.connect(AC.destination);o.start(tt);o.stop(tt+(oneByOne?.9:1.7));
+    });
+  }
+  if(AC.state==="suspended")AC.resume().then(schedule).catch(function(){});
+  else schedule();
+}
+function chordWav(v,oneByOne){
+  var rate=22050,notes=v.fr.map(function(f,i){return f<0?null:{freq:440*Math.pow(2,(TUN[i]+f-69)/12),level:STRING_LEVEL[i]};}).filter(Boolean);
+  var gap=oneByOne?.3:.055;
+  var samples=Math.ceil(rate*((oneByOne?1:1.5)+Math.max(0,notes.length-1)*gap)),buf=new ArrayBuffer(44+samples*2),view=new DataView(buf);
+  function label(offset,s){for(var j=0;j<s.length;j++)view.setUint8(offset+j,s.charCodeAt(j));}
+  label(0,"RIFF");view.setUint32(4,36+samples*2,true);label(8,"WAVE");label(12,"fmt ");
+  view.setUint32(16,16,true);view.setUint16(20,1,true);view.setUint16(22,1,true);
+  view.setUint32(24,rate,true);view.setUint32(28,rate*2,true);view.setUint16(32,2,true);view.setUint16(34,16,true);
+  label(36,"data");view.setUint32(40,samples*2,true);
+  for(var n=0;n<samples;n++){
+    var time=n/rate,mix=0;
+    notes.forEach(function(note,i){
+      var age=time-i*gap;if(age<0)return;
+      var env=(1-Math.exp(-age*280))*Math.exp(-age*(oneByOne?6:3.2)),phase=2*Math.PI*note.freq*age;
+      mix+=.14*note.level*env*(Math.sin(phase)+.48*Math.exp(-age*4)*Math.sin(phase*2)+.27*Math.exp(-age*6)*Math.sin(phase*3)+.16*Math.exp(-age*8)*Math.sin(phase*4)+.08*Math.exp(-age*10)*Math.sin(phase*5));
+    });
+    view.setInt16(44+n*2,Math.round(Math.max(-1,Math.min(1,mix))*32767),true);
+  }
+  return new Blob([buf],{type:"audio/wav"});
+}
+function strum(v,oneByOne){
+  if(!IOS_AUDIO){strumWebAudio(v,oneByOne);return;}
+  if(activeAudio){activeAudio.pause();URL.revokeObjectURL(activeAudioUrl);activeAudio=null;}
+  var url=URL.createObjectURL(chordWav(v,oneByOne)),audio=new Audio();
+  activeAudio=audio;activeAudioUrl=url;audio.src=url;
+  function release(){if(activeAudio===audio){activeAudio=null;activeAudioUrl=null;}URL.revokeObjectURL(url);}
+  audio.addEventListener("ended",release,{once:true});audio.addEventListener("error",release,{once:true});
+  var started=audio.play(); // Dokunma olayının içinde başlat; iPhone Safari bunu gerektirir.
+  if(started&&started.catch)started.catch(function(){release();strumWebAudio(v,oneByOne);});
 }
 /* ---- arayüz ---- */
 function $(id){return document.getElementById(id);}
@@ -538,7 +576,8 @@ function render(keep){
     var play=document.createElement("button");play.type="button";play.className="play-voicing";
     play.setAttribute("aria-label",sym+" · "+t("voicing")+" "+(i+1)+" · "+t("play"));
     play.innerHTML=draw(v,rp)+'<div class="cn">'+sym+'</div><div class="nt">'+notes+"</div><small>"+(v.open?t("open"):t("fret")+" "+v.mn)+" · "+(i+1)+" / "+VS.length+"</small>";
-    play.onclick=function(){strum(v);};card.appendChild(play);
+    var nextOneByOne=false;
+    play.onclick=function(){strum(v,nextOneByOne);nextOneByOne=!nextOneByOne;};card.appendChild(play);
     var badge=document.createElement("button"),key=voicingKey(v);
     badge.type="button";badge.className="known";badge.textContent="✓";updateKnown(badge,key);
     badge.onclick=function(){if(known.has(key))known.delete(key);else known.add(key);saveKnown();updateKnown(badge,key);};
