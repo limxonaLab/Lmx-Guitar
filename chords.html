@@ -56,7 +56,7 @@ button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .chip{border:1px solid var(--line);background:var(--card);color:var(--fg);font:600 1rem var(--sans);padding:11px 6px;border-radius:12px;cursor:pointer}
 .chip[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:var(--ink)}
 .stage{position:relative}
-.known{position:absolute;top:12px;right:12px;z-index:3;width:48px;height:48px;border:3px solid var(--mut);border-radius:50%;background:var(--card);color:var(--mut);font:700 1.35rem var(--sans);cursor:pointer;display:grid;place-items:center;transition:background .16s,color .16s,border-color .16s,transform .16s}
+.known{position:absolute;top:10px;right:12px;z-index:1;width:48px;height:48px;border:3px solid var(--mut);border-radius:50%;background:var(--card);color:var(--mut);font:700 1.35rem var(--sans);cursor:pointer;display:grid;place-items:center;transition:background .16s,color .16s,border-color .16s,transform .16s}
 .known:hover{transform:scale(1.06)}.known[aria-pressed="true"]{border-color:var(--acc);background:var(--acc);color:var(--ink)}
 .car{position:relative;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
 .car::-webkit-scrollbar{display:none}
@@ -64,7 +64,8 @@ button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .car.drag{cursor:grabbing}
 .slide svg{pointer-events:none}
 .car:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:24px}
-.slide{flex:0 0 100%;scroll-snap-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:2px 10px 12px;color:var(--fg);font-family:var(--sans);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.slide{position:relative;flex:0 0 100%;scroll-snap-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:58px 10px 12px;color:var(--fg);font-family:var(--sans);-webkit-tap-highlight-color:transparent}
+.play-voicing{width:100%;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0;border:0;background:transparent;color:inherit;font:inherit;cursor:pointer}
 .slide svg{width:100%;max-width:min(400px,94%);height:auto}
 .nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:1.5rem;line-height:1;cursor:pointer}
 .nav:disabled{opacity:.3;cursor:default}
@@ -123,7 +124,7 @@ svg .mx{stroke:var(--mut);stroke-width:1.4}
 <div class="roots" id="roots"></div>
 <div class="opts"><div class="seg" id="acc" role="group"></div><div class="seg" id="mode" role="group"><button data-m="finger" data-i="finger">Parmak</button><button data-m="note" data-i="note">Nota</button></div></div>
 <div class="quals" id="quals"></div>
-<div class="stage"><button class="nav prev" id="prev" type="button">‹</button><div class="car" id="car" tabindex="0" aria-live="polite"></div><button class="nav next" id="next" type="button">›</button><button class="known" id="known" type="button" aria-pressed="false" aria-label="Bu akoru biliyorum" title="Bu akoru biliyorum">✓</button></div>
+<div class="stage"><button class="nav prev" id="prev" type="button">‹</button><div class="car" id="car" tabindex="0" aria-live="polite"></div><button class="nav next" id="next" type="button">›</button></div>
 <div class="dots" id="dots" role="group"></div>
 </div>
 
@@ -134,7 +135,7 @@ svg .mx{stroke:var(--mut);stroke-width:1.4}
 "use strict";
 var LANG=window.LMX_LANG||"tr";
 var TX={tr:{h1:"Akor bulucu",sub:"Kök notayı ve akor türünü seç, gitar sapında parmak konumlarını gör.",root:"Kök nota",type:"Akor türü",
-hint:"Diyagrama dokunarak akoru dinle, diğer varyasyonlar için kaydır. Koyu nokta kök notadır.",voicing:"Varyasyon",prevL:"Önceki varyasyon",nextL:"Sonraki varyasyon",finger:"Parmak",note:"Nota",open:"Açık pozisyon",fret:"Perde",knownOn:"Bu akoru biliyorum",knownOff:"Bildiklerimden çıkar",
+hint:"Diyagrama dokunarak akoru dinle, diğer varyasyonlar için kaydır. Koyu nokta kök notadır.",voicing:"Varyasyon",prevL:"Önceki varyasyon",nextL:"Sonraki varyasyon",finger:"Parmak",note:"Nota",open:"Açık pozisyon",fret:"Perde",knownOn:"Bu basılışı biliyorum",knownOff:"Bu basılışı bildiklerimden çıkar",
 none:"Bu akor için uygun bir dizilim bulunamadı.",title:"Lmx Chords Akor Bulucu – Gitar Akorları ve Parmak Pozisyonları",
 htitle:"Akor bulucu nasıl kullanılır?",hlead:"Kök notayı ve akor türünü seç, gitar sapında nota ve parmak konumlarını gör. Başlıklara tıklayarak ayrıntıları açabilirsin. Pencerenin dışına tıklayarak, Esc ile ya da ✕ ile kapatabilirsin.",helpL:"Nasıl kullanılır?",closeL:"Kapat",day:"Gündüz",night:"Gece",themeL:"Görünüm",
 hs:[["Hızlı başlangıç",`<ol>
@@ -153,17 +154,18 @@ hs:[["Hızlı başlangıç",`<ol>
 <li><b>Alttaki harfler:</b> her telde çıkan notanın adı.</li></ul>`],
 ["Varyasyonlar ve gezinme",`<p>Aynı akor gitarda birçok farklı yerden çalınabilir. Her akor için en fazla 10 varyasyon gösterilir; az notalı akorlarda daha az çıkabilir.</p>
 <ul>
-<li><b>Sıralama:</b> varyasyonlar üst eşiğe en yakın pozisyondan başlayarak sap boyunca sıralanır. Aynı pozisyonda yaygın akor şekilleri önce gelir.</li>
+<li><b>Sıralama:</b> bilinen standart basılış ve rahat bir alternatif önce gösterilir; kalan varyasyonlar üst eşiğe yakın pozisyondan sapın ilerisine doğru sıralanır.</li>
 <li><b>Gezinme:</b> dokunmatik ekranda kaydır. Bilgisayarda mouse ile sürükle, yanlardaki ‹ › düğmelerine bas ya da diyagram seçiliyken <kbd>←</kbd> <kbd>→</kbd> tuşlarını kullan.</li>
 <li><b>Alttaki yuvarlaklar:</b> varyasyon sayısı kadardır. Birine dokunursan doğrudan o varyasyona gidersin.</li>
 <li><b>Etiket:</b> diyagramın altında "Açık pozisyon" ya da "Perde N" ile kaçıncı varyasyon olduğu yazar.</li>
 <li><b>Ses:</b> akor basit bir sentezle çalınır, gerçek gitar sesi değildir. Amaç doğru tellerin duyulmasıdır.</li></ul>`],
-["Akor türleri",`<p>Türler kolaydan ileriye dört grupta sıralanmıştır; küçük ekranlarda satırlara yayılır.</p>
+["Akor türleri",`<p>Türler kolaydan ileriye beş grupta sıralanmıştır; küçük ekranlarda satırlara yayılır.</p>
 <ul>
 <li><b>1. grup:</b> Maj, Min, 7, m7, Maj7, 5 ve Sus4 gibi sık kullanılan akorlar.</li>
-<li><b>2. grup:</b> Sus2, Add9, 6, m6, 6/9, 7sus4 ve 7add11.</li>
-<li><b>3. grup:</b> 9, Maj9, m9, 11, m11, 13 ve mMaj7.</li>
-<li><b>4. grup:</b> Dim, Dim7, m7♭5, Aug, 7♭9, 7♯9 ve 7♯11.</li></ul>`],
+<li><b>2. grup:</b> Sus2, Add9, mAdd9, 6, m6, 6/9, 7sus4 ve 9sus4.</li>
+<li><b>3. grup:</b> 9, Maj9, m9, mMaj7, mMaj9, 11, m11 ve 13.</li>
+<li><b>4. grup:</b> Dim, Dim7, m7♭5, Aug, 7♭5, 7♯5, 7♭9 ve 7♯9.</li>
+<li><b>5. grup:</b> 7add11, 7♯11, Maj7♯11, m13 ve Maj13.</li></ul>`],
 ["Notalar ve bemol / diyez",`<ul>
 <li>Akor adının altındaki harfler seçili pozisyonda gerçekten çalan notalardır (örneğin C · E · G). Geniş akorlarda bazı isteğe bağlı sesler çıkarılabilir.</li>
 <li>Bemol (♭) seçersen notalar bemollü yazılır (D♭ gibi), diyez (♯) seçersen diyezli yazılır (C♯ gibi). ♮ hiçbirini seçmemek demektir. F akorunda bemol kullanılır (B♭ gibi).</li>
@@ -174,10 +176,10 @@ hs:[["Hızlı başlangıç",`<ol>
 <li><kbd>Esc</kbd>: bu pencereyi kapatır</li>
 <li><b>TR / EN</b> düğmesi dili değiştirir. Seçim ana sayfadakiyle ortaktır.</li>
 <li><b>Gündüz / Gece</b> düğmesi görünümü değiştirir, tercih hatırlanır.</li></ul>
-<p><b>Bu sayfa seni hatırlar:</b> son seçtiğin kök, akor türü, Parmak / Nota tercihi, dil ve sağ üstte ✓ ile işaretlediğin bildiğin akorlar bu tarayıcıda saklanır.</p>`]],
+<p><b>Bu sayfa seni hatırlar:</b> son seçtiğin kök, akor türü, Parmak / Nota tercihi, dil ve her varyasyon kartındaki ✓ ile işaretlediğin basılışlar bu tarayıcıda saklanır.</p>`]],
 desc:"Online gitar akor bulucu. Kök notayı ve akor türünü seç, gitar sapında nota ve parmak konumlarını 10 farklı varyasyonla gör.",play:"Dinle"},
 en:{h1:"Chord finder",sub:"Pick a root note and a chord type to see finger positions on the fretboard.",root:"Root note",type:"Chord type",
-hint:"Tap the diagram to hear the chord, swipe for other voicings. The dark dot is the root note.",voicing:"Voicing",prevL:"Previous voicing",nextL:"Next voicing",finger:"Finger",note:"Note",open:"Open position",fret:"Fret",knownOn:"I know this chord",knownOff:"Remove from known chords",
+hint:"Tap the diagram to hear the chord, swipe for other voicings. The dark dot is the root note.",voicing:"Voicing",prevL:"Previous voicing",nextL:"Next voicing",finger:"Finger",note:"Note",open:"Open position",fret:"Fret",knownOn:"I know this voicing",knownOff:"Remove this voicing from known",
 none:"No suitable voicing found for this chord.",title:"Lmx Chords Chord Finder – Guitar Chords and Finger Positions",
 htitle:"How to use the chord finder",hlead:"Pick a root note and a chord type to see notes and finger positions on the fretboard. Tap a heading to open the details. Close this window by clicking outside it, pressing Esc, or using ✕.",helpL:"How to use",closeL:"Close",day:"Day",night:"Night",themeL:"Theme",
 hs:[["Quick start",`<ol>
@@ -196,17 +198,18 @@ hs:[["Quick start",`<ol>
 <li><b>Letters at the bottom:</b> the note produced on each string.</li></ul>`],
 ["Voicings and navigation",`<p>The same chord can be played in many places on the neck. Up to 10 voicings are shown for each chord; some chords may have fewer.</p>
 <ul>
-<li><b>Order:</b> variations start near the nut and progress up the neck. Familiar chord shapes appear first within each position.</li>
+<li><b>Order:</b> a familiar standard shape and a comfortable alternative appear first; remaining voicings progress from near the nut up the neck.</li>
 <li><b>Navigating:</b> on a touch screen just swipe. On a computer drag with the mouse, press the ‹ › buttons at the sides, or use <kbd>←</kbd> <kbd>→</kbd> while the diagram is focused.</li>
 <li><b>Dots at the bottom:</b> one for each voicing. Tap one to jump straight to it.</li>
 <li><b>Label:</b> under the diagram you see "Open position" or "Fret N" and which voicing it is.</li>
 <li><b>Sound:</b> the chord is played with a simple synthesizer, not a real guitar. The point is to hear the right strings.</li></ul>`],
-["Chord types",`<p>Chord types are arranged from common to advanced in four groups; they wrap on small screens.</p>
+["Chord types",`<p>Chord types are arranged from common to advanced in five groups; they wrap on small screens.</p>
 <ul>
 <li><b>Group 1:</b> frequently used Maj, Min, 7, m7, Maj7, 5 and Sus4.</li>
-<li><b>Group 2:</b> Sus2, Add9, 6, m6, 6/9, 7sus4 and 7add11.</li>
-<li><b>Group 3:</b> 9, Maj9, m9, 11, m11, 13 and mMaj7.</li>
-<li><b>Group 4:</b> Dim, Dim7, m7♭5, Aug, 7♭9, 7♯9 and 7♯11.</li></ul>`],
+<li><b>Group 2:</b> Sus2, Add9, mAdd9, 6, m6, 6/9, 7sus4 and 9sus4.</li>
+<li><b>Group 3:</b> 9, Maj9, m9, mMaj7, mMaj9, 11, m11 and 13.</li>
+<li><b>Group 4:</b> Dim, Dim7, m7♭5, Aug, 7♭5, 7♯5, 7♭9 and 7♯9.</li>
+<li><b>Group 5:</b> 7add11, 7♯11, Maj7♯11, m13 and Maj13.</li></ul>`],
 ["Notes and flats / sharps",`<ul>
 <li>The letters below the chord name are the notes actually sounded in the selected voicing (for example C · E · G). Extended voicings may omit optional chord tones.</li>
 <li>If you choose flat (♭) notes are written with flats (like D♭), if you choose sharp (♯) with sharps (like C♯). ♮ means neither. F chords use flats (like B♭).</li>
@@ -217,7 +220,7 @@ hs:[["Quick start",`<ol>
 <li><kbd>Esc</kbd>: closes this window</li>
 <li>The <b>TR / EN</b> button switches the language. It is shared with the home page.</li>
 <li>The <b>Day / Night</b> button switches the theme and your choice is remembered.</li></ul>
-<p><b>This page remembers you:</b> your last root, chord type, Finger / Note choice, language and chords marked with the ✓ button are stored in this browser.</p>`]],
+<p><b>This page remembers you:</b> your last root, chord type, Finger / Note choice, language and individual voicings marked with ✓ on each card are stored in this browser.</p>`]],
 desc:"Online guitar chord finder. Pick a root note and chord type and see notes and finger positions on the fretboard in up to 10 different voicings.",play:"Play"}};
 function t(k){return TX[LANG][k];}
 
@@ -235,7 +238,15 @@ var Q=[["maj","Maj","",[0,4,7]],["min","Min","m",[0,3,7]],["5","5","5",[0,7]],["
 ["11","11","11",[0,4,7,10,2,5],[0,4,10,2,5]],["m11","m11","m11",[0,3,7,10,2,5],[0,3,10,2,5]],
 ["13","13","13",[0,4,7,10,2,9],[0,4,10,9]],
 ["7b9","7♭9","7♭9",[0,4,7,10,1],[0,4,10,1]],["7s9","7♯9","7♯9",[0,4,7,10,3],[0,4,10,3]],
-["7s11","7♯11","7♯11",[0,4,7,10,6],[0,4,10,6]]];
+["7s11","7♯11","7♯11",[0,4,7,10,6],[0,4,10,6]],
+["mMaj9","mMaj9","m(maj9)",[0,3,7,11,2],[0,3,11,2]],
+["madd9","mAdd9","madd9",[0,3,7,2],[0,3,2]],
+["9sus4","9sus4","9sus4",[0,5,7,10,2],[0,5,10,2]],
+["7b5","7♭5","7♭5",[0,4,6,10]],
+["7s5","7♯5","7♯5",[0,4,8,10]],
+["maj7s11","Maj7♯11","maj7♯11",[0,4,7,11,6],[0,4,11,6]],
+["m13","m13","m13",[0,3,7,10,2,9],[0,3,10,9]],
+["maj13","Maj13","maj13",[0,4,7,11,2,9],[0,4,11,9]]];
 var S={root:"C",acc:"",q:"maj",mode:"finger"};
 try{var sv=JSON.parse(localStorage.getItem("lmx-chord")||"null");if(sv&&LET[sv.root]!==undefined&&Q.some(function(q){return q[0]===sv.q;}))S=Object.assign(S,sv);}catch(e){}
 function rootPc(){return(LET[S.root]+(S.acc==="♯"?1:S.acc==="♭"?-1:0)+12)%12;}
@@ -243,21 +254,84 @@ function qdef(){return Q.filter(function(q){return q[0]===S.q;})[0];}
 
 /* ---- parmak ataması ---- */
 function fing(fr){
-  var by={},fg=[0,0,0,0,0,0],groups=[],n=0;
-  fr.forEach(function(f,i){if(f>0)(by[f]=by[f]||[]).push(i);});
-  var fs=Object.keys(by).map(Number).sort(function(a,b){return a-b;});
-  for(var k=0;k<fs.length;k++){
-    var f=fs[k],s=by[f],a=s[0],b=s[s.length-1],bar=s.length>1;
-    if(bar)for(var i=a;i<=b;i++)if(fr[i]===0)bar=false;
-    if(bar){n++;if(n>4)return null;s.forEach(function(i){fg[i]=n;});groups.push({f:f,a:a,b:b,n:n,bar:true});}
-    else s.forEach(function(i){n++;fg[i]=n;groups.push({f:f,a:i,b:i,n:n,bar:false});});
-    if(n>4)return null;
+  var pressed=[],min=Infinity,best=null;
+  fr.forEach(function(f,i){if(f>0){pressed.push(i);min=Math.min(min,f);}});
+  function assign(bar,upper){
+    var groups=[],fg=[0,0,0,0,0,0],chosen=[bar,upper].filter(Boolean);
+    chosen.forEach(function(g){groups.push({f:g.f,a:g.a,b:g.b,bar:true});});
+    pressed.forEach(function(i){
+      if(!chosen.some(function(g){return i>=g.a&&i<=g.b&&fr[i]===g.f;}))
+        groups.push({f:fr[i],a:i,b:i,bar:false});
+    });
+    if(groups.length>4)return null;
+    groups.sort(function(a,b){return a.f-b.f||b.bar-a.bar||a.a-b.a;});
+    // Perde aralığı büyüdükçe parmak numarası da büyüsün (1 -> 4).
+    var chosenFingers=null,lowestCost=Infinity;
+    (function search(pos,last,cost,numbers){
+      if(pos===groups.length){if(cost<lowestCost){lowestCost=cost;chosenFingers=numbers.slice();}return;}
+      var target=Math.min(4,groups[pos].f-min+1);
+      if(groups[pos].bar&&groups[pos].f>min&&groups[pos].b-groups[pos].a>=2)
+        target=Math.max(3,target); // Üç telli üst bare yüzük/serçe ile daha rahattır.
+      for(var finger=last+1;finger<=4-(groups.length-pos-1);finger++){
+        numbers.push(finger);
+        search(pos+1,finger,cost+Math.abs(finger-target),numbers);
+        numbers.pop();
+      }
+    })(0,0,0,[]);
+    // İşaret parmağına göre üç perde uzaktaki bir notaya orta parmak
+    // yetişmez; bu durumda geçerli bir parmaklandırma yoktur.
+    if(groups.some(function(g,k){return g.f-min>=3&&chosenFingers[k]===2;}))return null;
+    groups.forEach(function(g,k){
+      g.n=chosenFingers[k];
+      for(var i=g.a;i<=g.b;i++)if(fr[i]===g.f)fg[i]=g.n;
+    });
+    return{fg:fg,groups:groups,n:groups.length};
   }
-  return{fg:fg,groups:groups,n:n};
+  // Dört telde üç veya dört komşu nota aynı perdedeyse, tek parmakla
+  // basılan kısa bare gerçekten daha az parmak gerektirir.
+  if(pressed.length<=4){
+    if(pressed.length>=3)for(var start=0;start<6;start++){
+      var end=start;
+      while(end<6&&fr[start]>0&&fr[end]===fr[start])end++;
+      if(end-start>=3){
+        var small=assign({f:fr[start],a:start,b:end-1},null);
+        if(small&&(!best||small.n<best.n))best=small;
+      }
+    }
+    return best||assign(null,null);
+  }
+  // İşaret parmağı yalnızca en düşük perdede bare yapabilir. Çizgi açık,
+  // susturulmuş veya daha düşük perdeden çalınan bir telin üzerinden geçemez.
+  var atMin=pressed.filter(function(i){return fr[i]===min;});
+  for(var a=0;a<atMin.length;a++)for(var b=a+1;b<atMin.length;b++){
+    var first=atMin[a],last=atMin[b],valid=true;
+    for(var i=first;i<=last;i++)if(fr[i]<min)valid=false;
+    if(!valid)continue;
+    // Bare, açık veya susturulmuş tele değmeden çalınan tel grubunun
+    // sonuna kadar uzanabilir; daha yüksek notalar üstünden basılır.
+    while(first>0&&fr[first-1]>=min)first--;
+    while(last<5&&fr[last+1]>=min)last++;
+    var bar={f:min,a:first,b:last},upperBars=[null];
+    Object.keys(fr.reduce(function(by,f,i){if(f>min)(by[f]=by[f]||[]).push(i);return by;},{})).forEach(function(key){
+      var s=[];fr.forEach(function(f,i){if(f===+key)s.push(i);});
+      for(var x=0;x<s.length;x++)for(var y=x+1;y<s.length;y++){
+        if(s[y]-s[x]>2)continue;
+        var okay=true;
+        for(var z=s[x];z<=s[y];z++)if(fr[z]<+key)okay=false;
+        if(okay)upperBars.push({f:+key,a:s[x],b:s[y]});
+      }
+    });
+    upperBars.forEach(function(upper){
+      var result=assign(bar,upper),cost=result&&result.n*100+(upper?4:0)+last-first+(upper?upper.b-upper.a:0);
+      if(result&&(!best||cost<best.cost))best={result:result,cost:cost};
+    });
+  }
+  return best&&best.result;
 }
 /* ---- dizilim üretici ---- */
 /* en çok kullanılan şekiller: açık akorlar + taşınabilir E / A kalıpları */
-var OP={"0|maj":"x32010","9|maj":"x02220","7|maj":"320003","4|maj":"022100","2|maj":"xx0232","9|min":"x02210","4|min":"022000","2|min":"xx0231",
+var OP={"0|maj":"x32010","1|maj":"x46664","2|maj":"xx0232","3|maj":"x68886","4|maj":"022100","5|maj":"133211","6|maj":"244322","7|maj":"320003","8|maj":"466544","9|maj":"x02220","10|maj":"x13331","11|maj":"x24442",
+"0|min":"x35543","1|min":"x46654","2|min":"xx0231","3|min":"x68876","4|min":"022000","5|min":"133111","6|min":"244222","7|min":"355333","8|min":"466444","9|min":"x02210","10|min":"x13321","11|min":"x24432",
 "0|7":"x32310","9|7":"x02020","7|7":"320001","4|7":"020100","2|7":"xx0212","11|7":"x21202","0|maj7":"x32000","9|maj7":"x02120","7|maj7":"320002",
 "2|maj7":"xx0222","5|maj7":"xx3210","4|maj7":"021100","9|m7":"x02010","4|m7":"020000","2|m7":"xx0211","9|sus2":"x02200","2|sus2":"xx0230",
 "9|sus4":"x02230","2|sus4":"xx0233","4|sus4":"002200","0|add9":"x32030"};
@@ -296,11 +370,11 @@ function gen(rp,ivs,qid,essential){
   var pick=[];
   function add(fr,sc){
     var k=fr.join(","),fi,ft,v;if(Math.max.apply(null,fr)>15)return;
-    if(out[k]){if(sc===0)out[k].T=1;else if(out[k].sc<sc)out[k].sc=sc;return;}
+    if(out[k]){if(sc===0)out[k].T=1;else{if(out[k].sc<sc)out[k].sc=sc;if(sc===200)out[k].preferred=1;}return;}
     fi=fing(fr);if(!fi)return;
     ft=fr.filter(function(f){return f>0;});
     var mn=ft.length?Math.min.apply(null,ft):0,mx=ft.length?Math.max.apply(null,ft):0;
-    out[k]={fr:fr,fg:fi.fg,groups:fi.groups,mn:mn,mx:mx,open:fr.filter(function(f){return f===0;}).length,sc:sc,T:sc===0,base:mx<=4?1:mn};
+    out[k]={fr:fr,fg:fi.fg,groups:fi.groups,mn:mn,mx:mx,open:fr.filter(function(f){return f===0;}).length,sc:sc,T:sc===0,preferred:sc===200?1:0,base:mx<=4?1:mn};
   }
   var op=OP[rp+"|"+qid];if(op)add(pf(op),200);
   var tp=TP[qid];
@@ -309,16 +383,26 @@ function gen(rp,ivs,qid,essential){
     if(tp[1])add(pf(tp[1],(rp-9+12)%12),0);
   }
   Object.keys(out).forEach(function(k){var v=out[k];if(v.T&&v.sc<100)v.sc=100-v.mn;});
-  var all=Object.keys(out).map(function(k){return out[k];}).sort(function(a,b){return a.base-b.base||b.sc-a.sc;}),th=2;
+  // Parmak sayısı ve perde açıklığı, tel sayısından daha çok önem taşır.
+  // Açık teller ve yakın pozisyonlar rahat basılışta küçük bir avantaj sağlar.
+  function effort(v){
+    return v.groups.length*5+(v.mx-v.mn)*2.5+
+      v.groups.filter(function(g){return g.bar;}).length*2-v.open*1.5+v.base*.8;
+  }
+  var all=Object.keys(out).map(function(k){return out[k];}).sort(function(a,b){return a.base-b.base||effort(a)-effort(b)||b.sc-a.sc;}),th=2;
   function distinct(v){return pick.every(function(q){var d=0,i;for(i=0;i<6;i++)if(q.fr[i]!==v.fr[i])d++;return d>=th;});}
   var perPosition={};
+  var standard=all.filter(function(v){return v.preferred;})[0];
+  if(standard){pick.push(standard);perPosition[standard.base]=1;}
+  var easy=all.slice().sort(function(a,b){return effort(a)-effort(b)||a.base-b.base||b.sc-a.sc;}).filter(distinct)[0];
+  if(easy){easy.easyChoice=1;pick.push(easy);perPosition[easy.base]=(perPosition[easy.base]||0)+1;}
   all.forEach(function(v){
     if(pick.length<10&&(perPosition[v.base]||0)<2&&distinct(v)){
       pick.push(v);perPosition[v.base]=(perPosition[v.base]||0)+1;
     }
   });
   all.forEach(function(v){if(pick.length<10&&distinct(v))pick.push(v);});
-  return pick.sort(function(a,b){return a.base-b.base||b.sc-a.sc;});
+  return pick.sort(function(a,b){return (b.preferred||0)-(a.preferred||0)||(b.easyChoice||0)-(a.easyChoice||0)||a.base-b.base||effort(a)-effort(b)||b.sc-a.sc;});
 }
 window.__gen=gen;window.__Q=Q;
 
@@ -381,8 +465,9 @@ var VS=[],cur=0,raf=0;
 var known=new Set();
 try{var storedKnown=JSON.parse(localStorage.getItem("lmx-known-chords")||"[]");if(Array.isArray(storedKnown))storedKnown.forEach(function(k){if(typeof k==="string")known.add(k);});}catch(e){}
 function chordKey(){return rootPc()+"|"+S.q;}
-function updateKnown(){var active=known.has(chordKey()),label=t(active?"knownOff":"knownOn");$("known").setAttribute("aria-pressed",String(active));$("known").setAttribute("aria-label",label);$("known").title=label;}
-$("known").onclick=function(){var key=chordKey();if(known.has(key))known.delete(key);else known.add(key);try{localStorage.setItem("lmx-known-chords",JSON.stringify(Array.from(known)));}catch(e){}updateKnown();};
+function voicingKey(v){return "v2|"+chordKey()+"|"+v.fr.join(",");}
+function saveKnown(){try{localStorage.setItem("lmx-known-chords",JSON.stringify(Array.from(known)));}catch(e){}}
+function updateKnown(button,key){var active=known.has(key),label=t(active?"knownOff":"knownOn");button.setAttribute("aria-pressed",String(active));button.setAttribute("aria-label",label);button.title=label;}
 function step(){var c=$("car").children;return c.length>1?c[1].offsetLeft-c[0].offsetLeft:($("car").clientWidth||1);}
 function sync(){
   var n=VS.length;cur=n?Math.max(0,Math.min(n-1,Math.round($("car").scrollLeft/step()))):0;
@@ -394,13 +479,21 @@ function render(keep){
   if(!keep)cur=0;
   var rp=rootPc(),q=qdef(),sym=S.root+S.acc+q[2];
   VS=gen(rp,q[3],q[0],q[4]);
+  // Önceki sürümde tüm akor için tutulan işareti ilk basılışa taşı.
+  if(VS.length&&known.has(chordKey())){known.delete(chordKey());known.add(voicingKey(VS[0]));saveKnown();}
   var car=$("car"),dots=$("dots");car.innerHTML="";dots.innerHTML="";
   if(!VS.length)car.innerHTML='<div class="none">'+t("none")+'</div>';
   VS.forEach(function(v,i){
     var notes=q[3].filter(function(iv){return v.fr.some(function(f,s){return f>=0&&(TUN[s]+f)%12===(rp+iv)%12;});}).map(function(iv){return nm(rp+iv);}).join(" · ");
-    var b=document.createElement("button");b.type="button";b.className="slide";
-    b.innerHTML=draw(v,rp)+'<div class="cn">'+sym+'</div><div class="nt">'+notes+"</div><small>"+(v.open?t("open"):t("fret")+" "+v.mn)+" · "+(i+1)+" / "+VS.length+"</small>";
-    b.onclick=function(){strum(v);};car.appendChild(b);
+    var card=document.createElement("div");card.className="slide";
+    var play=document.createElement("button");play.type="button";play.className="play-voicing";
+    play.setAttribute("aria-label",sym+" · "+t("voicing")+" "+(i+1)+" · "+t("play"));
+    play.innerHTML=draw(v,rp)+'<div class="cn">'+sym+'</div><div class="nt">'+notes+"</div><small>"+(v.open?t("open"):t("fret")+" "+v.mn)+" · "+(i+1)+" / "+VS.length+"</small>";
+    play.onclick=function(){strum(v);};card.appendChild(play);
+    var badge=document.createElement("button"),key=voicingKey(v);
+    badge.type="button";badge.className="known";badge.textContent="✓";updateKnown(badge,key);
+    badge.onclick=function(){if(known.has(key))known.delete(key);else known.add(key);saveKnown();updateKnown(badge,key);};
+    card.appendChild(badge);car.appendChild(card);
     var d=document.createElement("button");d.type="button";d.setAttribute("aria-label",t("voicing")+" "+(i+1));
     d.onclick=function(){go(i,true);};dots.appendChild(d);
   });
@@ -410,7 +503,6 @@ function render(keep){
   document.querySelectorAll("#acc button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.a===S.acc));});
   document.querySelectorAll("#quals .chip").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.q===S.q));});
   document.querySelectorAll("#mode button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.m===S.mode));});
-  updateKnown();
   try{localStorage.setItem("lmx-chord",JSON.stringify(S));}catch(e){}
 }
 $("car").addEventListener("scroll",function(){cancelAnimationFrame(raf);raf=requestAnimationFrame(sync);},{passive:true});
@@ -466,7 +558,11 @@ Object.keys(LET).forEach(function(n){var b=document.createElement("button");b.cl
   b.onclick=function(){S.root=n;render();};$("roots").appendChild(b);});
 [["♭","♭"],["","♮"],["♯","♯"]].forEach(function(a){var b=document.createElement("button");b.dataset.a=a[0];b.textContent=a[1];b.type="button";
   b.onclick=function(){S.acc=a[0];render();};$("acc").appendChild(b);});
-[["maj","min","7","m7","maj7","5","sus4"],["sus2","add9","6","m6","6/9","7sus4","7add11"],["9","maj9","m9","11","m11","13","mMaj7"],["dim","dim7","m7b5","aug","7b9","7s9","7s11"]].forEach(function(row){
+[["maj","min","7","m7","maj7","5","sus4"],
+ ["sus2","add9","madd9","6","m6","6/9","7sus4","9sus4"],
+ ["9","maj9","m9","mMaj7","mMaj9","11","m11","13"],
+ ["dim","dim7","m7b5","aug","7b5","7s5","7b9","7s9"],
+ ["7add11","7s11","maj7s11","m13","maj13"]].forEach(function(row){
   var r=document.createElement("div");r.className="qrow";
   row.forEach(function(id){var q=Q.filter(function(x){return x[0]===id;})[0],b=document.createElement("button");
     b.className="chip";b.dataset.q=id;b.textContent=q[1];b.type="button";b.onclick=function(){S.q=id;render();};r.appendChild(b);});
