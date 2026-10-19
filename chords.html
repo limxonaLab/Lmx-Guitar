@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="application-version" content="1.2">
+<meta name="application-version" content="1.3">
 <title>Lmx Chords Akor Bulucu – Gitar Akorları ve Parmak Pozisyonları</title>
 <meta name="description" content="Online gitar akor bulucu. Kök notayı ve akor türünü seç, gitar sapında nota ve parmak konumlarını 10 farklı varyasyonla gör.">
 <link rel="canonical" href="https://limxona.vercel.app/tr/chords">
@@ -96,7 +96,7 @@ button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .dlg .lead{color:var(--mut);margin:0 0 14px;font-size:.92rem}
 .dlg .x{position:absolute;top:14px;right:14px;width:34px;height:34px;border:0;border-radius:10px;background:var(--bg);color:var(--fg);cursor:pointer;font-size:1rem}
 .dlg details{border-top:1px solid var(--line)}
-.find-dialog{max-width:760px}
+.find-dialog{max-width:440px;padding:12px 16px 20px;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .find-tools{display:flex;align-items:center;gap:12px;margin:12px 0;flex-wrap:wrap}
 .find-tools label{font-weight:600;font-size:.9rem}
 .find-tools select,.find-tools button{border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);padding:9px 12px;font:600 .88rem var(--sans);cursor:pointer}
@@ -105,39 +105,44 @@ button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .find-legend>span{display:flex;align-items:center;gap:5px;white-space:nowrap}
 .find-legend i{width:9px;height:9px;border-radius:50%;background:var(--acc)}
 .find-legend i.root{background:var(--fg)}
-.find-swipe{display:none;flex:none;color:var(--mut);font-size:.72rem;white-space:nowrap}
-.find-scroll{overflow-x:auto;max-width:100%;padding-bottom:8px;scrollbar-width:thin;scrollbar-color:var(--mut) var(--line);overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
-.find-scroll::-webkit-scrollbar{height:5px}
-.find-scroll::-webkit-scrollbar-track{background:var(--line);border-radius:4px}
-.find-scroll::-webkit-scrollbar-thumb{background:var(--mut);border-radius:4px}
-.find-neck{--label-w:40px;--open-w:48px;position:relative;isolation:isolate;display:grid;grid-template-columns:var(--label-w) var(--open-w) repeat(12,minmax(44px,1fr));grid-template-rows:32px repeat(6,44px);min-width:616px;width:100%;padding:0 0 8px;gap:0;user-select:none;-webkit-user-select:none}
-.find-neck::before{content:"";position:absolute;left:calc(var(--label-w) + var(--open-w));right:0;top:32px;bottom:8px;z-index:0;background:repeating-linear-gradient(3deg,transparent 0 9px,rgba(255,255,255,.055) 9px 10px,transparent 10px 23px),linear-gradient(180deg,rgba(255,255,255,.1),rgba(0,0,0,.06)),var(--neck);border-top:1px solid rgba(0,0,0,.08);border-bottom:1px solid rgba(0,0,0,.08);pointer-events:none}
-.find-head{position:relative;z-index:2;display:grid;place-items:center;color:var(--mut);font-size:.72rem;font-weight:600;font-variant-numeric:tabular-nums;padding:0}
-.find-head.sticky-label{position:sticky;left:0;z-index:6;background:var(--card);font-size:.65rem}
-.find-head.sticky-open{position:sticky;left:var(--label-w);z-index:6;background:var(--card);font-size:.65rem;text-align:center;line-height:1.1}
-.find-string{position:sticky;left:0;z-index:5;display:flex;align-items:center;justify-content:center;gap:4px;background:var(--card);color:var(--fg)}
-.find-string b{font-size:.85rem;font-weight:600}
-.find-string small{color:var(--mut);font-size:.61rem}
-.find-open-string,.find-fret{position:relative;display:grid;place-items:center;min-width:0;height:44px;padding:0;border:0;border-radius:0;color:var(--fg);font-family:var(--sans);cursor:pointer;-webkit-tap-highlight-color:transparent}
-.find-open-string{position:sticky;left:var(--label-w);z-index:5;background:var(--card);border-right:6px solid var(--fg)}
-.find-neck[data-capo="true"] .find-open-string{border-right-color:var(--acc)}
-.find-open-string span{display:grid;place-items:center;width:29px;height:29px;border:1px solid var(--line);border-radius:50%;background:var(--bg);color:var(--mut);font-size:1.1rem;line-height:1;pointer-events:none}
-.find-open-string[data-state="open"] span{border:2px solid var(--acc);background:var(--soft);color:var(--acc)}
+.find-legend{gap:4px 12px}
+.find-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 8px}
+.find-bar select{border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--fg);padding:9px 12px;font:600 .9rem var(--sans);cursor:pointer;max-width:62%}
+.find-bar .x{position:static;flex:none;width:40px;height:40px}
+.find-top{margin:14px 0 0}
+.find-results{min-height:56px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}
+.find-notes{color:var(--mut);font-size:.8rem;margin:8px 2px 0;overflow-wrap:anywhere}
+.find-board-head{margin:12px 0 0}
+.find-scroll{padding-bottom:2px}
+.find-neck{--label-w:30px;--head-h:46px;--row-h:clamp(46px,9dvh,64px);--bx:calc(var(--label-w) + (100% - var(--label-w))/12);--bw:calc((100% - var(--label-w))*5/6);position:relative;isolation:isolate;display:grid;grid-template-columns:var(--label-w) repeat(6,minmax(0,1fr));grid-template-rows:var(--head-h) repeat(5,var(--row-h));width:100%;max-width:360px;margin:0 auto;user-select:none;-webkit-user-select:none}
+.find-neck::before{content:"";position:absolute;left:var(--bx);width:var(--bw);top:var(--head-h);bottom:0;z-index:0;background:var(--neck);border-radius:0 0 3px 3px;pointer-events:none}
+.find-neck::after{content:"";position:absolute;left:var(--bx);width:var(--bw);top:var(--head-h);height:2px;z-index:3;background:var(--fret-metal);pointer-events:none}
+.find-neck[data-nut="true"]::after{height:5px;background:var(--fg)}
+.find-neck[data-nut="true"][data-capo="true"]::after{background:var(--acc)}
+.find-head{display:grid;place-items:center;color:var(--mut);font-size:.72rem;font-weight:600;font-variant-numeric:tabular-nums;padding:0;text-align:center;line-height:1.1}
+.find-open-string,.find-fret{position:relative;display:grid;place-items:center;min-width:0;height:100%;padding:0;border:0;border-radius:0;background:transparent;color:var(--fg);font-family:var(--sans);cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.find-open-string{z-index:4}
+.find-open-string span{display:grid;place-items:center;width:32px;height:32px;border:1px solid var(--line);border-radius:50%;background:var(--bg);color:var(--mut);font-size:.85rem;font-weight:700;line-height:1;pointer-events:none}
+.find-open-string[data-state="open"] span{border:2px solid var(--acc);background:var(--soft);color:var(--acc);font-size:1.15rem;font-weight:400}
 .find-open-string[data-state="open"].is-root span{border-color:var(--fg);background:var(--fg);color:var(--bg)}
-.find-open-string[data-state="muted"] span{border-style:dashed;color:var(--mut)}
-.find-fret{z-index:1;background-color:transparent;background-image:linear-gradient(90deg,rgba(255,255,255,.7),var(--fret-metal) 42%,rgba(0,0,0,.25));background-size:3px 100%;background-position:right;background-repeat:no-repeat}
-.find-fret::before{content:"";position:absolute;left:0;right:0;top:50%;height:var(--sw);transform:translateY(-50%);z-index:1;background:linear-gradient(180deg,rgba(255,255,255,.65),var(--string-metal) 55%,rgba(0,0,0,.45));box-shadow:0 1px 1px rgba(0,0,0,.12);pointer-events:none}
+.find-open-string[data-state="muted"] span{border-style:dashed;font-size:1.15rem;font-weight:400}
+.find-fret{z-index:1;background-image:linear-gradient(var(--fret-metal),var(--fret-metal));background-size:100% 2px;background-position:left bottom;background-repeat:no-repeat}
+.find-fret.edge-l{background-size:50% 2px;background-position:right bottom}
+.find-fret.edge-r{background-size:50% 2px;background-position:left bottom}
+.find-fret::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:var(--sw);transform:translateX(-50%);z-index:1;background:var(--string-metal);pointer-events:none}
 .find-fret.is-muted::before{opacity:.3}
-.find-inlay{position:absolute;left:50%;top:100%;z-index:0;width:7px;height:7px;transform:translate(-50%,-50%);border-radius:50%;background:var(--inlay);opacity:.52;pointer-events:none}
-.find-fret span{position:relative;z-index:2;display:grid;place-items:center;width:29px;height:29px;border-radius:50%;background:var(--card);color:var(--fg);font-size:.73rem;font-weight:700;opacity:0;transform:scale(.85);transition:opacity .12s,transform .12s;pointer-events:none}
-.find-fret[aria-pressed="true"] span{opacity:1;transform:scale(1);background:var(--acc);color:var(--ink);box-shadow:0 2px 5px rgba(0,0,0,.18)}
+.find-inlay{position:absolute;left:100%;top:50%;z-index:0;width:8px;height:8px;transform:translate(-50%,-50%);border-radius:50%;background:var(--inlay);opacity:.7;pointer-events:none}
+.find-fret span{position:relative;z-index:2;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--card);color:var(--fg);font-size:.76rem;font-weight:700;opacity:0;transform:scale(.85);transition:opacity .12s,transform .12s;pointer-events:none}
+.find-fret[aria-pressed="true"] span{opacity:1;transform:scale(1);background:var(--acc);color:var(--ink)}
 .find-fret[aria-pressed="true"].is-root span{background:var(--fg);color:var(--bg)}
-.find-fret:focus-visible{outline:2px solid var(--acc);outline-offset:-3px;z-index:3}
+.find-fret:focus-visible,.find-open-string:focus-visible{outline:2px solid var(--acc);outline-offset:-3px;z-index:5}
 .find-fret:focus-visible span{opacity:1;transform:scale(1)}
 @media(hover:hover) and (pointer:fine){.find-fret:hover span{opacity:1;transform:scale(1)}.find-open-string:hover span{border-color:var(--acc)}}
-@media(max-width:740px){.find-swipe{display:block}}
-.find-notes{color:var(--mut);font-size:.9rem;margin:12px 0 6px}
-.find-results{min-height:60px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
+.find-pager{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:10px}
+.find-pager button{position:relative;width:48px;height:38px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);font-size:1.3rem;line-height:1;cursor:pointer}
+.find-pager button:disabled{opacity:.3;cursor:default}
+.find-pager button.has::after{content:"";position:absolute;top:5px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--acc)}
+.find-range{min-width:96px;text-align:center;color:var(--mut);font-size:.82rem;font-weight:600;font-variant-numeric:tabular-nums}
 .find-results strong{font-family:var(--serif);font-size:1.45rem}
 .find-results small{display:block;color:var(--mut);margin-top:4px}
 .find-results .find-alternatives{margin-top:10px}
@@ -145,7 +150,8 @@ button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .find-alternatives ul{list-style:none;padding:0;margin:0}
 .find-alternatives li{padding:6px 0;border-top:1px solid var(--line)}
 .find-alternatives small{font-size:.78rem}
-@media(max-width:480px){.find-open{padding:8px 10px}#fov{padding:12px}.find-dialog{max-height:calc(100dvh - 24px);padding:18px 14px 16px;border-radius:18px}.find-dialog .lead{font-size:.84rem;line-height:1.45;margin-bottom:10px}.find-tools{gap:8px;margin:8px 0}}
+@media(max-width:480px){.find-open{padding:8px 10px}}
+@media(max-width:480px),(max-height:520px){#fov{padding:0;background:var(--card)}.find-dialog{max-width:none;max-height:none;height:100%;border:0;border-radius:0;padding:max(10px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}.find-results strong{font-size:1.3rem}}
 .dlg summary{cursor:pointer;font-weight:600;padding:12px 0}
 .dlg details>:not(summary){font-size:.92rem}
 .dlg p,.dlg ul,.dlg ol{margin:0 0 10px}
@@ -177,7 +183,7 @@ svg .mx{stroke:var(--mut);stroke-width:1.4}
 <div class="wrap">
 <h1 class="sr-only" data-i="h1">Akor bulucu</h1>
 <header class="top">
-<a class="site" href="/"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 4v24M14.7 4v24M21.3 4v24M28 4v24M8 11h20M8 19h20"/><circle cx="14.7" cy="15" r="2.6" fill="currentColor" stroke="none"/><circle cx="21.3" cy="23" r="2.6" fill="currentColor" stroke="none"/></svg><span>LmX Chords <small>v1.2</small></span></a>
+<a class="site" href="/"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 4v24M14.7 4v24M21.3 4v24M28 4v24M8 11h20M8 19h20"/><circle cx="14.7" cy="15" r="2.6" fill="currentColor" stroke="none"/><circle cx="21.3" cy="23" r="2.6" fill="currentColor" stroke="none"/></svg><span>LmX Chords <small>v1.3</small></span></a>
 <div class="trg"><div class="seg th" id="theme" role="group"><button type="button" data-t="light"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><span data-i="day">Gündüz</span></button><button type="button" data-t="dark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 14A9 9 0 0 1 10 3.2 9 9 0 1 0 20.8 14Z"/></svg><span data-i="night">Gece</span></button></div><div class="seg" id="lang" role="group" aria-label="Dil / Language"><button data-l="tr">TR</button><button data-l="en">EN</button></div><button class="help" id="hopen" type="button">?</button></div>
 </header>
 <div class="roots" id="roots"></div>
@@ -188,7 +194,7 @@ svg .mx{stroke:var(--mut);stroke-width:1.4}
 </div>
 
 <div class="ov" id="ov" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="ht"><button class="x" id="hx" type="button">✕</button><h2 id="ht"></h2><p class="lead" id="hl"></p><div id="hbody"></div></div></div>
-<div class="ov" id="fov" hidden><div class="dlg find-dialog" role="dialog" aria-modal="true" aria-labelledby="ft"><button class="x" id="fx" type="button">✕</button><h2 id="ft"></h2><p class="lead" id="fl"></p><div class="find-tools"><label for="fcapo" id="fcl"></label><select id="fcapo"></select><button id="fclear" type="button"></button></div><div class="find-board-head"><div class="find-legend"><span><i aria-hidden="true"></i><span data-i="note">Nota</span></span><span><i class="root" aria-hidden="true"></i><span data-i="findRoot">kök</span></span><span>○ <span data-i="openString">açık</span></span><span>× <span data-i="mutedString">susturulmuş</span></span></div><span class="find-swipe" data-i="findSwipe">Kaydır →</span></div><div class="find-scroll"><div class="find-neck" id="fneck"></div></div><p class="find-notes" id="fnotes"></p><div class="find-results" id="fresults" role="status" aria-live="polite"></div></div></div>
+<div class="ov" id="fov" hidden><div class="dlg find-dialog" role="dialog" aria-modal="true"><div class="find-bar"><select id="fcapo"></select><button class="x" id="fx" type="button">✕</button></div><div class="find-scroll"><div class="find-neck" id="fneck"></div></div><div class="find-pager"><button id="fprev" type="button">‹</button><span class="find-range" id="frange"></span><button id="fnext" type="button">›</button></div><div class="find-top"><div class="find-results" id="fresults" role="status" aria-live="polite"></div><p class="find-notes" id="fnotes"></p></div><div class="find-board-head"><div class="find-legend"><span><i aria-hidden="true"></i><span data-i="note">Nota</span></span><span><i class="root" aria-hidden="true"></i><span data-i="findRoot">kök</span></span><span>○ <span data-i="openString">açık</span></span><span>× <span data-i="mutedString">susturulmuş</span></span></div></div></div></div>
 
 <script>
 (function(){
@@ -291,7 +297,7 @@ desc:"Online guitar chord finder. Pick a root note and chord type and see notes 
 Object.assign(TX.tr,{
   findLead:"Kapoyu ve bastığın perdeleri seç. Çalınacak açık telleri de ○ ile seç; seçilmemiş ve × işaretli teller hesaba katılmaz.",
   findNone:"Bu nota kümesi için tanımlı bir akor adı bulunamadı.",
-  findBoard:"Standart gitar klavyesi",findSwipe:"Kaydır →",findExact:"Tüm akor sesleri eşleşiyor",findInversion:"Tüm sesler eşleşiyor · çevrim / farklı bas",
+  findBoard:"Standart gitar klavyesi",findSwipe:"Kaydır →",findPrevF:"Önceki perdeler",findNextF:"Sonraki perdeler",findExact:"Tüm akor sesleri eşleşiyor",findInversion:"Tüm sesler eşleşiyor · çevrim / farklı bas",
   findMissing:"Eksik derece",findRoot:"kök",findPossible:"Olası yorum",findSlash:"Akor dışı bas",
   findSingle:"Yalnızca tek bir nota seçili",findPick:"Çalan telleri sapta seç.",
   findTwo:"İki nota, akorun türünü tek başına belirlemeyebilir.",
@@ -301,7 +307,7 @@ Object.assign(TX.tr,{
 Object.assign(TX.en,{
   findLead:"Choose the capo and fretted notes. Mark sounding open strings with ○ too; unset and × strings are excluded.",
   findNone:"No defined chord name matches this set of notes.",
-  findBoard:"Standard guitar fretboard",findSwipe:"Swipe →",findExact:"All chord tones match",findInversion:"All tones match · inversion / alternate bass",
+  findBoard:"Standard guitar fretboard",findSwipe:"Swipe →",findPrevF:"Previous frets",findNextF:"Next frets",findExact:"All chord tones match",findInversion:"All tones match · inversion / alternate bass",
   findMissing:"Omitted degree",findRoot:"root",findPossible:"Possible interpretation",findSlash:"Non-chord bass",
   findSingle:"Only one pitch class is selected",findPick:"Select the sounding strings on the fretboard.",
   findTwo:"Two notes may not be enough to determine a chord type.",
@@ -755,26 +761,34 @@ try{
      Number.isInteger(savedFinder.capo)&&savedFinder.capo>=0&&savedFinder.capo<=12)F=savedFinder;
 }catch(e){}
 function saveFinder(){try{localStorage.setItem("lmx-chord-finder",JSON.stringify(F));}catch(e){}}
+var FB=1,FB_MAX=8;
+function fitFinderBase(){
+  var ks=F.fr.filter(function(f){return f>0;});if(!ks.length)return;
+  var lo=Math.min.apply(null,ks),hi=Math.max.apply(null,ks);
+  if(lo<FB||hi>FB+4)FB=Math.max(1,Math.min(FB_MAX,lo));
+}
 function renderFinder(focusCell){
   var grid=$("fneck"),matches=identifyChord(F.fr,F.capo),root=matches.length?matches[0].root:null;
-  grid.innerHTML="";grid.dataset.capo=String(F.capo>0);grid.setAttribute("role","group");grid.setAttribute("aria-label",t("findBoard"));
-  function cell(tag,cls,label){var el=document.createElement(tag);el.className=cls;el.textContent=label;grid.appendChild(el);return el;}
-  cell("div","find-head sticky-label",t("stringLabel"));cell("div","find-head sticky-open",F.capo?t("capo")+" "+F.capo:"○ / ×");
-  for(var f=1;f<=12;f++)cell("div","find-head",String(F.capo+f));
+  FB=Math.max(1,Math.min(FB_MAX,FB));var last=FB+4;
+  grid.innerHTML="";grid.dataset.capo=String(F.capo>0);grid.dataset.nut=String(FB===1);grid.setAttribute("role","group");grid.setAttribute("aria-label",t("findBoard"));
+  function cell(tag,cls,label){var el=document.createElement(tag);el.className=cls;el.textContent=label;return el;}
+  var corner=cell("div","find-head find-open-label",""),opens=[],rows=[];
+  for(var f=FB;f<=last;f++)rows.push([cell("div","find-head find-fretno",String(F.capo+f))]);
   ["E","A","D","G","B","e"].forEach(function(name,s){
-    var string=cell("div","find-string",""),openPc=(TUN[s]+F.capo)%12;
-    string.innerHTML="<b>"+FIND_NAMES[openPc]+"</b><small>"+(6-s)+"</small>";
+    var openPc=(TUN[s]+F.capo)%12;
     var open=cell("button","find-open-string","");open.type="button";
     open.dataset.findCell="open-"+s;
     open.dataset.state=F.fr[s]===0?"open":F.fr[s]===-1?"muted":"unset";
     if(F.fr[s]===0&&openPc===root)open.classList.add("is-root");
-    open.innerHTML="<span>"+(F.fr[s]===0?"○":F.fr[s]===-1?"×":"–")+"</span>";
+    open.innerHTML="<span>"+(F.fr[s]===0?"○":F.fr[s]===-1?"×":FIND_NAMES[openPc])+"</span>";
     open.setAttribute("aria-pressed",String(F.fr[s]===0||F.fr[s]===-1));
     open.setAttribute("aria-label",(6-s)+". "+t("stringLabel")+" "+name+": "+t(F.fr[s]===0?"openString":F.fr[s]===-1?"mutedString":"unsetString"));
     open.onclick=function(){F.fr[s]=F.fr[s]===0?-1:F.fr[s]===-1?null:0;saveFinder();renderFinder("open-"+s);};
-    for(var fret=1;fret<=12;fret++)(function(k){
+    opens.push(open);
+    for(var fret=FB;fret<=last;fret++)(function(k){
       var b=cell("button","find-fret",""),actualFret=F.capo+k,pc=(TUN[s]+actualFret)%12;
-      b.type="button";b.style.setProperty("--sw",(2.6-s*.34).toFixed(2)+"px");
+      rows[k-FB].push(b);b.type="button";b.style.setProperty("--sw",(4.2-s*.5).toFixed(2)+"px");
+      if(s===0)b.classList.add("edge-l");if(s===5)b.classList.add("edge-r");
       if(F.fr[s]===-1)b.classList.add("is-muted");
       if(F.fr[s]===k&&pc===root)b.classList.add("is-root");
       b.dataset.findCell="fret-"+s+"-"+k;
@@ -782,14 +796,20 @@ function renderFinder(focusCell){
       var marker=[3,5,7,9,12,15,17,19,21,24].indexOf(actualFret)>=0&&(double?(s===1||s===3):s===2);
       b.innerHTML=(marker?'<i class="find-inlay" aria-hidden="true"></i>':"")+"<span>"+FIND_NAMES[pc]+"</span>";
       b.setAttribute("aria-pressed",String(F.fr[s]===k));
-      b.setAttribute("aria-label",(6-s)+". "+t("stringLabel")+" "+name+", "+(F.capo+k)+". "+t("fretLabel")+" · "+FIND_NAMES[(TUN[s]+F.capo+k)%12]);
+      b.setAttribute("aria-label",(6-s)+". "+t("stringLabel")+" "+name+", "+actualFret+". "+t("fretLabel")+" · "+FIND_NAMES[pc]);
       b.onclick=function(){F.fr[s]=F.fr[s]===k?null:k;saveFinder();renderFinder("fret-"+s+"-"+k);};
     })(fret);
   });
+  [corner].concat(opens).forEach(function(el){grid.appendChild(el);});
+  rows.forEach(function(r){r.forEach(function(el){grid.appendChild(el);});});
+  $("fprev").disabled=FB<=1;$("fnext").disabled=FB>=FB_MAX;
+  $("fprev").classList.toggle("has",F.fr.some(function(x){return x>0&&x<FB;}));
+  $("fnext").classList.toggle("has",F.fr.some(function(x){return x>last;}));
+  $("frange").textContent=t("fretLabel")+" "+(F.capo+FB)+"–"+(F.capo+last);
   var notes=soundingNotes(F.fr,F.capo),pcs=Array.from(new Set(notes.map(function(n){return n%12;})));
   $("fnotes").textContent=t("findNotes")+": "+(notes.length?notes.map(function(n){return FIND_NAMES[n%12]+(Math.floor(n/12)-1);}).join(" · "):"—");
   var results=$("fresults");results.innerHTML="";
-  if(focusCell){var selected=grid.querySelector('[data-find-cell="'+focusCell+'"]');if(selected)selected.focus();}
+  if(focusCell){var selected=grid.querySelector('[data-find-cell="'+focusCell+'"]');if(selected)selected.focus({preventScroll:true});}
   function info(parent,text){var el=document.createElement("small");el.textContent=text;parent.appendChild(el);}
   if(!matches.length){
     if(!pcs.length){results.textContent=t("findPick");return;}
@@ -812,12 +832,13 @@ function renderFinder(focusCell){
     more.appendChild(list);results.appendChild(more);
   }
 }
-for(var cap=0;cap<=12;cap++){var opt=document.createElement("option");opt.value=String(cap);opt.textContent=cap?String(cap):t("noCapo");$("fcapo").appendChild(opt);}
+for(var cap=0;cap<=12;cap++){var opt=document.createElement("option");opt.value=String(cap);opt.textContent=cap?t("capo")+" "+cap:t("noCapo");$("fcapo").appendChild(opt);}
 $("fcapo").onchange=function(){F.capo=+this.value;saveFinder();renderFinder();};
-$("fclear").onclick=function(){F.fr=[null,null,null,null,null,null];saveFinder();renderFinder();};
 function dialogState(){var open=!$("ov").hidden||!$("fov").hidden;document.body.classList.toggle("lock",open);document.querySelector(".wrap").inert=open;}
-function openFinder(){if(!$("ov").hidden)closeHelp();finderOpener=document.activeElement;$("fov").hidden=false;dialogState();$("fcapo").value=String(F.capo);renderFinder();$("fx").focus();}
+function openFinder(){if(!$("ov").hidden)closeHelp();finderOpener=document.activeElement;$("fov").hidden=false;dialogState();$("fcapo").value=String(F.capo);fitFinderBase();renderFinder();$("fx").focus();}
 function closeFinder(){$("fov").hidden=true;dialogState();if(finderOpener&&finderOpener.focus)finderOpener.focus();}
+$("fprev").onclick=function(){FB=Math.max(1,FB-4);renderFinder();if($("fprev").disabled)$("fnext").focus();};
+$("fnext").onclick=function(){FB=Math.min(FB_MAX,FB+4);renderFinder();if($("fnext").disabled)$("fprev").focus();};
 $("fopen").onclick=openFinder;$("fx").onclick=closeFinder;
 $("fov").addEventListener("click",function(e){if(e.target===$("fov"))closeFinder();});
 document.addEventListener("keydown",function(e){
@@ -844,9 +865,9 @@ function applyLang(){
   $("ht").textContent=t("htitle");$("hl").textContent=t("hlead");
   $("hopen").setAttribute("aria-label",t("helpL"));$("hopen").title=t("helpL");$("hx").setAttribute("aria-label",t("closeL"));
   $("hbody").innerHTML=t("hs").map(function(x,i){return"<details"+(i===0?" open":"")+"><summary>"+x[0]+"</summary>"+x[1]+"</details>";}).join("");
-  $("ft").textContent=t("findTitle");$("fl").textContent=t("findLead");$("fcl").textContent=t("capo");
-  $("fx").setAttribute("aria-label",t("closeL"));$("fclear").textContent=t("clearFind");
-  $("fcapo").options[0].textContent=t("noCapo");
+  document.querySelector("#fov .dlg").setAttribute("aria-label",t("findTitle"));
+  $("fx").setAttribute("aria-label",t("closeL"));$("fcapo").setAttribute("aria-label",t("capo"));$("fprev").setAttribute("aria-label",t("findPrevF"));$("fnext").setAttribute("aria-label",t("findNextF"));
+  Array.prototype.forEach.call($("fcapo").options,function(o,i){o.textContent=i?t("capo")+" "+i:t("noCapo");});
   if(!$("fov").hidden)renderFinder();
   render(true);
 }
