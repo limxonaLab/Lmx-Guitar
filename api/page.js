@@ -11,7 +11,7 @@ function translations(source, kind) {
     index: /var I18N = (\{[\s\S]*?\});\s*function detect\(/,
     metronome: /const MET_I18N=(\{[\s\S]*?\});\s*let MET_LANG=/,
     tuner: /var I18N = (\{[\s\S]*?\});\s*var LANG =/,
-    chords: /var TX=(\{[\s\S]*?\});\s*function t\(/
+    chords: /var TX=(\{[\s\S]*?\});\s*(?:Object\.assign|function t\()/
   };
   const match = source.match(patterns[kind]);
   if (!match) throw new Error('Missing translations: ' + kind);
