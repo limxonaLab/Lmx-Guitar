@@ -3,36 +3,55 @@ const path = require('node:path');
 const vm = require('node:vm');
 const origin = 'https://limxona.vercel.app';
 const root = path.join(__dirname, '..');
-const files = Object.fromEntries(['index', 'metronome', 'tuner','chords'].map(name => [name, fs.readFileSync(path.join(root, name + '.html'), 'utf8')]));
+
+// Çökmeyi önlemek için güvenli dosya okuma
+const files = {};
+['index', 'metronome', 'tuner', 'chords'].forEach(name => {
+  try {
+    files[name] = fs.readFileSync(path.join(root, name + '.html'), 'utf8');
+  } catch (err) {
+    console.error(`${name}.html okunamadi:`, err.message);
+    files[name] = ''; 
+  }
+});
+
 const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 
 function translations(source, kind) {
+  if (!source) return { tr: {}, en: {} };
   const patterns = {
     index: /var I18N = (\{[\s\S]*?\});\s*function detect\(/,
     metronome: /const MET_I18N=(\{[\s\S]*?\});\s*let MET_LANG=/,
     tuner: /var I18N = (\{[\s\S]*?\});\s*var LANG =/,
+    // chords regex'i Object.assign kelimesini destekleyecek şekilde düzeltildi
     chords: /var TX=(\{[\s\S]*?\});\s*(?:Object\.assign|function t\()/
   };
   const match = source.match(patterns[kind]);
-  if (!match) throw new Error('Missing translations: ' + kind);
+  if (!match) {
+    console.error('Missing translations: ' + kind);
+    // Hata fırlatmak (throw) yerine boş veri dönerek tüm sitenin çökmesini engeller
+    return { tr: {}, en: {} };
+  }
   return vm.runInNewContext('(' + match[1] + ')');
 }
 
-const dictionaries = Object.fromEntries(Object.entries(files).map(([kind, source]) => [kind, translations(source, kind)]));
+const dictionaries = Object.fromEntries(Object.keys(files).map(kind => [kind, translations(files[kind], kind)]));
 
 function setMeta(html, attribute, name, value) {
+  if (!value) return html;
   const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const regex = new RegExp(`(<meta ${attribute}="${escapedName}" content=")[^"]*("\\s*\\/?>)`);
   return html.replace(regex, (_, start, end) => start + escapeHtml(value) + end);
 }
 
 function render(kind, lang) {
-  const dict = dictionaries[kind][lang];
+  if (!files[kind]) return `<h1>500 - ${kind} sayfasi bulunamadi</h1>`;
+  const dict = dictionaries[kind][lang] || {};
   const suffix = kind === 'index' ? '' : '/' + kind;
   const url = origin + '/' + lang + suffix;
   
-  const docTitle = dict.docTitle || dict.title;
-  const docDesc = dict.docDesc || dict.desc;
+  const docTitle = dict.docTitle || dict.title || '';
+  const docDesc = dict.docDesc || dict.desc || '';
 
   let html = files[kind].replace('<html lang="tr">', `<html lang="${lang}">`);
   html = html.replace(/<title>[^<]*<\/title>/, `<title>${escapeHtml(docTitle)}</title>`);
