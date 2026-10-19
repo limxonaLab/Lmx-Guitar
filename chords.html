@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="application-version" content="1.3">
+<meta name="application-version" content="1.4">
 <title>Lmx Chords Akor Bulucu – Gitar Akorları ve Parmak Pozisyonları</title>
 <meta name="description" content="Online gitar akor bulucu. Kök notayı ve akor türünü seç, gitar sapında nota ve parmak konumlarını 10 farklı varyasyonla gör.">
 <link rel="canonical" href="https://limxona.vercel.app/tr/chords">
@@ -107,7 +107,8 @@ button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .find-legend i.root{background:var(--fg)}
 .find-legend{gap:4px 12px}
 .find-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 8px}
-.find-bar select{border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--fg);padding:9px 12px;font:600 .9rem var(--sans);cursor:pointer;max-width:62%}
+.find-bar-l{display:flex;align-items:center;gap:8px;min-width:0}
+.find-bar select{border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--fg);height:40px;padding:0 10px;font:600 .9rem var(--sans);cursor:pointer;min-width:0}
 .find-bar .x{position:static;flex:none;width:40px;height:40px}
 .find-top{margin:14px 0 0}
 .find-results{min-height:56px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}
@@ -143,6 +144,9 @@ button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .find-pager button:disabled{opacity:.3;cursor:default}
 .find-pager button.has::after{content:"";position:absolute;top:5px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--acc)}
 .find-range{min-width:96px;text-align:center;color:var(--mut);font-size:.82rem;font-weight:600;font-variant-numeric:tabular-nums}
+.find-listen{display:flex;align-items:center;justify-content:center;gap:6px;height:40px;padding:0 14px;border:0;border-radius:12px;background:var(--acc);color:var(--ink);font:700 .92rem var(--sans);white-space:nowrap;cursor:pointer}
+.find-listen:disabled{opacity:.4;cursor:default}
+.find-listen:active:not(:disabled){transform:scale(.98)}
 .find-results strong{font-family:var(--serif);font-size:1.45rem}
 .find-results small{display:block;color:var(--mut);margin-top:4px}
 .find-results .find-alternatives{margin-top:10px}
@@ -183,7 +187,7 @@ svg .mx{stroke:var(--mut);stroke-width:1.4}
 <div class="wrap">
 <h1 class="sr-only" data-i="h1">Akor bulucu</h1>
 <header class="top">
-<a class="site" href="/"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 4v24M14.7 4v24M21.3 4v24M28 4v24M8 11h20M8 19h20"/><circle cx="14.7" cy="15" r="2.6" fill="currentColor" stroke="none"/><circle cx="21.3" cy="23" r="2.6" fill="currentColor" stroke="none"/></svg><span>LmX Chords <small>v1.3</small></span></a>
+<a class="site" href="/"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 4v24M14.7 4v24M21.3 4v24M28 4v24M8 11h20M8 19h20"/><circle cx="14.7" cy="15" r="2.6" fill="currentColor" stroke="none"/><circle cx="21.3" cy="23" r="2.6" fill="currentColor" stroke="none"/></svg><span>LmX Chords <small>v1.4</small></span></a>
 <div class="trg"><div class="seg th" id="theme" role="group"><button type="button" data-t="light"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><span data-i="day">Gündüz</span></button><button type="button" data-t="dark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 14A9 9 0 0 1 10 3.2 9 9 0 1 0 20.8 14Z"/></svg><span data-i="night">Gece</span></button></div><div class="seg" id="lang" role="group" aria-label="Dil / Language"><button data-l="tr">TR</button><button data-l="en">EN</button></div><button class="help" id="hopen" type="button">?</button></div>
 </header>
 <div class="roots" id="roots"></div>
@@ -194,7 +198,7 @@ svg .mx{stroke:var(--mut);stroke-width:1.4}
 </div>
 
 <div class="ov" id="ov" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="ht"><button class="x" id="hx" type="button">✕</button><h2 id="ht"></h2><p class="lead" id="hl"></p><div id="hbody"></div></div></div>
-<div class="ov" id="fov" hidden><div class="dlg find-dialog" role="dialog" aria-modal="true"><div class="find-bar"><select id="fcapo"></select><button class="x" id="fx" type="button">✕</button></div><div class="find-scroll"><div class="find-neck" id="fneck"></div></div><div class="find-pager"><button id="fprev" type="button">‹</button><span class="find-range" id="frange"></span><button id="fnext" type="button">›</button></div><div class="find-top"><div class="find-results" id="fresults" role="status" aria-live="polite"></div><p class="find-notes" id="fnotes"></p></div><div class="find-board-head"><div class="find-legend"><span><i aria-hidden="true"></i><span data-i="note">Nota</span></span><span><i class="root" aria-hidden="true"></i><span data-i="findRoot">kök</span></span><span>○ <span data-i="openString">açık</span></span><span>× <span data-i="mutedString">susturulmuş</span></span></div></div></div></div>
+<div class="ov" id="fov" hidden><div class="dlg find-dialog" role="dialog" aria-modal="true"><div class="find-bar"><div class="find-bar-l"><select id="fcapo"></select><button class="find-listen" id="flisten" type="button"><span aria-hidden="true">▶</span><span data-i="findListen">Dinle</span></button></div><button class="x" id="fx" type="button">✕</button></div><div class="find-scroll"><div class="find-neck" id="fneck"></div></div><div class="find-pager"><button id="fprev" type="button">‹</button><span class="find-range" id="frange"></span><button id="fnext" type="button">›</button></div><div class="find-top"><div class="find-results" id="fresults" role="status" aria-live="polite"></div><p class="find-notes" id="fnotes"></p></div><div class="find-board-head"><div class="find-legend"><span><i aria-hidden="true"></i><span data-i="note">Nota</span></span><span><i class="root" aria-hidden="true"></i><span data-i="findRoot">kök</span></span><span>○ <span data-i="openString">açık</span></span><span>× <span data-i="mutedString">susturulmuş</span></span></div></div></div></div>
 
 <script>
 (function(){
@@ -297,7 +301,7 @@ desc:"Online guitar chord finder. Pick a root note and chord type and see notes 
 Object.assign(TX.tr,{
   findLead:"Kapoyu ve bastığın perdeleri seç. Çalınacak açık telleri de ○ ile seç; seçilmemiş ve × işaretli teller hesaba katılmaz.",
   findNone:"Bu nota kümesi için tanımlı bir akor adı bulunamadı.",
-  findBoard:"Standart gitar klavyesi",findSwipe:"Kaydır →",findPrevF:"Önceki perdeler",findNextF:"Sonraki perdeler",findExact:"Tüm akor sesleri eşleşiyor",findInversion:"Tüm sesler eşleşiyor · çevrim / farklı bas",
+  findBoard:"Standart gitar klavyesi",findSwipe:"Kaydır →",findPrevF:"Önceki perdeler",findListen:"Dinle",findNextF:"Sonraki perdeler",findExact:"Tüm akor sesleri eşleşiyor",findInversion:"Tüm sesler eşleşiyor · çevrim / farklı bas",
   findMissing:"Eksik derece",findRoot:"kök",findPossible:"Olası yorum",findSlash:"Akor dışı bas",
   findSingle:"Yalnızca tek bir nota seçili",findPick:"Çalan telleri sapta seç.",
   findTwo:"İki nota, akorun türünü tek başına belirlemeyebilir.",
@@ -307,7 +311,7 @@ Object.assign(TX.tr,{
 Object.assign(TX.en,{
   findLead:"Choose the capo and fretted notes. Mark sounding open strings with ○ too; unset and × strings are excluded.",
   findNone:"No defined chord name matches this set of notes.",
-  findBoard:"Standard guitar fretboard",findSwipe:"Swipe →",findPrevF:"Previous frets",findNextF:"Next frets",findExact:"All chord tones match",findInversion:"All tones match · inversion / alternate bass",
+  findBoard:"Standard guitar fretboard",findSwipe:"Swipe →",findPrevF:"Previous frets",findListen:"Listen",findNextF:"Next frets",findExact:"All chord tones match",findInversion:"All tones match · inversion / alternate bass",
   findMissing:"Omitted degree",findRoot:"root",findPossible:"Possible interpretation",findSlash:"Non-chord bass",
   findSingle:"Only one pitch class is selected",findPick:"Select the sounding strings on the fretboard.",
   findTwo:"Two notes may not be enough to determine a chord type.",
@@ -761,7 +765,7 @@ try{
      Number.isInteger(savedFinder.capo)&&savedFinder.capo>=0&&savedFinder.capo<=12)F=savedFinder;
 }catch(e){}
 function saveFinder(){try{localStorage.setItem("lmx-chord-finder",JSON.stringify(F));}catch(e){}}
-var FB=1,FB_MAX=8;
+var FB=1,FB_MAX=8,listenOneByOne=false;
 function fitFinderBase(){
   var ks=F.fr.filter(function(f){return f>0;});if(!ks.length)return;
   var lo=Math.min.apply(null,ks),hi=Math.max.apply(null,ks);
@@ -805,6 +809,7 @@ function renderFinder(focusCell){
   $("fprev").disabled=FB<=1;$("fnext").disabled=FB>=FB_MAX;
   $("fprev").classList.toggle("has",F.fr.some(function(x){return x>0&&x<FB;}));
   $("fnext").classList.toggle("has",F.fr.some(function(x){return x>last;}));
+  listenOneByOne=false;$("flisten").disabled=!soundingNotes(F.fr,F.capo).length;
   $("frange").textContent=t("fretLabel")+" "+(F.capo+FB)+"–"+(F.capo+last);
   var notes=soundingNotes(F.fr,F.capo),pcs=Array.from(new Set(notes.map(function(n){return n%12;})));
   $("fnotes").textContent=t("findNotes")+": "+(notes.length?notes.map(function(n){return FIND_NAMES[n%12]+(Math.floor(n/12)-1);}).join(" · "):"—");
@@ -836,9 +841,14 @@ for(var cap=0;cap<=12;cap++){var opt=document.createElement("option");opt.value=
 $("fcapo").onchange=function(){F.capo=+this.value;saveFinder();renderFinder();};
 function dialogState(){var open=!$("ov").hidden||!$("fov").hidden;document.body.classList.toggle("lock",open);document.querySelector(".wrap").inert=open;}
 function openFinder(){if(!$("ov").hidden)closeHelp();finderOpener=document.activeElement;$("fov").hidden=false;dialogState();$("fcapo").value=String(F.capo);fitFinderBase();renderFinder();$("fx").focus();}
-function closeFinder(){$("fov").hidden=true;dialogState();if(finderOpener&&finderOpener.focus)finderOpener.focus();}
+function closeFinder(){stopPlayback();$("fov").hidden=true;dialogState();if(finderOpener&&finderOpener.focus)finderOpener.focus();}
 $("fprev").onclick=function(){FB=Math.max(1,FB-4);renderFinder();if($("fprev").disabled)$("fnext").focus();};
 $("fnext").onclick=function(){FB=Math.min(FB_MAX,FB+4);renderFinder();if($("fnext").disabled)$("fprev").focus();};
+$("flisten").onclick=function(){
+  var v={fr:F.fr.map(function(f){return f===null||f<0?-1:F.capo+f;})};
+  if(v.fr.every(function(f){return f<0;}))return;
+  strum(v,listenOneByOne);listenOneByOne=!listenOneByOne;
+};
 $("fopen").onclick=openFinder;$("fx").onclick=closeFinder;
 $("fov").addEventListener("click",function(e){if(e.target===$("fov"))closeFinder();});
 document.addEventListener("keydown",function(e){
