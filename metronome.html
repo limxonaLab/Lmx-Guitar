@@ -251,7 +251,7 @@ body.help-open{overflow:hidden}
 
 .nt{cursor:pointer}
 .nt:hover{opacity:.75}
-.sub-popover{position:fixed;z-index:180;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 16px 48px rgba(0,0,0,.35);padding:10px;max-height:min(420px,70vh);display:flex;flex-direction:column;gap:4px;overscroll-behavior:contain}
+.sub-popover{position:fixed;max-width:calc(100vw - 16px);z-index:180;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 16px 48px rgba(0,0,0,.35);padding:10px;max-height:min(420px,70vh);display:flex;flex-direction:column;gap:4px;overscroll-behavior:contain}
 .pwrap.fs .sub-popover{position:fixed;z-index:9999;left:50%!important;top:50%!important;transform:translate(-50%,-50%);max-height:86vh;width:min(420px,92vw)}
 .sub-popover[hidden]{display:none}
 .sub-popover.fs-mode{left:50%!important;top:50%!important;transform:translate(-50%,-50%);max-height:86vh;width:min(420px,92vw)}
@@ -260,7 +260,7 @@ body.help-open{overflow:hidden}
 .nv:has(.nt:active){background:color-mix(in srgb,var(--acc) 18%,transparent)}
 .nv{cursor:pointer}
 .sub-popover-head{display:flex;align-items:center;justify-content:space-between;padding:2px 6px 8px}
-.sub-popover-head b{font-size:12px;color:var(--mut);font-weight:600}
+.sub-popover-head b{font-size:12px;color:var(--mut);font-weight:600;min-width:0;flex:1}.sub-popover-head{gap:8px}.sub-popover-actions{display:flex;align-items:center;gap:7px;flex:none}.sub-popover-settings{font-size:11px;padding:6px 9px;border-radius:8px;background:var(--soft);color:var(--acc);white-space:nowrap}
 .sub-popover-close{background:var(--button);border:1px solid var(--line);border-radius:50%;width:26px;height:26px;display:grid;place-items:center;font-size:13px;padding:0;color:var(--mut);cursor:pointer}
 .sub-popover-close:hover{color:var(--fg);border-color:var(--acc)}
 .sub-popover-list{overflow-y:auto;display:flex;flex-direction:column;gap:2px;padding-right:4px}
@@ -347,6 +347,38 @@ html,body{touch-action:pan-x pan-y}
   .pwrap.win .pulses{overflow-x:hidden;padding-left:4px;padding-right:4px;justify-content:flex-start;align-items:center}
   .pwrap.win .pulses .frow{width:100%;max-width:100%;flex-wrap:wrap;justify-content:center;gap:12px 4px}
 }
+/* Alt nota düzenleyici: her nota ayrı ses / es / bağ durumuna sahiptir. */
+#pulses{position:relative}
+.note-connections{position:absolute;left:0;top:0;z-index:2;pointer-events:none;overflow:visible}
+.note-connections path{stroke:var(--mut);stroke-width:1.6;fill:none}
+.nv.has-incoming-tie .tie-incoming{display:none}
+.nt.note-rest{fill:var(--mut);color:var(--mut);opacity:.65}
+.nt.note-tie{fill:var(--mut);color:var(--mut)}
+.nt.note-rest.lit,.nt.note-tie.lit{fill:#b31929;color:#b31929;opacity:1}
+.nt .note-tie{color:inherit}
+#note-editor-overlay{z-index:500;overscroll-behavior:contain}
+.note-editor-dialog{max-width:500px;max-height:calc(100dvh - 32px);overflow-y:auto;padding:24px}
+.note-editor-dialog h2{font-size:18px}
+.note-editor-score{display:flex;align-items:center;justify-content:center;min-height:115px;margin:20px 0 16px;padding:12px;background:var(--button);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.note-editor-score svg{max-width:100%;height:auto;overflow:visible}
+.note-editor-score .nt{cursor:pointer}
+.note-editor-score .note-edit-selected .note-head{stroke:var(--acc);stroke-width:2;fill:var(--acc)}
+.note-editor-score .note-edit-selected.note-rest{color:var(--acc);fill:var(--acc);opacity:1}
+.note-editor-notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(48px,1fr));gap:6px}
+.note-pick{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:56px;padding:8px 3px;background:var(--button)}
+.note-pick b{font-size:12px;font-weight:650}.note-pick small{font-size:9px;color:var(--mut);white-space:nowrap}
+.note-pick[aria-pressed="true"]{border-color:var(--acc);background:var(--soft);color:var(--acc);box-shadow:0 0 0 1px var(--acc)}
+.note-pick.state-tie b::before{content:"⌒ ";font-size:12px}.note-pick.state-rest b{text-decoration:line-through;opacity:.6}
+.note-editor-dialog .note-editor-current{margin:18px 0 7px;font-size:12px;font-weight:650;color:var(--fg)}
+.note-mode-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.note-mode-options button{padding:10px 4px;font-size:12px;min-height:42px}
+.note-mode-options button[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:var(--card);font-weight:650}
+.note-editor-dialog .note-editor-description{font-size:12px;line-height:1.6;min-height:3.2em;margin:10px 0 0;color:var(--mut)}
+.note-editor-dialog .delete-actions{justify-content:space-between;gap:8px;margin-top:20px}
+.note-editor-dialog .delete-actions button{min-width:0;font-size:12px}
+body.note-editor-open{overflow:hidden}
+@media(max-width:580px){.note-editor-dialog{padding:20px 16px}.note-editor-score{min-height:100px;padding:10px;margin:15px 0 12px}.note-pick small{font-size:8px}}
+
 </style>
 </head>
 <body>
@@ -525,6 +557,11 @@ html,body{touch-action:pan-x pan-y}
    </ul>
    <p><b>Bu sayfa seni hatırlar:</b> açtığında hangi başlıkları açık bıraktığın aynen korunur, sonraki açılışta da öyle gelir. Demo kutusu, tema, tempo, ölçüler ve vuruşlar da saklanır.</p>
   </details>
+  <details data-i18n-html="helpNoteSettings"><summary>Alt notaları sessize alma ve bağlama</summary>
+   <p>Vuruşun altındaki <b>nota grubuna</b> tıkla, açılan kalıp listesindeki <b>Ayarlar</b> düğmesine bas. Açılan pencerede bir alt notayı seç ve <b>Çal</b>, <b>Bağlı</b> veya <b>Sessiz / es</b> durumunu belirle.</p>
+   <ul><li><b>Çal:</b> o notada metronom sesi duyulur.</li><li><b>Bağlı:</b> önceki notanın devamı olarak çizilir ve yeni ses üretmez. Örneğin Ankara’dan sonraki Karaman’ın ilk notasını bağlı yaparsan “Ka”da yeni tık gelmez.</li><li><b>Sessiz / es:</b> nota es işaretine dönüşür ve ses çıkarmaz.</li></ul>
+   <p>Her durumda notanın süresi korunur. Ayarlar hemen uygulanır; tarayıcı kaydına, kayıtlı ritimlere ve JSON yedeklerine dahildir. Farklı bir ritim kalıbına geçersen o vuruşun alt nota ayarları sıfırlanır. Bağlı nota döngünün en başındaysa ilk geçişte de yeni tık üretmez.</p>
+  </details>
  </div>
 </div>
 <div class="delete-overlay" id="delete-overlay" hidden>
@@ -543,7 +580,7 @@ html,body{touch-action:pan-x pan-y}
   </div>
 </div>
 <div class="sub-popover" id="sub-popover" hidden role="dialog" aria-modal="false" data-i18n-aria="subPopoverAria" aria-label="Ritim kalıbı seç">
-  <div class="sub-popover-head"><b id="sub-popover-title" data-i18n="subPopTitle">Kalıp seç</b><button class="sub-popover-close" id="sub-popover-close" data-i18n-aria="closeBtn" aria-label="Kapat">✕</button></div>
+  <div class="sub-popover-head"><b id="sub-popover-title" data-i18n="subPopTitle">Kalıp seç</b><div class="sub-popover-actions"><button type="button" class="sub-popover-settings" id="sub-popover-settings" data-i18n="noteSettings" data-i18n-aria="noteEdit" aria-haspopup="dialog">Ayarlar</button><button class="sub-popover-close" id="sub-popover-close" data-i18n-aria="closeBtn" aria-label="Kapat">✕</button></div></div>
   <div class="sub-popover-list" id="sub-popover-list"></div>
   <div class="sub-popover-hint" data-i18n="subPopoverHint">Ctrl + tık: tüm ölçülere uygula</div>
 </div>
@@ -557,6 +594,23 @@ html,body{touch-action:pan-x pan-y}
   <div class="delete-actions"><button id="quick-close" data-i18n="closeBtn">Kapat</button></div>
  </div>
 </div>
+<div class="delete-overlay" id="note-editor-overlay" hidden>
+ <div class="delete-dialog note-editor-dialog" role="dialog" aria-modal="true" aria-labelledby="note-editor-title" aria-describedby="note-editor-lead">
+  <h2 id="note-editor-title">Alt notaları düzenle</h2>
+  <p id="note-editor-lead" data-i18n="noteEditorLead">Bir alt notayı seç, ardından nasıl çalınacağını belirle.</p>
+  <div id="note-editor-score" class="note-editor-score" aria-hidden="true"></div>
+  <div id="note-editor-notes" class="note-editor-notes" role="group" data-i18n-aria="noteSelectGroup" aria-label="Alt notalar"></div>
+  <p class="note-editor-current" id="note-editor-current" aria-live="polite"></p>
+  <div class="note-mode-options" role="group" data-i18n-aria="noteModeGroup" aria-label="Nota davranışı">
+   <button type="button" data-note-mode="play" data-i18n="noteMode_play">Çal</button>
+   <button type="button" data-note-mode="tie" data-i18n="noteMode_tie">Bağlı</button>
+   <button type="button" data-note-mode="rest" data-i18n="noteMode_rest">Sessiz / es</button>
+  </div>
+  <p id="note-editor-description" class="note-editor-description"></p>
+  <div class="delete-actions"><button type="button" id="note-editor-reset" data-i18n="noteReset">Alt notaları sıfırla</button><button type="button" id="note-editor-close" data-i18n="closeBtn">Kapat</button></div>
+ </div>
+</div>
+
 <script>
 /* ---------- i18n ---------- */
 const MET_I18N={
@@ -859,6 +913,22 @@ presetDelete:"delete",presetEdit:"Edit",
  <p><b>This page remembers you:</b> which headings you left open are kept exactly as they are for your next visit. The demo checkbox, theme, tempo, measures and beats are also saved.</p>
  `,
 }};
+Object.assign(MET_I18N.tr,{
+ noteSettings:"Ayarlar",noteEdit:"Alt notaları düzenle",noteEditAria:"{m}. ölçü, {b}. vuruşun alt notalarını düzenle",
+ noteEditorTitle:"{m}. ölçü · {b}. vuruş",noteEditorLead:"Bir alt notayı seç, ardından nasıl çalınacağını belirle. Ayarlar hemen uygulanır.",
+ noteSelectGroup:"Alt notalar",noteModeGroup:"Seçili notanın davranışı",noteMode_play:"Çal",noteMode_rest:"Sessiz / es",noteMode_tie:"Bağlı",
+ notePickAria:"{n}. alt nota: {mode}. Düzenlemek için seç.",noteCurrent:"{n}. alt nota",noteRestSyllable:"Es",noteReset:"Alt notaları sıfırla",
+ noteHelp_play:"Bu notada normal metronom vuruşu duyulur.",noteHelp_rest:"Bu nota es olarak görünür ve ses çıkarmaz. Süresi ritim içinde korunur.",noteHelp_tie:"Önceki notadan gelen bağ olarak görünür; bu notada yeni ses başlamaz. Süresi korunur."
+});
+Object.assign(MET_I18N.en,{
+ helpNoteSettings:`<summary>Muting and tying individual notes</summary><p>Click a beat’s <b>note group</b>, then press <b>Settings</b> in the pattern list. Select a note, then choose <b>Play</b>, <b>Tied</b> or <b>Rest / mute</b>.</p><ul><li><b>Play:</b> triggers a metronome click.</li><li><b>Tied:</b> is drawn as a continuation of the previous note and triggers no new click.</li><li><b>Rest / mute:</b> shows a rest and makes no sound.</li></ul><p>Timing is preserved in all cases. Changes apply immediately and are included in browser storage, saved rhythms and JSON backups. Changing a beat’s pattern resets its note settings. A tied note at the very start remains silent on the first pass too.</p>`,
+ noteSettings:"Settings",noteEdit:"Edit individual notes",noteEditAria:"Edit the notes of measure {m}, beat {b}",
+ noteEditorTitle:"Measure {m} · beat {b}",noteEditorLead:"Select a note, then choose how it plays. Changes apply immediately.",
+ noteSelectGroup:"Individual notes",noteModeGroup:"Selected note behavior",noteMode_play:"Play",noteMode_rest:"Rest / mute",noteMode_tie:"Tied",
+ notePickAria:"Note {n}: {mode}. Select to edit.",noteCurrent:"Note {n}",noteRestSyllable:"Rest",noteReset:"Reset note settings",
+ noteHelp_play:"This note triggers the normal metronome click.",noteHelp_rest:"This note is shown as a rest and produces no sound. Its duration is preserved.",noteHelp_tie:"Continues the previous note as a tie; no new click is triggered here. Its duration is preserved."
+});
+
 let MET_LANG="tr";
 function metDetectLang(){
   const pathLang=location.pathname.match(/^\/(tr|en)\/metronome\/?$/);
@@ -934,7 +1004,7 @@ let sameSubSound=true,restoringState=false,demoFirst=false,demoPhase=false;
 // Retain grouping-divider support for later use; currently inactive.
 const SHOW_GROUP_DIVIDERS=false;
 let measures=[{num:4,den:4}],activeMeasure=0,addingMeasure=false;
-let curGrp=null,pulseSub=[],noClick=false,bpm=100,num=4,den=4,sub=0,levels=[3,1,1,1],playing=false,ctx=null,timer=null,nextT=0,curP=0,curS=0;
+let curGrp=null,pulseSub=[],noteModes=[],noClick=false,bpm=100,num=4,den=4,sub=0,levels=[3,1,1,1],playing=false,ctx=null,timer=null,nextT=0,curP=0,curS=0;
 const subDefs=[
 ["Tek vuruş (bölme yok)",[1]],
 ["Tek sekizlik",[1]],
@@ -952,6 +1022,13 @@ const subDefs=[
 ["16 - 16 - 8 - 8",[1,1,1,0,1,0],["Ça","nak","Ka","le"]],
 ["8 - 16 - 16 - 8",[1,0,1,1,1,0],["Baa","lı","ke","Sir"]],
 ["8 - 8 - 16 - 16",[1,0,1,0,1,1],["Af","yon","ka","ra"]]];
+const NOTE_MODES=["play","rest","tie"];
+function noteCount(pattern){return subDefs[pattern][1].filter(Boolean).length;}
+function noteModeAt(beat,n){const mode=noteModes[beat]?.[n];return NOTE_MODES.includes(mode)?mode:"play";}
+function noteModesFor(beat){return Array.from({length:noteCount(pulseSub[beat]||0)},(_,n)=>noteModeAt(beat,n));}
+function normalizeNoteModes(source,patterns){return patterns.map((pattern,i)=>Array.from({length:noteCount(pattern)},(_,n)=>NOTE_MODES.includes(source?.[i]?.[n])?source[i][n]:"play"));}
+function setBeatPattern(beat,pattern){if(pulseSub[beat]===pattern)return;pulseSub[beat]=pattern;noteModes[beat]=[];}
+function setPatternRange(pattern,from=0,to=pulseSub.length){for(let beat=from;beat<to;beat++)setBeatPattern(beat,pattern);}
 const sigDefs=[[2,4],[3,4],[4,4],[5,4],[6,8],[5,8],[7,8],[9,8],[11,8],[12,8]];
 const names=[[40,"Largo"],[60,"Adagio"],[76,"Andante"],[108,"Moderato"],[120,"Allegro"],[168,"Vivace"],[200,"Presto"],[400,"Prestissimo"]];
 
@@ -1005,11 +1082,11 @@ function reorderMeasure(from,insertion){
   const selected=measures[activeMeasure];
   let offset=0;
   const chunks=measures.map(m=>{
-    const chunk={measure:m,levels:levels.slice(offset,offset+m.num),notes:pulseSub.slice(offset,offset+m.num)};
+    const chunk={measure:m,levels:levels.slice(offset,offset+m.num),notes:pulseSub.slice(offset,offset+m.num),modes:noteModes.slice(offset,offset+m.num)};
     offset+=m.num;return chunk;
   });
   const [moving]=chunks.splice(from,1);chunks.splice(to,0,moving);
-  measures=chunks.map(c=>c.measure);levels=chunks.flatMap(c=>c.levels);pulseSub=chunks.flatMap(c=>c.notes);
+  measures=chunks.map(c=>c.measure);levels=chunks.flatMap(c=>c.levels);pulseSub=chunks.flatMap(c=>c.notes);noteModes=chunks.flatMap(c=>c.modes);
   activeMeasure=measures.indexOf(selected);curP=0;curS=0;
   selectMeasure(activeMeasure);drawSubs();drawPulses();
 }
@@ -1108,9 +1185,9 @@ function duplicateMeasure(index){
   if(!measures[index])return;
   if(playing)toggle();
   const start=measureStart(index),n=measures[index].num;
-  const lv=levels.slice(start,start+n),ps=pulseSub.slice(start,start+n);
+  const lv=levels.slice(start,start+n),ps=pulseSub.slice(start,start+n),nm=Array.from({length:n},(_,i)=>noteModesFor(start+i));
   measures.splice(index+1,0,{...measures[index]});
-  levels.splice(start+n,0,...lv);pulseSub.splice(start+n,0,...ps);
+  levels.splice(start+n,0,...lv);pulseSub.splice(start+n,0,...ps);noteModes.splice(start+n,0,...nm);
   addingMeasure=false;curP=0;curS=0;
   selectMeasure(index+1);drawSubs();drawPulses();revealMeasures(index,index+1);
 }
@@ -1129,6 +1206,7 @@ function setMeter(n,d){
   sub=d===8?1:0;
   levels.splice(start,oldLength,...defaults);
   pulseSub.splice(start,oldLength,...Array(n).fill(sub));
+  noteModes.splice(start,oldLength,...Array.from({length:n},()=>[]));
   measures.splice(index,oldLength?1:0,{num:n,den:d});
   activeMeasure=index;addingMeasure=false;num=n;den=d;curGrp=null;
   $('num').value=n;$('den').value=d;
@@ -1188,6 +1266,7 @@ function syncSubPopHost(){
   if(pop.parentElement!==host)host.appendChild(pop);
   const quick=$('quick-overlay');if(quick.parentElement!==host)host.appendChild(quick);
   const confirm=$('delete-overlay');if(confirm.parentElement!==host)host.appendChild(confirm);
+  const editor=$('note-editor-overlay');if(editor.parentElement!==host)host.appendChild(editor);
 }
 function enterFs(){
   if(fsMode)return;
@@ -1223,6 +1302,7 @@ function exitWin(){
 document.addEventListener("fullscreenchange",()=>{if(!document.fullscreenElement&&fsMode)exitFs();});
 document.addEventListener("keydown",e=>{
   if(e.key!=="Escape")return;
+  if(!$("note-editor-overlay").hidden){e.preventDefault();e.stopImmediatePropagation();closeNoteEditor();return;}
   if(!$("quick-overlay").hidden){e.preventDefault();e.stopImmediatePropagation();closeQuickPicker();return;}
   if(!subPop.hidden){
     e.preventDefault();e.stopImmediatePropagation();closeSubPop();return;
@@ -1272,19 +1352,22 @@ function drawPulses(){
     const d=document.createElement("div");d.className="nv";d.id="nv"+i;d.tabIndex=0;
     d.setAttribute('role','button');
     d.setAttribute('aria-label',mt("patternAria").replace("{m}",measureAt(i).index+1).replace("{b}",measureAt(i).local+1));
-    d.innerHTML=noteSVG(NOT[pulseSub[i]],subDefs[pulseSub[i]][2],sc);c.appendChild(d);
+    d.innerHTML=noteSVG(NOT[pulseSub[i]],subDefs[pulseSub[i]][2],sc,noteModesFor(i));c.appendChild(d);
     d.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();openSubPop(i,d);}});
     rowFor(el,measureAt(i).index).appendChild(c);
   });
   setDemoGlow();
   if(!fsMode)el.scrollLeft=keepScroll;
+  requestAnimationFrame(drawNoteConnections);
 }
 const subPop=$("sub-popover"),subPopList=$("sub-popover-list"),subPopClose=$("sub-popover-close"),subPopTitle=$("sub-popover-title");
+let subPopBeat=0;
+$("sub-popover-settings").onclick=e=>{e.stopPropagation();openNoteEditor(subPopBeat,$("nv"+subPopBeat));};
 function closeSubPop(){subPop.hidden=true;subPop.classList.remove('fs-mode');}
 function subName(i){const k="subName"+i;const d=MET_I18N[MET_LANG];return d&&d[k]!==undefined?d[k]:subDefs[i][0];}
 function subCap(i){const k="cap"+i;const d=MET_I18N[MET_LANG];return d&&d[k]!==undefined?d[k]:'';}
 function openSubPop(beat,anchor){
-  syncSubPopHost();
+  subPopBeat=beat;syncSubPopHost();
   const ma=measureAt(beat);
   subPopTitle.textContent=mt("subPopFullTpl").replace("{m}",ma.index+1).replace("{b}",ma.local+1);
   subPopList.innerHTML="";
@@ -1295,7 +1378,7 @@ function openSubPop(beat,anchor){
     b.innerHTML=`${noteSVG(NOT[i],null,.62)}<span class="sp-name">${subName(i)}</span><span class="sp-tag">${subCap(i)}</span>`;
     b.addEventListener('click',e=>{
       const all=e.ctrlKey||e.metaKey;
-      if(all){pulseSub.fill(i);}else{pulseSub[beat]=i;}
+      if(all){setPatternRange(i);}else{setBeatPattern(beat,i);}
       curS=0;closeSubPop();drawSubs();drawPulses();preview(i);
     });
     subPopList.appendChild(b);
@@ -1309,7 +1392,7 @@ function openSubPop(beat,anchor){
   subPop.style.left=x+"px";subPop.style.top=y+"px";
 }
 function fillSubPopList(beat){
-  syncSubPopHost();
+  subPopBeat=beat;syncSubPopHost();
   subPopTitle.textContent=mt("subPopFullTpl").replace("{m}",measureAt(beat).index+1).replace("{b}",measureAt(beat).local+1);
   subPopList.innerHTML="";
   subDefs.forEach(([t],i)=>{
@@ -1319,7 +1402,7 @@ function fillSubPopList(beat){
     b.innerHTML=`${noteSVG(NOT[i],null,.62)}<span class="sp-name">${subName(i)}</span><span class="sp-tag">${subCap(i)}</span>`;
     b.addEventListener('click',e=>{
       const all=e.ctrlKey||e.metaKey;
-      if(all){pulseSub.fill(i);}else{pulseSub[beat]=i;}
+      if(all){setPatternRange(i);}else{setBeatPattern(beat,i);}
       curS=0;closeSubPop();drawSubs();drawPulses();preview(i);
     });
     subPopList.appendChild(b);
@@ -1338,7 +1421,7 @@ $("pulses").addEventListener("click",e=>{
   if(winMode){fillSubPopList(beat);subPop.classList.add('fs-mode');subPop.hidden=false;return;}
   if(e.ctrlKey||e.metaKey){
     const i=(pulseSub[beat]+1)%subDefs.length;
-    pulseSub[beat]=i;curS=0;drawSubs();drawPulses();preview(i);
+    setBeatPattern(beat,i);curS=0;drawSubs();drawPulses();preview(i);
     return;
   }
   openSubPop(beat,nt);
@@ -1365,36 +1448,128 @@ const NOT=[
 {it:[["16",0],["16",1],["8",2],["8",3]]},
 {it:[["8",0],["16",1],["16",2],["8",3]]},
 {it:[["8",0],["8",1],["16",2],["16",3]]}];
-function noteSVG(spec,sy,sc){sc=sc||1;
-  const U=22,P=16,it=spec.it,xs=it.map(([t,u])=>P+u*U);
+function noteSVG(spec,sy,sc,modes){sc=sc||1;
+  const U=22,P=16,it=spec.it,xs=it.map(([,u])=>P+u*U);
   const W=xs[xs.length-1]+P+(it[it.length-1][0]==="8"?6:0);
-  let g="",n=0;const nk=[];
-  it.forEach(([t],k)=>{
-    const x=xs[k];
-    if(t==="r"){g+=`<circle cx="${x-2}" cy="16" r="2"/><path d="M${x+3} 12 L${x-3} 30" stroke="currentColor" stroke-width="1.8" fill="none"/>`;return;}
-    let h=`<ellipse cx="${x}" cy="30" rx="4.6" ry="3.4" transform="rotate(-20 ${x} 30)"/><rect x="${x+3.6}" y="8" width="1.4" height="22"/>`;
-    if(it[k][2]&&it[k][2].dot)h+=`<circle cx="${x+9.5}" cy="26.5" r="1.8"/>`;
-    if(t!=="4")nk.push(k);
-    if(sy){h+=`<text x="${x}" y="48" text-anchor="middle" font-size="12" opacity=".85" font-family="system-ui,sans-serif">${sy[n]}</text>`;}
-    g+=`<g class="nt" data-n="${n}">${h}</g>`;
-    n++;
-  });
-  if(nk.length===1&&it[nk[0]][0]==="8"){const sx=xs[nk[0]]+4.3;g+=`<path d="M${sx} 8 C${sx+2} 15 ${sx+9} 17 ${sx+7} 26" stroke="currentColor" stroke-width="1.8" fill="none"/>`;}
-  if(nk.length>=2){
-    const f=xs[nk[0]],l=xs[nk[nk.length-1]];
-    g+=`<rect x="${f+3.6}" y="8" width="${l-f+1.4}" height="3"/>`;
-    nk.forEach((k,j)=>{
-      if(it[k][0]!=="16")return;
-      const nx=nk[j+1],pv=nk[j-1];
-      if(nx!==undefined&&it[nx][0]==="16"){g+=`<rect x="${xs[k]+3.6}" y="13.5" width="${xs[nx]-xs[k]+1.4}" height="3"/>`;}
-      else if(!(pv!==undefined&&it[pv][0]==="16")){
-        const sx=(j===nk.length-1||(pv!==undefined&&it[pv][2]&&it[pv][2].dot))?xs[k]+5-7:xs[k]+3.6;
-        g+=`<rect x="${sx}" y="13.5" width="7" height="3"/>`;}
-    });
-    if(spec.tup){g+=`<text x="${(spec.tupAt?(xs[spec.tupAt[0]]+xs[spec.tupAt[1]])/2:(f+l)/2)+4}" y="6.8" text-anchor="middle" font-size="9" font-style="italic" font-family="system-ui,sans-serif">${spec.tup}</text>`;}
+  let g="",n=0;const runs=[];let run=[];
+  function restGlyph(x,type){
+    if(type==="4")return `<path d="M${x-3} 10l7 8-6 6 5 5-4 6" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" fill="none"/>`;
+    return `<circle cx="${x-2}" cy="16" r="2"/>${type==="16"?`<circle cx="${x-4}" cy="23" r="2"/>`:""}<path d="M${x+3} 12L${x-3} 32" stroke="currentColor" stroke-width="1.8" fill="none"/>`;
   }
+  it.forEach(([type],k)=>{
+    const x=xs[k];
+    if(type==="r"){if(run.length)runs.push(run);run=[];g+=restGlyph(x,"8");return;}
+    const mode=NOTE_MODES.includes(modes?.[n])?modes[n]:"play";
+    let h="";
+    if(mode==="rest"){
+      if(run.length)runs.push(run);run=[];h=restGlyph(x,type);
+      if(it[k][2]?.dot)h+=`<circle cx="${x+9.5}" cy="26.5" r="1.8"/>`;
+    }else{
+      h=`<ellipse class="note-head" cx="${x}" cy="30" rx="4.6" ry="3.4" transform="rotate(-20 ${x} 30)"/><rect x="${x+3.6}" y="8" width="1.4" height="22"/>`;
+      if(it[k][2]?.dot)h+=`<circle cx="${x+9.5}" cy="26.5" r="1.8"/>`;
+      if(type!=="4")run.push(k);else{if(run.length)runs.push(run);run=[];}
+      if(mode==="tie"){
+        const previous=k>0?xs[k-1]+3:3;
+        h+=`<path class="note-tie${n===0?" tie-incoming":""}" d="M${previous} 36Q${(previous+x-3)/2} 45 ${x-3} 36" stroke="currentColor" stroke-width="1.5" fill="none"/>`;
+      }
+    }
+    if(sy){const syllable=mode==="rest"?mt("noteRestSyllable"):mode==="tie"?"("+sy[n]+")":sy[n];h+=`<text x="${x}" y="48" text-anchor="middle" font-size="12" opacity=".85" font-family="system-ui,sans-serif">${syllable}</text>`;}
+    g+=`<g class="nt${mode==="play"?"":" note-"+mode}" data-n="${n}" data-mode="${mode}">${h}</g>`;n++;
+  });
+  if(run.length)runs.push(run);
+  runs.forEach(keys=>{
+    if(keys.length===1){const k=keys[0],sx=xs[k]+4.3;
+      g+=`<path d="M${sx} 8C${sx+2} 15 ${sx+9} 17 ${sx+7} 26" stroke="currentColor" stroke-width="1.8" fill="none"/>`;
+      if(it[k][0]==="16")g+=`<path d="M${sx} 13.5C${sx+2} 20 ${sx+9} 22 ${sx+7} 31" stroke="currentColor" stroke-width="1.8" fill="none"/>`;
+      return;
+    }
+    const first=xs[keys[0]],last=xs[keys[keys.length-1]];
+    g+=`<rect x="${first+3.6}" y="8" width="${last-first+1.4}" height="3"/>`;
+    keys.forEach((k,j)=>{
+      if(it[k][0]!=="16")return;
+      const nx=keys[j+1],pv=keys[j-1];
+      if(nx!==undefined&&it[nx][0]==="16")g+=`<rect x="${xs[k]+3.6}" y="13.5" width="${xs[nx]-xs[k]+1.4}" height="3"/>`;
+      else if(!(pv!==undefined&&it[pv][0]==="16")){
+        const sx=(j===keys.length-1||it[pv]?.[2]?.dot)?xs[k]+5-7:xs[k]+3.6;
+        g+=`<rect x="${sx}" y="13.5" width="7" height="3"/>`;
+      }
+    });
+  });
+  if(spec.tup){const a=spec.tupAt?.[0]??0,b=spec.tupAt?.[1]??it.length-1;g+=`<text x="${(xs[a]+xs[b])/2+4}" y="6.8" text-anchor="middle" font-size="9" font-style="italic" font-family="system-ui,sans-serif">${spec.tup}</text>`;}
   return `<svg width="${W*sc}" height="${52*sc}" viewBox="0 0 ${W} 52" fill="currentColor">${g}</svg>`;
 }
+
+let noteEditorBeat=0,noteEditorOrdinal=0,noteEditorOpener=null;
+function drawNoteConnections(){
+  const strip=$('pulses');strip.querySelector('.note-connections')?.remove();
+  strip.querySelectorAll('.nv.has-incoming-tie').forEach(el=>el.classList.remove('has-incoming-tie'));
+  const box=strip.getBoundingClientRect(),paths=[];
+  pulseSub.forEach((_,i)=>{
+    if(noteModeAt(i,0)!=="tie"||i===0)return;
+    const previous=$('nv'+(i-1)),current=$('nv'+i);
+    const last=previous?.querySelector('.nt:last-of-type .note-head'),first=current?.querySelector('.nt[data-n="0"] .note-head');
+    if(!last||!first)return;
+    const a=last.getBoundingClientRect(),b=first.getBoundingClientRect();
+    if(b.left<=a.right||Math.abs((a.top+a.height/2)-(b.top+b.height/2))>6)return;
+    const x1=a.left+a.width*.7-box.left+strip.scrollLeft,x2=b.left+b.width*.3-box.left+strip.scrollLeft;
+    const y1=a.bottom+2-box.top+strip.scrollTop,y2=b.bottom+2-box.top+strip.scrollTop;
+    paths.push(`<path d="M${x1} ${y1}Q${(x1+x2)/2} ${Math.max(y1,y2)+10} ${x2} ${y2}"/>`);
+    current.classList.add('has-incoming-tie');
+  });
+  if(!paths.length)return;
+  const layer=document.createElementNS('http://www.w3.org/2000/svg','svg');layer.classList.add('note-connections');layer.setAttribute('aria-hidden','true');
+  layer.setAttribute('width',strip.scrollWidth);layer.setAttribute('height',strip.scrollHeight);layer.innerHTML=paths.join('');strip.appendChild(layer);
+}
+function openNoteEditor(beat,opener){
+  if(!Number.isInteger(beat)||beat<0||beat>=pulseSub.length)return;
+  closeSubPop();if(!$('quick-overlay').hidden)closeQuickPicker();syncSubPopHost();
+  noteEditorBeat=beat;noteEditorOrdinal=0;noteEditorOpener=opener;
+  $('note-editor-overlay').hidden=false;document.body.classList.add('note-editor-open');
+  document.querySelector('.app').inert=!(fsMode||winMode);renderNoteEditor();$('note-editor-close').focus({preventScroll:true});
+}
+function closeNoteEditor(){
+  $('note-editor-overlay').hidden=true;document.body.classList.remove('note-editor-open');document.querySelector('.app').inert=false;
+  const opener=$('nv'+noteEditorBeat);if(opener?.isConnected)opener.focus({preventScroll:true});else if(noteEditorOpener?.isConnected)noteEditorOpener.focus({preventScroll:true});
+}
+function renderNoteEditor(){
+  if(!pulseSub.length||noteEditorBeat>=pulseSub.length){closeNoteEditor();return;}
+  const beat=noteEditorBeat,pattern=pulseSub[beat],ma=measureAt(beat),count=noteCount(pattern);
+  noteEditorOrdinal=Math.min(noteEditorOrdinal,count-1);
+  $('note-editor-title').textContent=mt('noteEditorTitle').replace('{m}',ma.index+1).replace('{b}',ma.local+1);
+  const score=$('note-editor-score'),scale=Math.min(2.1,Math.max(1.05,($('note-editor-notes').clientWidth||300)/specW(NOT[pattern])));
+  score.innerHTML=noteSVG(NOT[pattern],subDefs[pattern][2],scale,noteModesFor(beat));
+  score.querySelectorAll('.nt').forEach(el=>{const n=Number(el.dataset.n);el.classList.toggle('note-edit-selected',n===noteEditorOrdinal);el.onclick=()=>{noteEditorOrdinal=n;renderNoteEditor();};});
+  const buttons=$('note-editor-notes');buttons.innerHTML='';
+  for(let n=0;n<count;n++){
+    const mode=noteModeAt(beat,n),button=document.createElement('button');button.type='button';button.dataset.ordinal=n;button.className='note-pick state-'+mode;
+    button.setAttribute('aria-pressed',n===noteEditorOrdinal);button.setAttribute('aria-label',mt('notePickAria').replace('{n}',n+1).replace('{mode}',mt('noteMode_'+mode)));
+    const name=document.createElement('b');name.textContent=subDefs[pattern][2]?.[n]||String(n+1);
+    const status=document.createElement('small');status.textContent=mt('noteMode_'+mode);button.append(name,status);
+    button.onclick=()=>{noteEditorOrdinal=n;renderNoteEditor();$('note-editor-notes').querySelector(`[data-ordinal="${n}"]`).focus({preventScroll:true});};buttons.appendChild(button);
+  }
+  const mode=noteModeAt(beat,noteEditorOrdinal);
+  document.querySelectorAll('[data-note-mode]').forEach(button=>button.setAttribute('aria-pressed',button.dataset.noteMode===mode));
+  $('note-editor-current').textContent=mt('noteCurrent').replace('{n}',noteEditorOrdinal+1);
+  $('note-editor-description').textContent=mt('noteHelp_'+mode);
+}
+function setNoteMode(mode){
+  if(!NOTE_MODES.includes(mode))return;
+  const beat=noteEditorBeat,modes=noteModesFor(beat);modes[noteEditorOrdinal]=mode;noteModes[beat]=modes;
+  drawPulses();renderNoteEditor();
+}
+document.querySelectorAll('[data-note-mode]').forEach(button=>button.onclick=()=>setNoteMode(button.dataset.noteMode));
+$('note-editor-reset').onclick=()=>{noteModes[noteEditorBeat]=[];drawPulses();renderNoteEditor();};
+$('note-editor-close').onclick=closeNoteEditor;
+$('note-editor-overlay').addEventListener('click',e=>{if(e.target===$('note-editor-overlay'))closeNoteEditor();});
+$('note-editor-overlay').addEventListener('keydown',e=>{
+  if(e.key==='Escape'){e.preventDefault();e.stopPropagation();closeNoteEditor();return;}
+  if(e.code==='Space'){e.stopPropagation();}
+  if(e.key==='Tab'){
+    const buttons=[...$('note-editor-overlay').querySelectorAll('button')],first=buttons[0],last=buttons[buttons.length-1];
+    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+  }
+});
 
 let drag=null,ghost=null;
 function cellAt(x,y){const el=document.elementFromPoint(x,y);return el&&el.closest?el.closest(".cell"):null;}
@@ -1417,7 +1592,7 @@ function dup(e){
   if(!drag)return;
   if(drag.on){noClick=true;setTimeout(()=>noClick=false,50);
     const c=cellAt(e.clientX,e.clientY);
-    if(c){const idx=[...document.querySelectorAll("#pulses .cell")].indexOf(c);if(idx>=0){pulseSub[idx]=drag.i;curS=0;dend();drawSubs();drawPulses();return;}}}
+    if(c){const idx=[...document.querySelectorAll("#pulses .cell")].indexOf(c);if(idx>=0){setBeatPattern(idx,drag.i);curS=0;dend();drawSubs();drawPulses();return;}}}
   dend();
 }
 function dend(){
@@ -1452,7 +1627,7 @@ function drawSubs(){
     const cap=subCap(i);
     if(!sy)b.classList.add('nosy');
     if(cap){const caption=document.createElement('small');caption.className='sub-label';caption.textContent=cap;b.appendChild(caption);}
-    b.addEventListener("pointerdown",e=>chipDown(e,i,b));b.onclick=e=>{if(noClick)return;sub=i;if(e.ctrlKey||e.metaKey)pulseSub.fill(i);else{const st=measureStart(activeMeasure);pulseSub.fill(i,st,st+measures[activeMeasure].num);}curS=0;drawSubs();drawPulses();};$("subs").appendChild(b);});
+    b.addEventListener("pointerdown",e=>chipDown(e,i,b));b.onclick=e=>{if(noClick)return;sub=i;if(e.ctrlKey||e.metaKey)setPatternRange(i);else{const st=measureStart(activeMeasure);setPatternRange(i,st,st+measures[activeMeasure].num);}curS=0;drawSubs();drawPulses();};$("subs").appendChild(b);});
 }
 for(let i=1;i<=16;i++){const o=document.createElement("option");o.textContent=i;$("num").appendChild(o);}
 $("num").onchange=e=>{if(!addingMeasure)setMeter(+e.target.value,den);};
@@ -1592,10 +1767,16 @@ function sched(){
     const lvl=levels[curP];
     const pat=subDefs[pulseSub[curP]||0][1];
     if(curS>=pat.length)curS=0;
-    if(pat[curS])flashDot(curP,curS,nextT);
-    if(curS===0){if(pat[0]&&lvl>0)click(nextT,lvl,false);}
-    if(curS===pat.indexOf(1))flash(curP,nextT);
-    if(curS>0&&pat[curS]){if(!pat[0]&&curS===pat.indexOf(1)){if(lvl>0)click(nextT,lvl,false);}else if(lvl>0){if(sameSubSound)click(nextT,lvl,false);else click(nextT,0,true);}}
+    const firstSlot=pat.indexOf(1);
+    if(pat[curS]){
+      const ordinal=pat.slice(0,curS).filter(Boolean).length;
+      flashDot(curP,curS,nextT);
+      if(lvl>0&&noteModeAt(curP,ordinal)==="play"){
+        if(curS===firstSlot||sameSubSound)click(nextT,lvl,false);
+        else click(nextT,0,true);
+      }
+    }
+    if(curS===firstSlot)flash(curP,nextT);
     nextT+=(60/bpm)/pat.length;
     if(++curS>=pat.length){
       const completed=measureAt(curP);
@@ -1652,7 +1833,7 @@ function toggle(forceDemo){
 // Normal görünümde boş alan tıklaması çalmayı durdurur; tempo ve görünüm denetimleri çalmayı sürdürür.
 document.addEventListener("click",e=>{
   if(!playing||winMode||e.button!==0||noClick||drag)return;
-  if(e.target.closest('.sub-panel,.nv,.nt,.beat-tempo,#win-open,[aria-labelledby="tempo-title"],#sub-popover,#quick-overlay,#delete-overlay,#json-overlay,#help-overlay'))return;
+  if(e.target.closest('.sub-panel,.nv,.nt,#note-editor-overlay,.beat-tempo,#win-open,[aria-labelledby="tempo-title"],#sub-popover,#quick-overlay,#delete-overlay,#json-overlay,#help-overlay'))return;
   e.preventDefault();e.stopImmediatePropagation();toggle();
 },true);
 // iOS Safari'nin yakınlaştırma hareketlerini engelle; tek dokunma butonları çalışmaya devam eder.
@@ -1662,7 +1843,7 @@ document.addEventListener('touchmove',e=>{if(e.touches.length>1)e.preventDefault
 document.addEventListener('dblclick',e=>{if(window.matchMedia('(pointer:coarse)').matches)e.preventDefault();});
 $("play").onclick=()=>toggle();
 document.addEventListener("keydown",e=>{
-  if(!$("delete-overlay").hidden||!$("json-overlay").hidden||!$("quick-overlay").hidden)return;
+  if(!$("delete-overlay").hidden||!$("json-overlay").hidden||!$("quick-overlay").hidden||!$("note-editor-overlay").hidden)return;
   if(!$("help-overlay").hidden){if(e.key==="Escape")closeHelp();return;}
   if(["INPUT","SELECT"].includes(e.target.tagName))return;
   if(e.code==="Space"&&e.target.tagName==="BUTTON")e.target.blur();
@@ -1672,7 +1853,7 @@ document.addEventListener("keydown",e=>{
   if(e.code==="ArrowUp"){e.preventDefault();setBpm(bpm+1);}
   if(e.code==="ArrowDown"){e.preventDefault();setBpm(bpm-1);}
 });
-function snapshot(){return {version:2,demoFirst,bpm,num,den,measures:measures.map(m=>({...m})),activeMeasure,levels:[...levels],pulseSub:[...pulseSub],sub,sameSubSound};}
+function snapshot(){return {version:3,demoFirst,bpm,num,den,measures:measures.map(m=>({...m})),activeMeasure,levels:[...levels],pulseSub:[...pulseSub],noteModes:pulseSub.map((_,i)=>noteModesFor(i)),sub,sameSubSound};}
 function save(){if(restoringState)return;try{localStorage.setItem('metronom-state',JSON.stringify(snapshot()));}catch{}}
 function updateSummary(){save();$('meter-badge').textContent=addingMeasure?mt("meterNew"):`${num} / ${den}`;$('transport-detail').textContent=mt("transportDetailTpl").replace("{m}",measures.length).replace("{b}",levels.length).replace("{bpm}",bpm);}
 function setTheme(theme,save){document.documentElement.dataset.theme=theme;['light','dark'].forEach(t=>$('theme-'+t).setAttribute('aria-pressed',t===theme));if(save){try{localStorage.setItem('metronom-theme',theme);}catch{}}}
@@ -1698,6 +1879,7 @@ function applyState(st){
     pulseSub=Array.from({length:total},(_,i)=>{
       const value=st.pulseSub[i];return Number.isInteger(value)&&value>=0&&value<subDefs.length?value:sub;
     });
+    noteModes=normalizeNoteModes(st.noteModes,pulseSub);
     curP=0;curS=0;curGrp=null;gstarts=new Set([0]);
     setBpm(Number.isFinite(+st.bpm)?+st.bpm:100);
     drawMeasureTabs();drawSigs();drawSubs();drawPulses();
@@ -1754,9 +1936,11 @@ function parseRhythmImport(text){
     if(!Array.isArray(p.levels)||p.levels.length!==total||p.levels.some(v=>![0,1,2,3].includes(v)))bad();
     if(!Array.isArray(p.pulseSub)||p.pulseSub.length!==total||p.pulseSub.some(v=>!Number.isInteger(v)||v<0||v>=subDefs.length))bad();
     if(p.sameSubSound!==undefined&&typeof p.sameSubSound!=='boolean')bad();
+    if(p.noteModes!==undefined&&(!Array.isArray(p.noteModes)||p.noteModes.length!==total||p.noteModes.some((row,i)=>!Array.isArray(row)||row.length!==noteCount(p.pulseSub[i])||row.some(mode=>!NOTE_MODES.includes(mode)))))bad();
+    if(p.demoFirst!==undefined&&typeof p.demoFirst!=='boolean')bad();
     const active=Number.isInteger(p.activeMeasure)&&p.activeMeasure>=0&&p.activeMeasure<ms.length?p.activeMeasure:0;
-    return {version:2,name:typeof p.name==='string'?p.name.trim().slice(0,40):'',bpm:Math.round(p.bpm),num:ms[active].num,den:ms[active].den,
-      measures:ms.map(m=>({num:m.num,den:m.den})),activeMeasure:active,levels:[...p.levels],pulseSub:[...p.pulseSub],
+    return {version:3,name:typeof p.name==='string'?p.name.trim().slice(0,40):'',bpm:Math.round(p.bpm),num:ms[active].num,den:ms[active].den,
+      measures:ms.map(m=>({num:m.num,den:m.den})),activeMeasure:active,levels:[...p.levels],pulseSub:[...p.pulseSub],noteModes:normalizeNoteModes(p.noteModes,p.pulseSub),demoFirst:p.demoFirst===true,
       sub:Number.isInteger(p.sub)&&p.sub>=0&&p.sub<subDefs.length?p.sub:0,sameSubSound:p.sameSubSound!==false};
   });
 }
@@ -1823,7 +2007,7 @@ function confirmMeasureDelete(){
   if(index<0||measures.length<2){closeDeleteDialog();return;}
   if(playing)toggle();
   const start=measureStart(index),count=measures[index].num;
-  levels.splice(start,count);pulseSub.splice(start,count);measures.splice(index,1);
+  levels.splice(start,count);pulseSub.splice(start,count);noteModes.splice(start,count);measures.splice(index,1);
   if(activeMeasure>index)activeMeasure--;
   else if(activeMeasure===index)activeMeasure=Math.min(index,measures.length-1);
   curP=0;curS=0;closeDeleteDialog(false);
