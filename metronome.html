@@ -2,6 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
+<meta name="application-version" content="4">
 <!-- Temel Meta Etiketleri -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
@@ -255,7 +256,7 @@ body.help-open{overflow:hidden}
 .pwrap.fs .sub-popover{position:fixed;z-index:9999;left:50%!important;top:50%!important;transform:translate(-50%,-50%);max-height:86vh;width:min(420px,92vw)}
 .sub-popover[hidden]{display:none}
 .sub-popover.fs-mode{left:50%!important;top:50%!important;transform:translate(-50%,-50%);max-height:86vh;width:min(420px,92vw)}
-.nv{cursor:pointer;min-height:20px;padding:2px 0;width:var(--cw,84px);display:flex;justify-content:center;border-radius:8px;transition:background .1s}
+.nv{cursor:pointer;touch-action:manipulation;min-height:20px;padding:2px 0;width:var(--cw,84px);display:flex;justify-content:center;border-radius:8px;transition:background .1s}
 .nv:hover{background:color-mix(in srgb,var(--acc) 12%,transparent)}
 .nv:has(.nt:active){background:color-mix(in srgb,var(--acc) 18%,transparent)}
 .nv{cursor:pointer}
@@ -385,7 +386,7 @@ body.note-editor-open{overflow:hidden}
 
 <div class="app">
  <header class="topbar">
-  <div class="brand" id="brand-btn" role="button" tabindex="0" data-i18n-title="brandTitle" title="Sayfayı yenile" style="cursor:pointer"><div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5h8l6 23H6L12 5Z"/><path d="m16 23 7-17M11 24h10M15 10h3"/><circle cx="20.5" cy="11.5" r="2" fill="currentColor" stroke="none"/></svg></div><div><h1><span data-i18n="brandName">Lmx Metronom v3.8</span><span style="color:var(--acc)">.</span></h1><div class="tagline" data-i18n="tagline">Kendi ritmini bul.</div></div></div>
+  <div class="brand" id="brand-btn" role="button" tabindex="0" data-i18n-title="brandTitle" title="Sayfayı yenile" style="cursor:pointer"><div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5h8l6 23H6L12 5Z"/><path d="m16 23 7-17M11 24h10M15 10h3"/><circle cx="20.5" cy="11.5" r="2" fill="currentColor" stroke="none"/></svg></div><div><h1><span data-i18n="brandName">Lmx Metronom v4</span><span style="color:var(--acc)">.</span></h1><div class="tagline" data-i18n="tagline">Kendi ritmini bul.</div></div></div>
   <div class="top-actions"><div class="lang" role="group" data-i18n-aria="langGroup" aria-label="Dil / Language"><button type="button" data-lang="tr" aria-pressed="true">TR</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div><div class="theme-switch" role="group" data-i18n-aria="themeGroup" aria-label="Görünüm"><button id="theme-light" data-i18n-aria="themeLightAria" aria-label="Gündüz teması" aria-pressed="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button id="theme-dark" data-i18n-aria="themeNightAria" aria-label="Gece teması" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M20.8 14A9 9 0 0 1 10 3.2 9 9 0 1 0 20.8 14Z"/></svg></button></div><button id="help-open" class="help-btn" data-i18n-aria="helpOpenAria" data-i18n-title="helpOpen" aria-label="Nasıl kullanılır? Yardımı aç" title="Nasıl kullanılır?">?</button></div>
  </header>
  <section class="pwrap" aria-labelledby="beats-title">
@@ -440,7 +441,7 @@ body.note-editor-open{overflow:hidden}
     veya başka bir cihaza taşıyabilirsiniz.
   </p>
 </section>
-  <footer class="footer"><div class="shortcuts"><span data-i18n-html="kbdSpace"><kbd>Boşluk</kbd> veya boş alana tıkla: başlat / durdur</span><span data-i18n-html="kbdCtrlSpace"><kbd>Ctrl</kbd> + <kbd>Boşluk</kbd>: demo başlat</span><span data-i18n-html="kbdArrows"><kbd>↑ ↓</kbd> Tempo</span><span data-i18n-html="kbdCtrlClick"><kbd>Ctrl + tık</kbd> Tek vuruşu sustur</span></div><span class="footer-note"><span data-i18n="footerNote">Pratik için tasarlandı.</span> v3.8</span></footer>
+  <footer class="footer"><div class="shortcuts"><span data-i18n-html="kbdSpace"><kbd>Boşluk</kbd> veya boş alana tıkla: başlat / durdur</span><span data-i18n-html="kbdCtrlSpace"><kbd>Ctrl</kbd> + <kbd>Boşluk</kbd>: demo başlat</span><span data-i18n-html="kbdArrows"><kbd>↑ ↓</kbd> Tempo</span><span data-i18n-html="kbdCtrlClick"><kbd>Ctrl + tık</kbd> Tek vuruşu sustur</span></div><span class="footer-note"><span data-i18n="footerNote">Pratik için tasarlandı.</span> v4</span></footer>
 </div>
 
 <div class="help-overlay" id="help-overlay" hidden>
@@ -558,7 +559,7 @@ body.note-editor-open{overflow:hidden}
    <p><b>Bu sayfa seni hatırlar:</b> açtığında hangi başlıkları açık bıraktığın aynen korunur, sonraki açılışta da öyle gelir. Demo kutusu, tema, tempo, ölçüler ve vuruşlar da saklanır.</p>
   </details>
   <details data-i18n-html="helpNoteSettings"><summary>Alt notaları sessize alma ve bağlama</summary>
-   <p>Vuruşun altındaki <b>nota grubuna</b> tıkla, açılan kalıp listesindeki <b>Ayarlar</b> düğmesine bas. Açılan pencerede bir alt notayı seç ve <b>Çal</b>, <b>Bağlı</b> veya <b>Sessiz / es</b> durumunu belirle.</p>
+   <p>Vuruşun altındaki <b>nota grubuna çift tıkla veya çift dokun</b>. Tek tıklayıp açılan kalıp listesindeki <b>Ayarlar</b> düğmesini de kullanabilirsin. Açılan pencerede bir alt notayı seç ve <b>Çal</b>, <b>Bağlı</b> veya <b>Sessiz / es</b> durumunu belirle.</p>
    <ul><li><b>Çal:</b> o notada metronom sesi duyulur.</li><li><b>Bağlı:</b> önceki notanın devamı olarak çizilir ve yeni ses üretmez. Örneğin Ankara’dan sonraki Karaman’ın ilk notasını bağlı yaparsan “Ka”da yeni tık gelmez.</li><li><b>Sessiz / es:</b> nota es işaretine dönüşür ve ses çıkarmaz.</li></ul>
    <p>Her durumda notanın süresi korunur. Ayarlar hemen uygulanır; tarayıcı kaydına, kayıtlı ritimlere ve JSON yedeklerine dahildir. Farklı bir ritim kalıbına geçersen o vuruşun alt nota ayarları sıfırlanır. Bağlı nota döngünün en başındaysa ilk geçişte de yeni tık üretmez.</p>
   </details>
@@ -618,7 +619,7 @@ tr:{htmlLang:"tr",
 docTitle:"Online Metronom – Ücretsiz Tempo ve Ritim Aracı | LmXMetro",
 docDesc:"Ücretsiz online metronom ile 30–300 BPM tempo ayarlayın. Farklı ölçüler, vuruş vurguları ve ritmik bölümler oluşturun, ritimlerinizi kaydedin.",
 tagline:"Kendi ritmini bul.",
-brandName:"Lmx Metronom v3.8",
+brandName:"Lmx Metronom v4",
 statusReady:"Çalmaya hazır",statusPlaying:"Ritim akıyor",statusDemo:"Demo: 1. ölçü",
 playStart:"▶ Başlat",playStop:"■ Durdur",
  themeDay:"Gündüz",themeNight:"Gece",
@@ -716,7 +717,7 @@ en:{htmlLang:"en",
 docTitle:"Online Metronome – Free Tempo & Rhythm Tool | LmXMetro",
 docDesc:"Set a tempo from 30–300 BPM with this free online metronome. Build different meters, beat accents and rhythmic subdivisions, and save your rhythms.",
 tagline:"Find your rhythm.",
-brandName:"Lmx Metronome v3.8",
+brandName:"Lmx Metronome v4",
 statusReady:"Ready to play",statusPlaying:"Rhythm running",statusDemo:"Demo: Measure 1",
 playStart:"▶ Start",playStop:"■ Stop",
  themeDay:"Day",themeNight:"Night",
@@ -914,15 +915,15 @@ presetDelete:"delete",presetEdit:"Edit",
  `,
 }};
 Object.assign(MET_I18N.tr,{
- noteSettings:"Ayarlar",noteEdit:"Alt notaları düzenle",noteEditAria:"{m}. ölçü, {b}. vuruşun alt notalarını düzenle",
+ noteOpenHint:"Tek tık: kalıp seç · Çift tık / çift dokunma: nota ayarları",noteSettings:"Ayarlar",noteEdit:"Alt notaları düzenle",noteEditAria:"{m}. ölçü, {b}. vuruşun alt notalarını düzenle",
  noteEditorTitle:"{m}. ölçü · {b}. vuruş",noteEditorLead:"Bir alt notayı seç, ardından nasıl çalınacağını belirle. Ayarlar hemen uygulanır.",
  noteSelectGroup:"Alt notalar",noteModeGroup:"Seçili notanın davranışı",noteMode_play:"Çal",noteMode_rest:"Sessiz / es",noteMode_tie:"Bağlı",
  notePickAria:"{n}. alt nota: {mode}. Düzenlemek için seç.",noteCurrent:"{n}. alt nota",noteRestSyllable:"Es",noteReset:"Alt notaları sıfırla",
  noteHelp_play:"Bu notada normal metronom vuruşu duyulur.",noteHelp_rest:"Bu nota es olarak görünür ve ses çıkarmaz. Süresi ritim içinde korunur.",noteHelp_tie:"Önceki notadan gelen bağ olarak görünür; bu notada yeni ses başlamaz. Süresi korunur."
 });
 Object.assign(MET_I18N.en,{
- helpNoteSettings:`<summary>Muting and tying individual notes</summary><p>Click a beat’s <b>note group</b>, then press <b>Settings</b> in the pattern list. Select a note, then choose <b>Play</b>, <b>Tied</b> or <b>Rest / mute</b>.</p><ul><li><b>Play:</b> triggers a metronome click.</li><li><b>Tied:</b> is drawn as a continuation of the previous note and triggers no new click.</li><li><b>Rest / mute:</b> shows a rest and makes no sound.</li></ul><p>Timing is preserved in all cases. Changes apply immediately and are included in browser storage, saved rhythms and JSON backups. Changing a beat’s pattern resets its note settings. A tied note at the very start remains silent on the first pass too.</p>`,
- noteSettings:"Settings",noteEdit:"Edit individual notes",noteEditAria:"Edit the notes of measure {m}, beat {b}",
+ helpNoteSettings:`<summary>Muting and tying individual notes</summary><p><b>Double-click or double-tap</b> a beat’s note group. You can also single-click it and press <b>Settings</b> in the pattern list. Select a note, then choose <b>Play</b>, <b>Tied</b> or <b>Rest / mute</b>.</p><ul><li><b>Play:</b> triggers a metronome click.</li><li><b>Tied:</b> is drawn as a continuation of the previous note and triggers no new click.</li><li><b>Rest / mute:</b> shows a rest and makes no sound.</li></ul><p>Timing is preserved in all cases. Changes apply immediately and are included in browser storage, saved rhythms and JSON backups. Changing a beat’s pattern resets its note settings. A tied note at the very start remains silent on the first pass too.</p>`,
+ noteOpenHint:"Single click: choose pattern · Double-click / double-tap: note settings",noteSettings:"Settings",noteEdit:"Edit individual notes",noteEditAria:"Edit the notes of measure {m}, beat {b}",
  noteEditorTitle:"Measure {m} · beat {b}",noteEditorLead:"Select a note, then choose how it plays. Changes apply immediately.",
  noteSelectGroup:"Individual notes",noteModeGroup:"Selected note behavior",noteMode_play:"Play",noteMode_rest:"Rest / mute",noteMode_tie:"Tied",
  notePickAria:"Note {n}: {mode}. Select to edit.",noteCurrent:"Note {n}",noteRestSyllable:"Rest",noteReset:"Reset note settings",
@@ -1302,6 +1303,7 @@ function exitWin(){
 document.addEventListener("fullscreenchange",()=>{if(!document.fullscreenElement&&fsMode)exitFs();});
 document.addEventListener("keydown",e=>{
   if(e.key!=="Escape")return;
+  cancelNoteTap();
   if(!$("note-editor-overlay").hidden){e.preventDefault();e.stopImmediatePropagation();closeNoteEditor();return;}
   if(!$("quick-overlay").hidden){e.preventDefault();e.stopImmediatePropagation();closeQuickPicker();return;}
   if(!subPop.hidden){
@@ -1350,7 +1352,7 @@ function drawPulses(){
     tag.textContent=measureAt(i).local===0?`${mi+1}. · ${measures[mi].num}/${measures[mi].den}`+(demoActive()&&mi===0?mt("beatTagDemo"):''):'';
     c.appendChild(tag);c.appendChild(b);
     const d=document.createElement("div");d.className="nv";d.id="nv"+i;d.tabIndex=0;
-    d.setAttribute('role','button');
+    d.setAttribute('role','button');d.title=mt("noteOpenHint");
     d.setAttribute('aria-label',mt("patternAria").replace("{m}",measureAt(i).index+1).replace("{b}",measureAt(i).local+1));
     d.innerHTML=noteSVG(NOT[pulseSub[i]],subDefs[pulseSub[i]][2],sc,noteModesFor(i));c.appendChild(d);
     d.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();openSubPop(i,d);}});
@@ -1367,7 +1369,7 @@ function closeSubPop(){subPop.hidden=true;subPop.classList.remove('fs-mode');}
 function subName(i){const k="subName"+i;const d=MET_I18N[MET_LANG];return d&&d[k]!==undefined?d[k]:subDefs[i][0];}
 function subCap(i){const k="cap"+i;const d=MET_I18N[MET_LANG];return d&&d[k]!==undefined?d[k]:'';}
 function openSubPop(beat,anchor){
-  subPopBeat=beat;syncSubPopHost();
+  cancelNoteTap();subPopBeat=beat;syncSubPopHost();
   const ma=measureAt(beat);
   subPopTitle.textContent=mt("subPopFullTpl").replace("{m}",ma.index+1).replace("{b}",ma.local+1);
   subPopList.innerHTML="";
@@ -1392,7 +1394,7 @@ function openSubPop(beat,anchor){
   subPop.style.left=x+"px";subPop.style.top=y+"px";
 }
 function fillSubPopList(beat){
-  subPopBeat=beat;syncSubPopHost();
+  cancelNoteTap();subPopBeat=beat;syncSubPopHost();
   subPopTitle.textContent=mt("subPopFullTpl").replace("{m}",measureAt(beat).index+1).replace("{b}",measureAt(beat).local+1);
   subPopList.innerHTML="";
   subDefs.forEach(([t],i)=>{
@@ -1413,22 +1415,40 @@ $("pulses").closest(".pwrap").addEventListener("click",e=>{
   if(e.target.closest('button,input,select,textarea,label,a,.nv,.nt,.measure-tab,.beat-meter-bar,.beat-toolbar,.sub-panel,#sub-popover,#quick-overlay,#delete-overlay'))return;
   e.stopPropagation();toggle();
 });
+let noteTapPending=null,noteTapTimer=null;
+function cancelNoteTap(){clearTimeout(noteTapTimer);noteTapTimer=null;noteTapPending=null;}
+function noteArea(target){const el=target.closest?.(".nv");return el&&el.closest("#pulses")?el:null;}
+function showNotePattern(beat,anchor){
+  if(!anchor.isConnected)return;
+  if(winMode){fillSubPopList(beat);subPop.classList.add('fs-mode');subPop.hidden=false;}
+  else openSubPop(beat,anchor);
+}
 $("pulses").addEventListener("click",e=>{
-  const nt=e.target.closest(".nt")||e.target.closest(".nv");
-  if(!nt||noClick||drag)return;
-  const nv=nt.classList.contains("nv")?nt:nt.closest(".nv");if(!nv)return;
+  const nv=noteArea(e.target);if(!nv||noClick||drag)return;
   const beat=Number(nv.id.slice(2));
-  if(winMode){fillSubPopList(beat);subPop.classList.add('fs-mode');subPop.hidden=false;return;}
-  if(e.ctrlKey||e.metaKey){
-    const i=(pulseSub[beat]+1)%subDefs.length;
-    setBeatPattern(beat,i);curS=0;drawSubs();drawPulses();preview(i);
-    return;
+  if(!winMode&&(e.ctrlKey||e.metaKey)){
+    cancelNoteTap();const i=(pulseSub[beat]+1)%subDefs.length;
+    setBeatPattern(beat,i);curS=0;drawSubs();drawPulses();preview(i);return;
   }
-  openSubPop(beat,nt);
+  const now=performance.now(),pending=noteTapPending;
+  const doubleTap=e.detail>=2||(pending&&pending.beat===beat&&now-pending.time<=400&&Math.hypot(e.clientX-pending.x,e.clientY-pending.y)<=22);
+  cancelNoteTap();
+  if(doubleTap){e.preventDefault();e.stopPropagation();openNoteEditor(beat,nv);return;}
+  // Klavye/programatik tıklama beklemez. Fiziksel tek tıklamada ikinci
+  // dokunuşu bekleyerek kalıp listesinin çift dokunmayı kapatmasını önle.
+  if(e.detail===0){showNotePattern(beat,nv);return;}
+  noteTapPending={beat,time:now,x:e.clientX,y:e.clientY};
+  noteTapTimer=setTimeout(()=>{cancelNoteTap();const anchor=$('nv'+beat);if(anchor&&$("note-editor-overlay").hidden)showNotePattern(beat,anchor);},400);
+});
+$("pulses").addEventListener("dblclick",e=>{
+  const nv=noteArea(e.target);if(!nv||noClick||drag||e.ctrlKey||e.metaKey)return;
+  e.preventDefault();e.stopPropagation();cancelNoteTap();
+  if($("note-editor-overlay").hidden)openNoteEditor(Number(nv.id.slice(2)),nv);
 });
 subPopClose.addEventListener('click',closeSubPop);
 subPop.addEventListener('pointerdown',e=>e.stopPropagation());
 document.addEventListener('pointerdown',e=>{
+  if(!noteArea(e.target))cancelNoteTap();
   if(!subPop.hidden&&!e.target.closest('#sub-popover'))closeSubPop();
 },true);
 const NOT=[
@@ -1521,6 +1541,7 @@ function drawNoteConnections(){
   layer.setAttribute('width',strip.scrollWidth);layer.setAttribute('height',strip.scrollHeight);layer.innerHTML=paths.join('');strip.appendChild(layer);
 }
 function openNoteEditor(beat,opener){
+  cancelNoteTap();
   if(!Number.isInteger(beat)||beat<0||beat>=pulseSub.length)return;
   closeSubPop();if(!$('quick-overlay').hidden)closeQuickPicker();syncSubPopHost();
   noteEditorBeat=beat;noteEditorOrdinal=0;noteEditorOpener=opener;
