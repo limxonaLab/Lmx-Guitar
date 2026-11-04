@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="application-version" content="4">
+<meta name="application-version" content="4.1">
 <!-- Temel Meta Etiketleri -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
@@ -164,8 +164,8 @@ body.measure-reordering,body.measure-reordering *{cursor:grabbing!important;user
 .settings-column,.controls>section[aria-labelledby="tempo-title"]{min-height:550px}
 @media(max-width:580px){.controls>section[aria-labelledby="tempo-title"]{min-height:0}}
 
-/* Ritmi böl: touch drag, no scrolling */
-.sub-panel,#subs,#subs .chip{touch-action:none}
+/* Mobilde kaydır; sürüklemek için basılı tut. */
+.sub-panel,#subs,#subs .chip{touch-action:pan-y}
 /* Fullscreen beat view */
 #fs-open,#win-open{font-size:11px;padding:7px 11px;background:var(--button);color:var(--fg)}
 .fs-close{display:none}
@@ -331,9 +331,9 @@ input,textarea{-webkit-user-select:text;user-select:text}
 .pwrap.win>.beat-head .beat-head-actions{display:none}
 .pwrap.win>.beat-meter-bar>.measure-tabs{width:100%;max-width:none}
 @media(max-width:580px){.beat-head{gap:5px}.beat-head>.beat-tempo{gap:3px}.beat-head>.beat-tempo button{padding:5px 8px;min-width:0}.beat-head #beat-tempo-value{min-width:48px}.beat-head .status{display:none}.beat-meter-bar{padding-bottom:12px}.pwrap.win>.beat-head{left:8px;right:8px}}
-.pwrap.win .pulses{position:absolute;top:132px;bottom:0;left:0;right:0;width:100%;height:auto;min-height:0;max-height:none;margin:0;padding:12px 16px 24px;overflow-x:auto;overflow-y:auto;justify-content:safe center;align-items:safe center;overscroll-behavior:contain;scrollbar-width:thin}
+.pwrap.win .pulses{position:absolute;top:132px;bottom:0;left:0;right:0;width:100%;height:auto;min-height:0;max-height:none;margin:0;padding:12px 16px;overflow-x:auto;overflow-y:auto;justify-content:safe center;align-items:safe center;overscroll-behavior:contain;scrollbar-width:thin}
 .pwrap.win .pulses .frow{flex:none;max-width:none}
-@media(max-width:580px){.pwrap.win .pulses{top:126px;padding:12px 8px 24px}}
+@media(max-width:580px){.pwrap.win .pulses{top:126px;padding:12px 8px}}
 .measure-tab>.chip{flex-direction:row;align-items:center;gap:5px}
 .measure-tour-count{font-weight:800;color:var(--acc);font-variant-numeric:tabular-nums}
 /* Mobilde çift dokunma ve sıkıştırma yakınlaştırmasını kapat; sayfa kaydırması açık kalır. */
@@ -345,11 +345,11 @@ html,body{touch-action:pan-x pan-y}
   .pwrap:not(.win):not(.fs) .mblock{width:min(100%,var(--mobile-row-width,100%));flex-wrap:wrap;justify-content:flex-start;gap:12px 4px}
   .pwrap:not(.win):not(.fs) .cell.measure-start{margin-left:0}
   .pwrap:not(.win):not(.fs) .cell::before{display:none}
-  .pwrap.win .pulses{overflow-x:hidden;padding-left:4px;padding-right:4px;justify-content:flex-start;align-items:center}
+  .pwrap.win .pulses{overflow-x:hidden;padding-left:4px;padding-right:4px;justify-content:safe center;align-items:center}
   .pwrap.win .pulses .frow{width:100%;max-width:100%;flex-wrap:wrap;justify-content:center;gap:12px 4px}
 }
 /* Alt nota düzenleyici: her nota ayrı ses / es / bağ durumuna sahiptir. */
-#pulses{position:relative}
+.pulses{position:relative}
 .note-connections{position:absolute;left:0;top:0;z-index:2;pointer-events:none;overflow:visible}
 .note-connections path{stroke:var(--mut);stroke-width:1.6;fill:none}
 .nv.has-incoming-tie .tie-incoming{display:none}
@@ -364,20 +364,43 @@ html,body{touch-action:pan-x pan-y}
 .note-editor-score svg{max-width:100%;height:auto;overflow:visible}
 .note-editor-score .nt{cursor:pointer}
 .note-editor-score .note-edit-selected .note-head{stroke:var(--acc);stroke-width:2;fill:var(--acc)}
+.note-editor-score .note-edit-selected .note-mute-head{fill:none}
 .note-editor-score .note-edit-selected.note-rest{color:var(--acc);fill:var(--acc);opacity:1}
 .note-editor-notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(48px,1fr));gap:6px}
 .note-pick{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:56px;padding:8px 3px;background:var(--button)}
 .note-pick b{font-size:12px;font-weight:650}.note-pick small{font-size:9px;color:var(--mut);white-space:nowrap}
 .note-pick[aria-pressed="true"]{border-color:var(--acc);background:var(--soft);color:var(--acc);box-shadow:0 0 0 1px var(--acc)}
-.note-pick.state-tie b::before{content:"⌒ ";font-size:12px}.note-pick.state-rest b{text-decoration:line-through;opacity:.6}
+.note-pick.state-mute b::before{content:"× ";font-weight:800}.note-pick.state-tie b::before{content:"⌒ ";font-size:12px}.note-pick.state-rest b{text-decoration:line-through;opacity:.6}
 .note-editor-dialog .note-editor-current{margin:18px 0 7px;font-size:12px;font-weight:650;color:var(--fg)}
-.note-mode-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.note-mode-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:18px}
 .note-mode-options button{padding:10px 4px;font-size:12px;min-height:42px}
 .note-mode-options button[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:var(--card);font-weight:650}
 .note-editor-dialog .note-editor-description{font-size:12px;line-height:1.6;min-height:3.2em;margin:10px 0 0;color:var(--mut)}
 .note-editor-dialog .delete-actions{justify-content:space-between;gap:8px;margin-top:20px}
 .note-editor-dialog .delete-actions button{min-width:0;font-size:12px}
+.note-editor-score .nt.preview-lit{color:#b31929;fill:#b31929;opacity:1;filter:drop-shadow(0 0 2px rgba(179,25,41,.55))}
+.note-editor-score .nt.preview-lit .note-head{stroke:#b31929;fill:#b31929}
+.note-editor-score .nt.preview-lit .note-mute-head{fill:none}
+.note-editor-score .nt.preview-lit text{opacity:1}
 body.note-editor-open{overflow:hidden}
+#note-editor-listen{background:var(--acc);border-color:var(--acc);color:var(--card);font-weight:650}
+@media(max-width:580px){
+ #note-editor-overlay{padding:12px;padding-top:max(12px,env(safe-area-inset-top));padding-bottom:max(12px,env(safe-area-inset-bottom))}
+ .note-editor-dialog{width:100%;max-height:calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));padding:18px 14px}
+ .note-mode-options{margin-top:16px}
+ .note-editor-dialog .delete-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:16px}
+ .note-editor-dialog .delete-actions button{padding:9px 4px}
+}
+@media(max-height:450px){
+ .note-editor-dialog{padding:12px}
+ .note-editor-dialog h2{font-size:16px;margin-bottom:8px}
+ .note-editor-dialog .note-editor-score{min-height:64px;margin:8px 0;padding:4px}
+ .note-editor-score svg{max-height:70px}
+ .note-editor-notes .note-pick{min-height:42px;padding:4px 2px;gap:2px}
+ .note-mode-options{margin-top:12px}
+ .note-mode-options button{min-height:36px;padding:7px 3px}
+ .note-editor-dialog .delete-actions{margin-top:10px}
+}
 @media(max-width:580px){.note-editor-dialog{padding:20px 16px}.note-editor-score{min-height:100px;padding:10px;margin:15px 0 12px}.note-pick small{font-size:8px}}
 
 </style>
@@ -386,7 +409,7 @@ body.note-editor-open{overflow:hidden}
 
 <div class="app">
  <header class="topbar">
-  <div class="brand" id="brand-btn" role="button" tabindex="0" data-i18n-title="brandTitle" title="Sayfayı yenile" style="cursor:pointer"><div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5h8l6 23H6L12 5Z"/><path d="m16 23 7-17M11 24h10M15 10h3"/><circle cx="20.5" cy="11.5" r="2" fill="currentColor" stroke="none"/></svg></div><div><h1><span data-i18n="brandName">Lmx Metronom v4</span><span style="color:var(--acc)">.</span></h1><div class="tagline" data-i18n="tagline">Kendi ritmini bul.</div></div></div>
+  <div class="brand" id="brand-btn" role="button" tabindex="0" data-i18n-title="brandTitle" title="Sayfayı yenile" style="cursor:pointer"><div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5h8l6 23H6L12 5Z"/><path d="m16 23 7-17M11 24h10M15 10h3"/><circle cx="20.5" cy="11.5" r="2" fill="currentColor" stroke="none"/></svg></div><div><h1><span data-i18n="brandName">Lmx Metronom v4.1</span><span style="color:var(--acc)">.</span></h1><div class="tagline" data-i18n="tagline">Kendi ritmini bul.</div></div></div>
   <div class="top-actions"><div class="lang" role="group" data-i18n-aria="langGroup" aria-label="Dil / Language"><button type="button" data-lang="tr" aria-pressed="true">TR</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div><div class="theme-switch" role="group" data-i18n-aria="themeGroup" aria-label="Görünüm"><button id="theme-light" data-i18n-aria="themeLightAria" aria-label="Gündüz teması" aria-pressed="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button id="theme-dark" data-i18n-aria="themeNightAria" aria-label="Gece teması" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M20.8 14A9 9 0 0 1 10 3.2 9 9 0 1 0 20.8 14Z"/></svg></button></div><button id="help-open" class="help-btn" data-i18n-aria="helpOpenAria" data-i18n-title="helpOpen" aria-label="Nasıl kullanılır? Yardımı aç" title="Nasıl kullanılır?">?</button></div>
  </header>
  <section class="pwrap" aria-labelledby="beats-title">
@@ -396,7 +419,7 @@ body.note-editor-open{overflow:hidden}
 
   <div class="legend"><span><i class="strong"></i><b data-i18n="legendStrong">Güçlü</b></span><span><i class="medium"></i><b data-i18n="legendMedium">Orta</b></span><span><i class="weak"></i><b data-i18n="legendWeak">Zayıf</b></span><span><i class="silent"></i><b data-i18n="legendSilent">Sessiz</b></span></div>
   <div class="hint"><span data-i18n="hintClick">Tıkla: vurguyu değiştir</span> &nbsp;·&nbsp; <kbd>Ctrl</kbd> + <span data-i18n="hintCtrl">tıkla: seçili vuruşu sessize al</span></div>
-  <div class="sub-panel"><div class="section-head"><h2 class="section-title" data-i18n="secSubs">Ritmi böl</h2><span class="eyebrow" data-i18n="dragDrop">Sürükle & bırak</span></div><div id="subs" class="row"></div><p class="section-note" data-i18n="subNote">Bir kalıbı yukarıdaki vuruşa sürükle. Tıklarsan seçili ölçüye, Ctrl + tıklarsan tüm ölçülere uygulanır. Dokunmatik ekranda dokunduğun gibi sürükleyebilirsin.</p><div class="sub-options"><label class="sub-sound-option"><input type="checkbox" id="same-sub-sound" checked><span data-i18n="subSameSound">Alt vuruşlarda aynı ses</span></label><label class="sub-sound-option demo-option" id="demo-wrap" hidden><input type="checkbox" id="demo-first"><span data-i18n="subDemoFirst">Önce ilk ölçüyü demo olarak çal, sonra devam et</span></label></div></div>
+  <div class="sub-panel"><div class="section-head"><h2 class="section-title" data-i18n="secSubs">Ritmi böl</h2><span class="eyebrow" data-i18n="dragDrop">Sürükle & bırak</span></div><div id="subs" class="row"></div><p class="section-note" data-i18n="subNote">Tek tık / dokunuş: 60 BPM önizleme. Çift tık / dokunuş: seçili ölçüye uygula. Ctrl + çift tık: tüm ölçülere uygula. Mobilde basılı tutup bir vuruşa sürükle; normal kaydırma sayfayı kaydırır.</p><div class="sub-options"><label class="sub-sound-option"><input type="checkbox" id="same-sub-sound" checked><span data-i18n="subSameSound">Alt vuruşlarda aynı ses</span></label><label class="sub-sound-option demo-option" id="demo-wrap" hidden><input type="checkbox" id="demo-first"><span data-i18n="subDemoFirst">Önce ilk ölçüyü demo olarak çal, sonra devam et</span></label></div></div>
  </section>
  <div class="transport"><div class="transport-copy"><span data-i18n="transportFocus">Ritme odaklan.</span><small id="transport-detail">4/4 ölçü · 100 BPM</small></div><button class="play" id="play" aria-pressed="false" data-i18n="playStart">▶ Başlat</button></div>
  <div class="controls">
@@ -441,7 +464,7 @@ body.note-editor-open{overflow:hidden}
     veya başka bir cihaza taşıyabilirsiniz.
   </p>
 </section>
-  <footer class="footer"><div class="shortcuts"><span data-i18n-html="kbdSpace"><kbd>Boşluk</kbd> veya boş alana tıkla: başlat / durdur</span><span data-i18n-html="kbdCtrlSpace"><kbd>Ctrl</kbd> + <kbd>Boşluk</kbd>: demo başlat</span><span data-i18n-html="kbdArrows"><kbd>↑ ↓</kbd> Tempo</span><span data-i18n-html="kbdCtrlClick"><kbd>Ctrl + tık</kbd> Tek vuruşu sustur</span></div><span class="footer-note"><span data-i18n="footerNote">Pratik için tasarlandı.</span> v4</span></footer>
+  <footer class="footer"><div class="shortcuts"><span data-i18n-html="kbdSpace"><kbd>Boşluk</kbd> veya boş alana tıkla: başlat / durdur</span><span data-i18n-html="kbdCtrlSpace"><kbd>Ctrl</kbd> + <kbd>Boşluk</kbd>: demo başlat</span><span data-i18n-html="kbdArrows"><kbd>↑ ↓</kbd> Tempo</span><span data-i18n-html="kbdCtrlClick"><kbd>Ctrl + tık</kbd> Tek vuruşu sustur</span></div><span class="footer-note"><span data-i18n="footerNote">Pratik için tasarlandı.</span> v4.1</span></footer>
 </div>
 
 <div class="help-overlay" id="help-overlay" hidden>
@@ -506,9 +529,9 @@ body.note-editor-open{overflow:hidden}
   <details data-i18n-html="helpSubdivide"><summary>Ritmi böl: notalar ve heceler</summary>
    <p>Her vuruşu daha küçük parçalara bölebilirsin: tek vuruş, sekizlikler, triol, onaltılıklar, altılı gruplar, es (sessiz yer) içeren kalıplar.</p>
    <ul>
-    <li><b>Tıkla:</b> kalıp sadece <b>seçili ölçünün</b> vuruşlarına uygulanır. Hangi ölçünün seçili olduğunu vuruş alanının üstündeki sekmelerden görürsün. Diğer ölçülere dokunulmaz.</li>
-    <li><kbd>Ctrl</kbd> + tıkla: kalıp <b>tüm ölçülerdeki</b> bütün vuruşlara uygulanır. (Mac'te <kbd>⌘</kbd> + tıkla da çalışır.)</li>
-    <li><b>Sürükle ve bırak:</b> kalıbı yukarıdaki bir vuruşun üstüne bırakırsan sadece <b>o vuruş</b> değişir. Böylece karışık bir ritim kurarsın, örneğin 1. vuruş Kar-Tal, 2. vuruş An-Ka-Ra, 3. vuruş Ka-Ra-Man gibi. Telefonda da dokunup sürüklemen yeterli.</li>
+    <li><b>Tek tık / dokunuş:</b> 60 BPM hızında önizlemeyi dinle. <b>Çift tık / çift dokunuş:</b> kalıp sadece <b>seçili ölçünün</b> vuruşlarına uygulanır. Hangi ölçünün seçili olduğunu vuruş alanının üstündeki sekmelerden görürsün. Diğer ölçülere dokunulmaz.</li>
+    <li><kbd>Ctrl</kbd> + çift tıkla: kalıp <b>tüm ölçülerdeki</b> bütün vuruşlara uygulanır. (Mac'te <kbd>⌘</kbd> + çift tıkla da çalışır.)</li>
+    <li><b>Sürükle ve bırak:</b> kalıbı yukarıdaki bir vuruşun üstüne bırakırsan sadece <b>o vuruş</b> değişir. Böylece karışık bir ritim kurarsın, örneğin 1. vuruş Kar-Tal, 2. vuruş An-Ka-Ra, 3. vuruş Ka-Ra-Man gibi. Telefonda önce basılı tut, sonra sürükle. Normal kaydırmada sayfa kayar; tek dokunma kalıbı uygulamaz.</li>
    </ul>
    <p><b>Heceler</b> ritmi ağızdan söyleyerek öğrenmen için konmuştur. Her hece bir notanın altındadır ve o nota çalınca yanar:</p>
    <ul>
@@ -559,8 +582,8 @@ body.note-editor-open{overflow:hidden}
    <p><b>Bu sayfa seni hatırlar:</b> açtığında hangi başlıkları açık bıraktığın aynen korunur, sonraki açılışta da öyle gelir. Demo kutusu, tema, tempo, ölçüler ve vuruşlar da saklanır.</p>
   </details>
   <details data-i18n-html="helpNoteSettings"><summary>Alt notaları sessize alma ve bağlama</summary>
-   <p>Vuruşun altındaki <b>nota grubuna çift tıkla veya çift dokun</b>. Tek tıklayıp açılan kalıp listesindeki <b>Ayarlar</b> düğmesini de kullanabilirsin. Açılan pencerede bir alt notayı seç ve <b>Çal</b>, <b>Bağlı</b> veya <b>Sessiz / es</b> durumunu belirle.</p>
-   <ul><li><b>Çal:</b> o notada metronom sesi duyulur.</li><li><b>Bağlı:</b> önceki notanın devamı olarak çizilir ve yeni ses üretmez. Örneğin Ankara’dan sonraki Karaman’ın ilk notasını bağlı yaparsan “Ka”da yeni tık gelmez.</li><li><b>Sessiz / es:</b> nota es işaretine dönüşür ve ses çıkarmaz.</li></ul>
+   <p>Vuruşun altındaki <b>nota grubuna çift tıkla veya çift dokun</b>. Tek tıklayıp açılan kalıp listesindeki <b>Ayarlar</b> düğmesini de kullanabilirsin. Açılan pencerede bir alt notayı seç ve <b>Çal</b>, <b>Bağlı</b>, <b>Es</b> veya <b>Mute</b> durumunu belirle.</p>
+   <ul><li><b>Çal:</b> o notada metronom sesi duyulur.</li><li><b>Bağlı:</b> önceki notanın devamı olarak çizilir ve yeni ses üretmez. Örneğin Ankara’dan sonraki Karaman’ın ilk notasını bağlı yaparsan “Ka”da yeni tık gelmez.</li><li><b>Es:</b> nota es işaretine dönüşür ve ses çıkarmaz.</li><li><b>Mute:</b> nota × ile gösterilir ve susturulmuş gitar teli gibi kısa bir çıt sesi duyulur.</li></ul>
    <p>Her durumda notanın süresi korunur. Ayarlar hemen uygulanır; tarayıcı kaydına, kayıtlı ritimlere ve JSON yedeklerine dahildir. Farklı bir ritim kalıbına geçersen o vuruşun alt nota ayarları sıfırlanır. Bağlı nota döngünün en başındaysa ilk geçişte de yeni tık üretmez.</p>
   </details>
  </div>
@@ -596,19 +619,17 @@ body.note-editor-open{overflow:hidden}
  </div>
 </div>
 <div class="delete-overlay" id="note-editor-overlay" hidden>
- <div class="delete-dialog note-editor-dialog" role="dialog" aria-modal="true" aria-labelledby="note-editor-title" aria-describedby="note-editor-lead">
+ <div class="delete-dialog note-editor-dialog" role="dialog" aria-modal="true" aria-labelledby="note-editor-title">
   <h2 id="note-editor-title">Alt notaları düzenle</h2>
-  <p id="note-editor-lead" data-i18n="noteEditorLead">Bir alt notayı seç, ardından nasıl çalınacağını belirle.</p>
   <div id="note-editor-score" class="note-editor-score" aria-hidden="true"></div>
   <div id="note-editor-notes" class="note-editor-notes" role="group" data-i18n-aria="noteSelectGroup" aria-label="Alt notalar"></div>
-  <p class="note-editor-current" id="note-editor-current" aria-live="polite"></p>
   <div class="note-mode-options" role="group" data-i18n-aria="noteModeGroup" aria-label="Nota davranışı">
    <button type="button" data-note-mode="play" data-i18n="noteMode_play">Çal</button>
    <button type="button" data-note-mode="tie" data-i18n="noteMode_tie">Bağlı</button>
-   <button type="button" data-note-mode="rest" data-i18n="noteMode_rest">Sessiz / es</button>
+   <button type="button" data-note-mode="rest" data-i18n="noteMode_rest">Es</button>
+   <button type="button" data-note-mode="mute" data-i18n="noteMode_mute">Mute</button>
   </div>
-  <p id="note-editor-description" class="note-editor-description"></p>
-  <div class="delete-actions"><button type="button" id="note-editor-reset" data-i18n="noteReset">Alt notaları sıfırla</button><button type="button" id="note-editor-close" data-i18n="closeBtn">Kapat</button></div>
+  <div class="delete-actions"><button type="button" id="note-editor-reset" data-i18n="noteReset">Alt notaları sıfırla</button><button type="button" id="note-editor-listen" aria-pressed="false" data-i18n="noteListen">Dinle</button><button type="button" id="note-editor-close" data-i18n="closeBtn">Kapat</button></div>
  </div>
 </div>
 
@@ -619,7 +640,7 @@ tr:{htmlLang:"tr",
 docTitle:"Online Metronom – Ücretsiz Tempo ve Ritim Aracı | LmXMetro",
 docDesc:"Ücretsiz online metronom ile 30–300 BPM tempo ayarlayın. Farklı ölçüler, vuruş vurguları ve ritmik bölümler oluşturun, ritimlerinizi kaydedin.",
 tagline:"Kendi ritmini bul.",
-brandName:"Lmx Metronom v4",
+brandName:"Lmx Metronom v4.1",
 statusReady:"Çalmaya hazır",statusPlaying:"Ritim akıyor",statusDemo:"Demo: 1. ölçü",
 playStart:"▶ Başlat",playStop:"■ Durdur",
  themeDay:"Gündüz",themeNight:"Gece",
@@ -649,7 +670,7 @@ emptyPresets:"Henüz kayıt yok. Kaydet'e bas; adını boş bırakırsan otomati
 meterHelp:"Seçili ölçüyü düzenle veya yeni bir ölçü ekle.",
 measureAddHelp:"Eklenecek ölçüyü seç. Mevcut ritmin sonuna eklenecek.",
 measureEditHelp:"{n}. ölçüyü düzenliyorsun. Yeni ölçü eklemek için \"Yeni Ölçü\"ye bas.",
-subNote:"Bir kalıbı yukarıdaki vuruşa sürükle. Tıklarsan seçili ölçüye, Ctrl + tıklarsan tüm ölçülere uygulanır. Dokunmatik ekranda dokunduğun gibi sürükleyebilirsin.",
+subNote:"Tek tık / dokunuş: 60 BPM önizleme. Çift tık / dokunuş: seçili ölçüye uygula. Ctrl + çift tık: tüm ölçülere uygula. Mobilde basılı tutup bir vuruşa sürükle; normal kaydırma sayfayı kaydırır.",
 beatTempoMinus:"Tempoyu 5 azalt",beatTempoPlus:"Tempoyu 5 artır",
 tempoMinus5:"Tempoyu 5 azalt",tempoPlus5:"Tempoyu 5 artır",
 tempoMinus1:"Tempoyu 1 azalt",tempoPlus1:"Tempoyu 1 artır",
@@ -717,7 +738,7 @@ en:{htmlLang:"en",
 docTitle:"Online Metronome – Free Tempo & Rhythm Tool | LmXMetro",
 docDesc:"Set a tempo from 30–300 BPM with this free online metronome. Build different meters, beat accents and rhythmic subdivisions, and save your rhythms.",
 tagline:"Find your rhythm.",
-brandName:"Lmx Metronome v4",
+brandName:"Lmx Metronome v4.1",
 statusReady:"Ready to play",statusPlaying:"Rhythm running",statusDemo:"Demo: Measure 1",
 playStart:"▶ Start",playStop:"■ Stop",
  themeDay:"Day",themeNight:"Night",
@@ -746,7 +767,7 @@ aboutP3:"The rhythms you create are saved in your browser. Use Download JSON and
 meterHelp:"Edit the selected meter or add a new one.",
 measureAddHelp:"Choose the meter to add. It will be appended to the end of the rhythm.",
 measureEditHelp:"You are editing measure {n}. Click \u201CNew Measure\u201D to add another.",
-subNote:"Drag a pattern onto a beat above. Click applies to the selected measure; Ctrl + click applies to all measures. On touch screens you can drag directly.",
+subNote:"Click / tap: preview at 60 BPM. Double-click / double-tap: apply to the selected measure. Ctrl + double-click: apply to all measures. On mobile, hold and drag onto a beat; swipe normally to scroll.",
 beatTempoMinus:"Decrease tempo by 5",beatTempoPlus:"Increase tempo by 5",
 tempoMinus5:"Decrease tempo by 5",tempoPlus5:"Increase tempo by 5",
 tempoMinus1:"Decrease tempo by 1",tempoPlus1:"Increase tempo by 1",
@@ -864,9 +885,9 @@ presetDelete:"delete",presetEdit:"Edit",
  helpSubdivide:`<summary>Subdivide: notes and syllables</summary>
  <p>You can split every beat into smaller parts: single beat, eighth notes, triplets, sixteenth notes, sextuplets, and patterns with rests (silent spots).</p>
  <ul>
-  <li><b>Click:</b> the pattern applies only to the <b>selected measure's</b> beats. The tabs above the beat area show which measure is selected. Other measures are untouched.</li>
-  <li><kbd>Ctrl</kbd> + click: the pattern applies to <b>every beat in all measures</b>. (On a Mac, <kbd>⌘</kbd> + click works too.)</li>
-  <li><b>Drag and drop:</b> drop a pattern onto a beat above and only <b>that beat</b> changes. That's how you build mixed rhythms, e.g. beat 1 Kar-Tal, beat 2 An-Ka-Ra, beat 3 Ka-Ra-Man. On phones, touch and drag works as well.</li>
+  <li><b>Click / tap:</b> hear a preview at 60 BPM. <b>Double-click / double-tap:</b> the pattern applies only to the <b>selected measure's</b> beats. The tabs above the beat area show which measure is selected. Other measures are untouched.</li>
+  <li><kbd>Ctrl</kbd> + double-click: the pattern applies to <b>every beat in all measures</b>. (On a Mac, <kbd>⌘</kbd> + double-click works too.)</li>
+  <li><b>Drag and drop:</b> drop a pattern onto a beat above and only <b>that beat</b> changes. That's how you build mixed rhythms, e.g. beat 1 Kar-Tal, beat 2 An-Ka-Ra, beat 3 Ka-Ra-Man. On phones, hold first, then drag. A normal swipe scrolls the page; a single tap does not apply the pattern.</li>
  </ul>
  <p><b>Syllables</b> are there so you can learn the rhythm by singing it. Each syllable sits under a note and lights up when that note plays:</p>
  <ul>
@@ -917,17 +938,17 @@ presetDelete:"delete",presetEdit:"Edit",
 Object.assign(MET_I18N.tr,{
  noteOpenHint:"Tek tık: kalıp seç · Çift tık / çift dokunma: nota ayarları",noteSettings:"Ayarlar",noteEdit:"Alt notaları düzenle",noteEditAria:"{m}. ölçü, {b}. vuruşun alt notalarını düzenle",
  noteEditorTitle:"{m}. ölçü · {b}. vuruş",noteEditorLead:"Bir alt notayı seç, ardından nasıl çalınacağını belirle. Ayarlar hemen uygulanır.",
- noteSelectGroup:"Alt notalar",noteModeGroup:"Seçili notanın davranışı",noteMode_play:"Çal",noteMode_rest:"Sessiz / es",noteMode_tie:"Bağlı",
- notePickAria:"{n}. alt nota: {mode}. Düzenlemek için seç.",noteCurrent:"{n}. alt nota",noteRestSyllable:"Es",noteReset:"Alt notaları sıfırla",
- noteHelp_play:"Bu notada normal metronom vuruşu duyulur.",noteHelp_rest:"Bu nota es olarak görünür ve ses çıkarmaz. Süresi ritim içinde korunur.",noteHelp_tie:"Önceki notadan gelen bağ olarak görünür; bu notada yeni ses başlamaz. Süresi korunur."
+ noteSelectGroup:"Alt notalar",noteModeGroup:"Seçili notanın davranışı",noteMode_play:"Çal",noteMode_rest:"Es",noteMode_mute:"Mute",noteMode_tie:"Bağlı",
+ notePickAria:"{n}. alt nota: {mode}. Düzenlemek için seç.",noteCurrent:"{n}. alt nota",noteRestSyllable:"Es",noteListen:"Dinle",noteListenStop:"Durdur",noteReset:"Sıfırla",
+ noteHelp_mute:"× işaretli nota, susturulmuş gitar teli gibi kısa bir çıt sesiyle çalınır. Süresi korunur.",noteHelp_play:"Bu notada normal metronom vuruşu duyulur.",noteHelp_rest:"Bu nota es olarak görünür ve ses çıkarmaz. Süresi ritim içinde korunur.",noteHelp_tie:"Önceki notadan gelen bağ olarak görünür; bu notada yeni ses başlamaz. Süresi korunur."
 });
 Object.assign(MET_I18N.en,{
- helpNoteSettings:`<summary>Muting and tying individual notes</summary><p><b>Double-click or double-tap</b> a beat’s note group. You can also single-click it and press <b>Settings</b> in the pattern list. Select a note, then choose <b>Play</b>, <b>Tied</b> or <b>Rest / mute</b>.</p><ul><li><b>Play:</b> triggers a metronome click.</li><li><b>Tied:</b> is drawn as a continuation of the previous note and triggers no new click.</li><li><b>Rest / mute:</b> shows a rest and makes no sound.</li></ul><p>Timing is preserved in all cases. Changes apply immediately and are included in browser storage, saved rhythms and JSON backups. Changing a beat’s pattern resets its note settings. A tied note at the very start remains silent on the first pass too.</p>`,
+ helpNoteSettings:`<summary>Muting and tying individual notes</summary><p><b>Double-click or double-tap</b> a beat’s note group. You can also single-click it and press <b>Settings</b> in the pattern list. Select a note, then choose <b>Play</b>, <b>Tied</b>, <b>Rest</b> or <b>Mute</b>.</p><ul><li><b>Play:</b> triggers a metronome click.</li><li><b>Tied:</b> is drawn as a continuation of the previous note and triggers no new click.</li><li><b>Rest:</b> shows a rest and makes no sound.</li></ul><p>Timing is preserved in all cases. Changes apply immediately and are included in browser storage, saved rhythms and JSON backups. Changing a beat’s pattern resets its note settings. A tied note at the very start remains silent on the first pass too.</p>`,
  noteOpenHint:"Single click: choose pattern · Double-click / double-tap: note settings",noteSettings:"Settings",noteEdit:"Edit individual notes",noteEditAria:"Edit the notes of measure {m}, beat {b}",
  noteEditorTitle:"Measure {m} · beat {b}",noteEditorLead:"Select a note, then choose how it plays. Changes apply immediately.",
- noteSelectGroup:"Individual notes",noteModeGroup:"Selected note behavior",noteMode_play:"Play",noteMode_rest:"Rest / mute",noteMode_tie:"Tied",
- notePickAria:"Note {n}: {mode}. Select to edit.",noteCurrent:"Note {n}",noteRestSyllable:"Rest",noteReset:"Reset note settings",
- noteHelp_play:"This note triggers the normal metronome click.",noteHelp_rest:"This note is shown as a rest and produces no sound. Its duration is preserved.",noteHelp_tie:"Continues the previous note as a tie; no new click is triggered here. Its duration is preserved."
+ noteSelectGroup:"Individual notes",noteModeGroup:"Selected note behavior",noteMode_play:"Play",noteMode_rest:"Rest",noteMode_mute:"Mute",noteMode_tie:"Tied",
+ notePickAria:"Note {n}: {mode}. Select to edit.",noteCurrent:"Note {n}",noteRestSyllable:"Rest",noteListen:"Listen",noteListenStop:"Stop",noteReset:"Reset",
+ noteHelp_mute:"The × note plays a short muted-string click, like a damped guitar string. Its duration is preserved.",noteHelp_play:"This note triggers the normal metronome click.",noteHelp_rest:"This note is shown as a rest and produces no sound. Its duration is preserved.",noteHelp_tie:"Continues the previous note as a tie; no new click is triggered here. Its duration is preserved."
 });
 
 let MET_LANG="tr";
@@ -1023,7 +1044,7 @@ const subDefs=[
 ["16 - 16 - 8 - 8",[1,1,1,0,1,0],["Ça","nak","Ka","le"]],
 ["8 - 16 - 16 - 8",[1,0,1,1,1,0],["Baa","lı","ke","Sir"]],
 ["8 - 8 - 16 - 16",[1,0,1,0,1,1],["Af","yon","ka","ra"]]];
-const NOTE_MODES=["play","rest","tie"];
+const NOTE_MODES=["play","rest","tie","mute"];
 function noteCount(pattern){return subDefs[pattern][1].filter(Boolean).length;}
 function noteModeAt(beat,n){const mode=noteModes[beat]?.[n];return NOTE_MODES.includes(mode)?mode:"play";}
 function noteModesFor(beat){return Array.from({length:noteCount(pulseSub[beat]||0)},(_,n)=>noteModeAt(beat,n));}
@@ -1447,9 +1468,21 @@ $("pulses").addEventListener("dblclick",e=>{
 });
 subPopClose.addEventListener('click',closeSubPop);
 subPop.addEventListener('pointerdown',e=>e.stopPropagation());
+let suppressSurfaceClick=false;
 document.addEventListener('pointerdown',e=>{
+  suppressSurfaceClick=false;
   if(!noteArea(e.target))cancelNoteTap();
-  if(!subPop.hidden&&!e.target.closest('#sub-popover'))closeSubPop();
+  if(!e.target.closest('#subs'))paletteTapPending=null;
+  if(!subPop.hidden&&!e.target.closest('#sub-popover')){
+    closeSubPop();cancelNoteTap();suppressSurfaceClick=true;
+    e.stopImmediatePropagation();
+  }
+},true);
+document.addEventListener('click',e=>{
+  if(suppressSurfaceClick||(!subPop.hidden&&!e.target.closest('#sub-popover'))){
+    suppressSurfaceClick=false;closeSubPop();cancelNoteTap();
+    e.preventDefault();e.stopImmediatePropagation();
+  }
 },true);
 const NOT=[
 {it:[["4",0]]},
@@ -1485,7 +1518,8 @@ function noteSVG(spec,sy,sc,modes){sc=sc||1;
       if(run.length)runs.push(run);run=[];h=restGlyph(x,type);
       if(it[k][2]?.dot)h+=`<circle cx="${x+9.5}" cy="26.5" r="1.8"/>`;
     }else{
-      h=`<ellipse class="note-head" cx="${x}" cy="30" rx="4.6" ry="3.4" transform="rotate(-20 ${x} 30)"/><rect x="${x+3.6}" y="8" width="1.4" height="22"/>`;
+      const head=mode==="mute"?`<path class="note-head note-mute-head" d="M${x-4} 26L${x+4} 34M${x-4} 34L${x+4} 26" stroke="currentColor" stroke-width="2.2" stroke-linecap="butt" fill="none"/>`:`<ellipse class="note-head" cx="${x}" cy="30" rx="4.6" ry="3.4" transform="rotate(-20 ${x} 30)"/>`;
+      h=head+`<rect x="${x+3.6}" y="8" width="1.4" height="22"/>`;
       if(it[k][2]?.dot)h+=`<circle cx="${x+9.5}" cy="26.5" r="1.8"/>`;
       if(type!=="4")run.push(k);else{if(run.length)runs.push(run);run=[];}
       if(mode==="tie"){
@@ -1549,6 +1583,7 @@ function openNoteEditor(beat,opener){
   document.querySelector('.app').inert=!(fsMode||winMode);renderNoteEditor();$('note-editor-close').focus({preventScroll:true});
 }
 function closeNoteEditor(){
+  stopPalettePreview();
   $('note-editor-overlay').hidden=true;document.body.classList.remove('note-editor-open');document.querySelector('.app').inert=false;
   const opener=$('nv'+noteEditorBeat);if(opener?.isConnected)opener.focus({preventScroll:true});else if(noteEditorOpener?.isConnected)noteEditorOpener.focus({preventScroll:true});
 }
@@ -1570,17 +1605,21 @@ function renderNoteEditor(){
   }
   const mode=noteModeAt(beat,noteEditorOrdinal);
   document.querySelectorAll('[data-note-mode]').forEach(button=>button.setAttribute('aria-pressed',button.dataset.noteMode===mode));
-  $('note-editor-current').textContent=mt('noteCurrent').replace('{n}',noteEditorOrdinal+1);
-  $('note-editor-description').textContent=mt('noteHelp_'+mode);
+  if(notePreviewLoop)paintNotePreview();
 }
 function setNoteMode(mode){
   if(!NOTE_MODES.includes(mode))return;
   const beat=noteEditorBeat,modes=noteModesFor(beat);modes[noteEditorOrdinal]=mode;noteModes[beat]=modes;
   drawPulses();renderNoteEditor();
+  if(mode==="mute"&&!playing&&!notePreviewLoop)previewMutedString();
 }
 document.querySelectorAll('[data-note-mode]').forEach(button=>button.onclick=()=>setNoteMode(button.dataset.noteMode));
 $('note-editor-reset').onclick=()=>{noteModes[noteEditorBeat]=[];drawPulses();renderNoteEditor();};
 $('note-editor-close').onclick=closeNoteEditor;
+$('note-editor-listen').onclick=()=>{
+  if(notePreviewLoop)stopPalettePreview();
+  else previewPalettePattern(pulseSub[noteEditorBeat],noteModesFor(noteEditorBeat),true);
+};
 $('note-editor-overlay').addEventListener('click',e=>{if(e.target===$('note-editor-overlay'))closeNoteEditor();});
 $('note-editor-overlay').addEventListener('keydown',e=>{
   if(e.key==='Escape'){e.preventDefault();e.stopPropagation();closeNoteEditor();return;}
@@ -1592,37 +1631,129 @@ $('note-editor-overlay').addEventListener('keydown',e=>{
   }
 });
 
-let drag=null,ghost=null;
+let drag=null,ghost=null,paletteTapPending=null;
 function cellAt(x,y){const el=document.elementFromPoint(x,y);return el&&el.closest?el.closest(".cell"):null;}
 function chipDown(e,i,b){
   if(e.button>0||drag)return;
-  drag={i,b,x:e.clientX,y:e.clientY,lx:e.clientX,ly:e.clientY,on:false,touch:e.pointerType!=="mouse",tm:null};
-  
-  document.addEventListener("pointermove",dmove);document.addEventListener("pointerup",dup);document.addEventListener("pointercancel",dend);
+  drag={i,b,id:e.pointerId,x:e.clientX,y:e.clientY,lx:e.clientX,ly:e.clientY,on:false,touch:e.pointerType!=="mouse",tm:null};
+  if(drag.touch)drag.tm=setTimeout(startDrag,350);
+  document.addEventListener("pointermove",dmove,{passive:false});document.addEventListener("pointerup",dup);document.addEventListener("pointercancel",dend);
 }
-function startDrag(){drag.on=true;ghost=drag.b.cloneNode(true);ghost.classList.add("ghost");document.body.appendChild(ghost);moveGhost();}
+function startDrag(){
+  if(!drag||drag.on)return;
+  drag.on=true;paletteTapPending=null;stopPalettePreview();
+  drag.b.setPointerCapture(drag.id);
+  ghost=drag.b.cloneNode(true);ghost.classList.add("ghost");document.body.appendChild(ghost);moveGhost();
+}
 function moveGhost(){ghost.style.left=(drag.lx-ghost.offsetWidth/2)+"px";ghost.style.top=(drag.ly-ghost.offsetHeight-14)+"px";}
 function dmove(e){
-  if(!drag)return;drag.lx=e.clientX;drag.ly=e.clientY;
-  const d=Math.hypot(e.clientX-drag.x,e.clientY-drag.y);
-  if(!drag.on&&d>6)startDrag();
-  if(drag.on){moveGhost();document.querySelectorAll(".cell.drop").forEach(c=>c.classList.remove("drop"));
+  if(!drag||e.pointerId!==drag.id)return;drag.lx=e.clientX;drag.ly=e.clientY;
+  const distance=Math.hypot(e.clientX-drag.x,e.clientY-drag.y);
+  if(!drag.on){
+    if(drag.touch){if(distance>8){paletteTapPending=null;dend();}return;}
+    if(distance>6)startDrag();
+  }
+  if(drag?.on){e.preventDefault();moveGhost();document.querySelectorAll(".cell.drop").forEach(c=>c.classList.remove("drop"));
     const c=cellAt(e.clientX,e.clientY);if(c)c.classList.add("drop");}
 }
 function dup(e){
-  if(!drag)return;
-  if(drag.on){noClick=true;setTimeout(()=>noClick=false,50);
-    const c=cellAt(e.clientX,e.clientY);
-    if(c){const idx=[...document.querySelectorAll("#pulses .cell")].indexOf(c);if(idx>=0){setBeatPattern(idx,drag.i);curS=0;dend();drawSubs();drawPulses();return;}}}
+  if(!drag||e.pointerId!==drag.id)return;
+  if(drag.on){
+    suppressSurfaceClick=true;
+    const c=cellAt(e.clientX,e.clientY),pattern=drag.i;
+    const idx=c?[...document.querySelectorAll("#pulses .cell")].indexOf(c):-1;
+    dend();
+    if(idx>=0){setBeatPattern(idx,pattern);curS=0;drawSubs();drawPulses();}
+    return;
+  }
   dend();
 }
-function dend(){
-  if(drag)clearTimeout(drag.tm);
-  if(ghost)ghost.remove();ghost=null;drag=null;
+function dend(e){
+  if(e&&drag&&e.pointerId!==drag.id)return;
+  const state=drag;drag=null;
+  if(state){clearTimeout(state.tm);if(state.b.hasPointerCapture(state.id))state.b.releasePointerCapture(state.id);}
+  if(ghost)ghost.remove();ghost=null;
   document.querySelectorAll(".cell.drop").forEach(c=>c.classList.remove("drop"));
   document.removeEventListener("pointermove",dmove);document.removeEventListener("pointerup",dup);document.removeEventListener("pointercancel",dend);
 }
 document.addEventListener("touchmove",e=>{if(drag&&drag.on)e.preventDefault();},{passive:false});
+let palettePreviewBus=null,palettePreviewTimer=null,palettePreviewGeneration=0,notePreviewLoop=false;
+let notePreviewFrame=null,notePreviewEvents=[];
+function paintNotePreview(){
+  const time=ctx?.currentTime||0;
+  notePreviewEvents=notePreviewEvents.filter(event=>event.end>time);
+  const active=notePreviewEvents.find(event=>event.time<=time&&event.end>time);
+  $('note-editor-score').querySelectorAll('.nt').forEach(note=>note.classList.toggle('preview-lit',Boolean(active&&(active.mode==='play'||active.mode==='mute')&&Number(note.dataset.n)===active.ordinal)));
+}
+function syncListenButton(){
+  const button=$('note-editor-listen');
+  button.textContent=mt(notePreviewLoop?'noteListenStop':'noteListen');
+  button.setAttribute('aria-pressed',String(notePreviewLoop));
+}
+function stopPalettePreview(){
+  palettePreviewGeneration++;clearTimeout(palettePreviewTimer);clearInterval(palettePreviewTimer);
+  if(notePreviewFrame!==null)cancelAnimationFrame(notePreviewFrame);
+  notePreviewFrame=null;notePreviewEvents=[];
+  $('note-editor-score').querySelectorAll('.preview-lit').forEach(note=>note.classList.remove('preview-lit'));
+  if(palettePreviewBus){palettePreviewBus.disconnect();palettePreviewBus=null;}
+  notePreviewLoop=false;syncListenButton();
+}
+async function previewPalettePattern(i,modes,loop=false){
+  stopPalettePreview();const generation=palettePreviewGeneration;
+  notePreviewLoop=loop;syncListenButton();
+  try{
+    if(!ctx)ctx=new (window.AudioContext||window.webkitAudioContext)();
+    if(ctx.state==='suspended')await ctx.resume();
+    if(generation!==palettePreviewGeneration)return;
+    const bus=ctx.createGain();bus.connect(ctx.destination);palettePreviewBus=bus;
+    let next=ctx.currentTime+0.025;
+    function scheduleBeat(){
+      const selectedPattern=loop?pulseSub[noteEditorBeat]:i;
+      const selectedModes=loop?noteModesFor(noteEditorBeat):modes;
+      const pattern=subDefs[selectedPattern][1];let ordinal=0;
+      // 60 BPM: one complete beat is one second, including rests.
+      pattern.forEach((hit,k)=>{
+        if(!hit)return;
+        const noteOrdinal=ordinal++,mode=selectedModes?.[noteOrdinal]||'play',time=next+k/pattern.length;
+        if(loop){
+          const later=pattern.findIndex((value,index)=>index>k&&value);
+          notePreviewEvents.push({time,end:next+(later<0?pattern.length:later)/pattern.length,ordinal:noteOrdinal,mode});
+        }
+        if(mode==='play')click(time,1,false,bus);
+        else if(mode==='mute')mutedStringClick(time,1,bus);
+      });
+      next+=1;
+    }
+    scheduleBeat();
+    if(loop){
+      function followPreview(){
+        if(generation!==palettePreviewGeneration)return;
+        paintNotePreview();notePreviewFrame=requestAnimationFrame(followPreview);
+      }
+      notePreviewFrame=requestAnimationFrame(followPreview);
+      palettePreviewTimer=setInterval(()=>{
+        if(generation!==palettePreviewGeneration)return;
+        if(next<ctx.currentTime)next=ctx.currentTime+.025;
+        while(next<ctx.currentTime+.12)scheduleBeat();
+      },25);
+    }else{
+      palettePreviewTimer=setTimeout(()=>{if(palettePreviewBus===bus){bus.disconnect();palettePreviewBus=null;}},1250);
+    }
+  }catch{stopPalettePreview();}
+}
+function applyPalettePattern(i,e){
+  if(noClick)return;
+  const previous=paletteTapPending,now=performance.now();
+  const doubleTap=previous&&previous.i===i&&now-previous.time<=400&&Math.hypot(e.clientX-previous.x,e.clientY-previous.y)<=22;
+  if(!doubleTap){
+    paletteTapPending={i,time:now,x:e.clientX,y:e.clientY};
+    previewPalettePattern(i);return;
+  }
+  paletteTapPending=null;stopPalettePreview();sub=i;
+  if(e.ctrlKey||e.metaKey)setPatternRange(i);
+  else{const st=measureStart(activeMeasure);setPatternRange(i,st,st+measures[activeMeasure].num);}
+  curS=0;drawSubs();drawPulses();
+}
 function activeSubsAll(i){const st=measureStart(activeMeasure),n=measures[activeMeasure]?.num||0;return n>0&&pulseSub.slice(st,st+n).every(x=>x===i);}
 function revealMeasures(a,b){
   if(fsMode)return;
@@ -1648,7 +1779,7 @@ function drawSubs(){
     const cap=subCap(i);
     if(!sy)b.classList.add('nosy');
     if(cap){const caption=document.createElement('small');caption.className='sub-label';caption.textContent=cap;b.appendChild(caption);}
-    b.addEventListener("pointerdown",e=>chipDown(e,i,b));b.onclick=e=>{if(noClick)return;sub=i;if(e.ctrlKey||e.metaKey)setPatternRange(i);else{const st=measureStart(activeMeasure);setPatternRange(i,st,st+measures[activeMeasure].num);}curS=0;drawSubs();drawPulses();};$("subs").appendChild(b);});
+    b.addEventListener("pointerdown",e=>chipDown(e,i,b));b.onclick=e=>applyPalettePattern(i,e);$("subs").appendChild(b);});
 }
 for(let i=1;i<=16;i++){const o=document.createElement("option");o.textContent=i;$("num").appendChild(o);}
 $("num").onchange=e=>{if(!addingMeasure)setMeter(+e.target.value,den);};
@@ -1728,16 +1859,42 @@ $("tap").onclick=()=>{const t=performance.now();taps=taps.filter(x=>t-x<2500);ta
 
 let ms=null;
 function master(){if(!ms||ms.context!==ctx){ms=ctx.createGain();ms.connect(ctx.destination);}return ms;}
-function click(t,lvl,isSub){
+function click(t,lvl,isSub,destination){
   const f=isSub?900:[0,1000,1400,2200][lvl];
   const v=isSub?0.11:[0,0.24,0.5,0.7][lvl];
   const dur=lvl===3&&!isSub?0.09:0.05;
   const mk=(fr,type,vol,d)=>{const o=ctx.createOscillator(),g=ctx.createGain();
     o.frequency.value=fr;o.type=type;
     g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(0.001,t+d);
-    o.connect(g).connect(master());o.start(t);o.stop(t+d+0.01);};
+    o.connect(g).connect(destination||master());o.start(t);o.stop(t+d+0.01);};
   mk(f,"square",v,dur);
   if(lvl===3&&!isSub)mk(600,"sine",0.3,0.12);
+}
+// A short, filtered noise burst: percussive, without the metronome's pitched beep.
+let mutedStringBuffer=null;
+function mutedStringClick(t,level,destination){
+  if(!mutedStringBuffer||mutedStringBuffer.sampleRate!==ctx.sampleRate){
+    mutedStringBuffer=ctx.createBuffer(1,Math.ceil(ctx.sampleRate*.045),ctx.sampleRate);
+    const samples=mutedStringBuffer.getChannelData(0);
+    for(let i=0;i<samples.length;i++)samples[i]=Math.random()*2-1;
+  }
+  const source=ctx.createBufferSource(),high=ctx.createBiquadFilter(),tone=ctx.createBiquadFilter(),gain=ctx.createGain();
+  source.buffer=mutedStringBuffer;
+  high.type='highpass';high.frequency.value=650;
+  tone.type='lowpass';tone.frequency.value=5500;
+  const volume=[0,.34,.46,.6][level]||.34;
+  gain.gain.setValueAtTime(.001,t);gain.gain.linearRampToValueAtTime(volume,t+.001);
+  gain.gain.exponentialRampToValueAtTime(.001,t+.032);
+  source.connect(high).connect(tone).connect(gain).connect(destination||master());
+  source.onended=()=>{source.disconnect();high.disconnect();tone.disconnect();gain.disconnect();};
+  source.start(t);source.stop(t+.04);
+}
+async function previewMutedString(){
+  try{
+    if(!ctx)ctx=new (window.AudioContext||window.webkitAudioContext)();
+    if(ctx.state==='suspended')await ctx.resume();
+    if(!playing)mutedStringClick(ctx.currentTime+.01,2);
+  }catch{}
 }
 let followFrame=null;
 function stopBeatFollow(){
@@ -1792,9 +1949,13 @@ function sched(){
     if(pat[curS]){
       const ordinal=pat.slice(0,curS).filter(Boolean).length;
       flashDot(curP,curS,nextT);
-      if(lvl>0&&noteModeAt(curP,ordinal)==="play"){
-        if(curS===firstSlot||sameSubSound)click(nextT,lvl,false);
-        else click(nextT,0,true);
+      if(lvl>0){
+        const mode=noteModeAt(curP,ordinal);
+        if(mode==="mute")mutedStringClick(nextT,lvl);
+        else if(mode==="play"){
+          if(curS===firstSlot||sameSubSound)click(nextT,lvl,false);
+          else click(nextT,0,true);
+        }
       }
     }
     if(curS===firstSlot)flash(curP,nextT);
@@ -1839,6 +2000,7 @@ document.addEventListener('visibilitychange',()=>{
 document.addEventListener('pointerdown',keepScreenAwake,{passive:true});
 // forceDemo: Ctrl/Cmd + Boşluk. Demo kutusu işaretli değilse işaretlenir ve demo baştan çalınır.
 function toggle(forceDemo){
+  stopPalettePreview();paletteTapPending=null;
   if(!ctx)ctx=new (window.AudioContext||window.webkitAudioContext)();
   if(ctx.state==="suspended")ctx.resume();
   if(forceDemo){
