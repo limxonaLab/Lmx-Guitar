@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="application-version" content="1.5">
+<meta name="application-version" content="1.6">
 <title>Lmx Chords Akor Bulucu – Gitar Akorları ve Parmak Pozisyonları</title>
 <meta name="description" content="Online gitar akor bulucu. Kök notayı ve akor türünü seç, gitar sapında nota ve parmak konumlarını 10 farklı varyasyonla gör.">
 <link rel="canonical" href="https://limxona.vercel.app/tr/chords">
@@ -181,17 +181,81 @@ svg .dot.r+.dt{fill:var(--bg)}
 svg .op{fill:none;stroke:var(--fg);stroke-width:1.4}
 svg .mx{stroke:var(--mut);stroke-width:1.4}
 @media(max-width:700px){.nav{display:none}}
+/* Notes → chords: a separate workspace, keeping the original reverse finder. */
+.suggest-dialog{max-width:1000px;padding:22px;max-height:94dvh}
+.suggest-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+.suggest-heading h2{margin:0;font-size:1.5rem}.suggest-heading .x{position:static;flex:none}
+.suggest-layout{display:grid;grid-template-columns:minmax(280px,340px) minmax(0,1fr);gap:28px;align-items:start}
+.suggest-input,.suggest-output{min-width:0}
+.suggest-input{background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:14px}
+.suggest-input .find-neck{--row-h:48px;--head-h:42px}
+.suggest-input .find-bar{gap:6px}.suggest-input .find-bar-l{flex-wrap:wrap}
+.suggest-input .find-bar select{background:var(--card);font-size:.82rem}
+.suggest-input .find-listen{padding:0 12px;font-size:.82rem}
+.suggest-label{font-size:.78rem;font-weight:600;color:var(--mut);margin:0 0 8px}
+.suggest-selected{display:flex;gap:8px;flex-wrap:wrap;min-height:42px;margin:12px 0}
+.suggest-note{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:7px 10px;color:var(--fg);font:600 .9rem var(--sans);cursor:pointer}
+.suggest-note small{display:block;font-size:.65rem;color:var(--mut);font-weight:400}
+.suggest-note.empty{color:var(--mut);border-style:dashed;flex:1;justify-content:center;cursor:default}
+.suggest-note .remove{color:var(--mut);font-size:1.1rem}
+.suggest-actions{display:flex;gap:8px}
+.suggest-actions button{flex:1;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);font:600 .86rem var(--sans);cursor:pointer}
+.suggest-actions #sapply{background:var(--acc);border-color:var(--acc);color:var(--ink)}
+.suggest-actions button:disabled{opacity:.4;cursor:default}
+.suggest-hint{font-size:.78rem;color:var(--mut);margin:10px 0 0!important;min-height:2.8em;line-height:1.5}
+.suggest-circle-head{font-size:.78rem;color:var(--mut);font-weight:600;margin:0 0 8px}
+.suggest-circle{width:230px;height:230px;position:relative;margin:0 auto 16px;border-radius:50%;background:radial-gradient(circle,transparent 52%,var(--line) 53%,var(--line) 54%,transparent 55%)}
+.suggest-circle>button{position:absolute;left:calc(50% + var(--x));top:calc(50% + var(--y));transform:translate(-50%,-50%);width:40px;height:40px;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--fg);font:600 .78rem var(--sans);cursor:pointer}
+.suggest-circle>button:disabled{opacity:.3;cursor:default}
+.suggest-circle>button[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:var(--ink)}
+.suggest-circle>button.suggest-circle-all{--x:0px;--y:0px;width:70px;height:70px;font-size:.75rem}
+.suggest-circle button small{display:block;font-size:.6rem;line-height:1;color:inherit;opacity:.75}
+.suggest-filters{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.suggest-filters button{font:600 .75rem var(--sans);border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--mut);padding:6px 9px;cursor:pointer}
+.suggest-filters button[aria-pressed=true]{border-color:var(--acc);background:var(--soft);color:var(--acc)}
+.suggest-summary{font-size:.9rem;font-weight:600;margin:0 0 10px!important;overflow-wrap:anywhere}
+.suggest-results{display:grid;gap:8px;max-height:410px;overflow:auto;padding:2px 4px 4px 2px;overscroll-behavior:contain}
+.suggest-result{border:1px solid var(--line)!important;border-radius:12px;background:var(--bg);overflow:hidden}
+.suggest-result summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px!important;list-style:none}
+.suggest-result summary::-webkit-details-marker{display:none}
+.suggest-result summary:after{content:'+';font-size:1.2rem;color:var(--mut);flex:none}
+.suggest-result[open] summary:after{content:'−'}
+.suggest-result summary strong{font-family:var(--serif);font-size:1.13rem;font-weight:600;white-space:nowrap}
+.suggest-tones{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto;justify-content:flex-end}
+.suggest-tones span{font-size:.7rem;color:var(--mut);padding:1px 4px}
+.suggest-tones .required-tone{background:var(--soft);border-radius:5px;color:var(--acc);font-weight:700}
+.suggest-voicings{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 12px 12px}
+.suggest-voicing{flex:0 0 150px;scroll-snap-align:start;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--fg);padding:8px;font:inherit;cursor:pointer}
+.suggest-voicing svg{width:100%;height:auto;display:block}.suggest-voicing small{display:block;font-size:.7rem;color:var(--mut)}
+.suggest-result .suggest-none{padding:0 12px 12px;color:var(--mut);font-size:.82rem}
+@media(max-width:700px){#sov{padding:0;background:var(--card)}.suggest-dialog{border:0;border-radius:0;width:100%;max-width:none;height:100dvh;max-height:none;padding:max(14px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}.suggest-layout{grid-template-columns:1fr;gap:20px}.suggest-input{max-width:400px;width:100%;margin:auto}.suggest-heading{margin-bottom:12px}.suggest-heading h2{font-size:1.25rem}.suggest-results{max-height:none;overflow:visible}.suggest-input .find-neck{--row-h:42px}.suggest-circle{margin-bottom:12px}.suggest-output{border-top:1px solid var(--line);padding-top:16px}}
+
+
+.suggest-role-filter{--role-ink:#176c64;--role-bg:#edf6f3;--role-line:#bddbd3;display:block;margin:10px 0 18px;padding:12px;background:var(--role-bg);border:1px solid var(--role-line);border-radius:13px}
+:root[data-theme="dark"] .suggest-role-filter{--role-ink:#8dd9c9;--role-bg:#1b332e;--role-line:#365d52}
+.suggest-role-title{display:block;margin:0 0 9px;color:var(--role-ink);font-size:.77rem;font-weight:600}
+.suggest-role-buttons{display:flex;flex-wrap:wrap;gap:6px}
+.suggest-role-buttons button{min-height:34px;padding:6px 10px;border:1px solid var(--role-line);border-radius:8px;background:var(--card);color:var(--role-ink);font:600 .77rem var(--sans);cursor:pointer}
+.suggest-role-buttons button:hover{border-color:var(--role-ink)}
+.suggest-role-buttons button[aria-pressed="true"]{background:var(--role-ink);border-color:var(--role-ink);color:var(--card)}
+:root[data-theme="dark"] .suggest-role-buttons button[aria-pressed="true"]{color:#12332b}
+.suggest-type-title{margin-bottom:8px}.suggest-type-title+.suggest-filters{margin-top:0}
+.suggest-result-main{display:block;flex:1;min-width:0}
+.suggest-result-top{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.suggest-roles{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.suggest-roles>span{font:600 .73rem var(--sans);color:var(--acc);background:var(--soft);padding:4px 7px;border-radius:6px;line-height:1.35}
+
 </style>
 </head>
 <body>
 <div class="wrap">
 <h1 class="sr-only" data-i="h1">Akor bulucu</h1>
 <header class="top">
-<a class="site" href="/"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 4v24M14.7 4v24M21.3 4v24M28 4v24M8 11h20M8 19h20"/><circle cx="14.7" cy="15" r="2.6" fill="currentColor" stroke="none"/><circle cx="21.3" cy="23" r="2.6" fill="currentColor" stroke="none"/></svg><span>LmX Chords <small>v1.5</small></span></a>
+<a class="site" href="/"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 4v24M14.7 4v24M21.3 4v24M28 4v24M8 11h20M8 19h20"/><circle cx="14.7" cy="15" r="2.6" fill="currentColor" stroke="none"/><circle cx="21.3" cy="23" r="2.6" fill="currentColor" stroke="none"/></svg><span>LmX Chords <small>v1.6</small></span></a>
 <div class="trg"><div class="seg th" id="theme" role="group"><button type="button" data-t="light"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><span data-i="day">Gündüz</span></button><button type="button" data-t="dark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 14A9 9 0 0 1 10 3.2 9 9 0 1 0 20.8 14Z"/></svg><span data-i="night">Gece</span></button></div><div class="seg" id="lang" role="group" aria-label="Dil / Language"><button data-l="tr">TR</button><button data-l="en">EN</button></div><button class="help" id="hopen" type="button">?</button></div>
 </header>
 <div class="roots" id="roots"></div>
-<div class="opts"><div class="seg" id="acc" role="group"></div><div class="find-controls"><div class="seg" id="mode" role="group"><button data-m="finger" data-i="finger">Parmak</button><button data-m="note" data-i="note">Nota</button></div><button class="find-open" id="fopen" type="button" data-i="find">Bul</button></div></div>
+<div class="opts"><div class="seg" id="acc" role="group"></div><div class="find-controls"><div class="seg" id="mode" role="group"><button data-m="finger" data-i="finger">Parmak</button><button data-m="note" data-i="note">Nota</button></div><button class="find-open" id="sopen" type="button" data-i="suggestOpen">Akor Bul</button><button class="find-open" id="fopen" type="button" data-i="find">Bul</button></div></div>
 <div class="quals" id="quals"></div>
 <div class="stage"><button class="nav prev" id="prev" type="button">‹</button><div class="car" id="car" tabindex="0" aria-live="polite"></div><button class="nav next" id="next" type="button">›</button></div>
 <div class="dots" id="dots" role="group"></div>
@@ -199,6 +263,31 @@ svg .mx{stroke:var(--mut);stroke-width:1.4}
 
 <div class="ov" id="ov" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="ht"><button class="x" id="hx" type="button">✕</button><h2 id="ht"></h2><p class="lead" id="hl"></p><div id="hbody"></div></div></div>
 <div class="ov" id="fov" hidden><div class="dlg find-dialog" role="dialog" aria-modal="true"><div class="find-bar"><div class="find-bar-l"><select id="fcapo"></select><button class="find-listen" id="flisten" type="button"><span aria-hidden="true">▶</span><span data-i="findListen">Dinle</span></button></div><button class="x" id="fx" type="button">✕</button></div><div class="find-scroll"><div class="find-neck" id="fneck"></div></div><div class="find-pager"><button id="fprev" type="button">‹</button><span class="find-range" id="frange"></span><button id="fnext" type="button">›</button></div><div class="find-top"><div class="find-results" id="fresults" role="status" aria-live="polite"></div><p class="find-notes" id="fnotes"></p></div><div class="find-board-head"><div class="find-legend"><span><i aria-hidden="true"></i><span data-i="note">Nota</span></span><span><i class="root" aria-hidden="true"></i><span data-i="findRoot">kök</span></span><span>○ <span data-i="openString">açık</span></span><span>× <span data-i="mutedString">susturulmuş</span></span></div></div></div></div>
+
+<div class="ov" id="sov" hidden>
+ <div class="dlg suggest-dialog" role="dialog" aria-modal="true" aria-labelledby="stitle">
+  <div class="suggest-heading"><h2 id="stitle" data-i="suggestTitle">Notadan akor bul</h2><button class="x" id="sx" type="button" aria-label="Kapat">✕</button></div>
+  <div class="suggest-layout">
+   <section class="suggest-input" aria-labelledby="sinput-title">
+    <h3 class="suggest-label" id="sinput-title" data-i="suggestPick">Sapta bir veya iki nota seç</h3>
+    <div class="find-bar"><div class="find-bar-l"><select id="scapo"></select><button class="find-listen" id="slisten" type="button" data-i="findListen">Dinle</button></div></div>
+    <div class="find-neck" id="sneck"></div>
+    <div class="find-pager"><button id="sprev" type="button">‹</button><span class="find-range" id="srange"></span><button id="snext" type="button">›</button></div>
+    <div class="suggest-selected" id="sselected"></div>
+    <div class="suggest-actions"><button type="button" id="sclear" data-i="clearFind">Temizle</button><button type="button" id="sapply" data-i="suggestApply">Uygula</button></div>
+    <p class="suggest-hint" id="shint" role="status" aria-live="polite"></p>
+   </section>
+   <section class="suggest-output" aria-labelledby="scircle-title">
+    <h3 id="scircle-title" class="suggest-circle-head" data-i="suggestCircle">Beşliler çemberi · kök filtresi</h3>
+    <div class="suggest-circle" id="scircle" role="group"></div>
+    <div class="suggest-role-filter"><h3 class="suggest-role-title" id="srole-title" data-i="suggestRoleTitle">Notanın görevi</h3><div class="suggest-role-buttons" id="srole" role="group" aria-labelledby="srole-title"></div></div>
+    <h3 class="suggest-circle-head suggest-type-title" data-i="type">Akor türü</h3><div class="suggest-filters" id="sfilters" role="group"></div>
+    <p class="suggest-summary" id="ssummary" role="status" aria-live="polite"></p>
+    <div class="suggest-results" id="sresults"></div>
+   </section>
+  </div>
+ </div>
+</div>
 
 <script>
 (function(){
@@ -422,14 +511,16 @@ var OP={"0|maj":"x32010","1|maj":"x46664","2|maj":"xx0232","3|maj":"x68886","4|m
 var TP={maj:["022100","x02220"],min:["022000","x02210"],"7":["020100","x02020"],maj7:["021100","x02120"],m7:["020000","x02010"],sus4:["022200","x02230"],
 sus2:["024400","x02200"],"5":["022xxx","x022xx"],dim:[0,"x0121x"],m7b5:[0,"x0101x"],"6":["022120","x02222"],m6:["022020","x02212"]};
 function pf(str,sh){return str.split("").map(function(c){return c==="x"?-1:+c+(sh||0);});}
-function gen(rp,ivs,qid,essential){
+function gen(rp,ivs,qid,essential,mustHave,maxFret){
+  maxFret=Number.isInteger(maxFret)?Math.min(15,Math.max(0,maxFret)):15;
   var need={},req={},fifth=(rp+7)%12,out={};
   ivs.forEach(function(i){need[(rp+i)%12]=1;});
   (essential||ivs).forEach(function(i){req[(rp+i)%12]=1;});
   if(!essential&&ivs.length>=4&&ivs.indexOf(7)>=0)delete req[fifth];
+  (mustHave||[]).forEach(function(pc){req[pc]=1;});
   var minStr=ivs.length<3?3:4;
-  for(var p=0;p<=12;p++){
-    var lo=Math.max(p,1),hi=p===0?4:p+3;
+  for(var p=0;p<=Math.min(12,maxFret);p++){
+    var lo=Math.max(p,1),hi=Math.min(maxFret,p===0?4:p+3);
     var opts=TUN.map(function(m){var o=[-1],f;if(p===0&&need[m%12])o.push(0);for(f=lo;f<=hi;f++)if(need[(m+f)%12])o.push(f);return o;});
     var cur=[0,0,0,0,0,0];
     (function rec(s){
@@ -453,7 +544,8 @@ function gen(rp,ivs,qid,essential){
   }
   var pick=[];
   function add(fr,sc){
-    var k=fr.join(","),fi,ft,v;if(Math.max.apply(null,fr)>15)return;
+    if(mustHave&&(fr.some(function(f,s){return f>=0&&!need[(TUN[s]+f)%12];})||!mustHave.every(function(pc){return fr.some(function(f,s){return f>=0&&(TUN[s]+f)%12===pc;});})))return;
+    var k=fr.join(","),fi,ft,v;if(Math.max.apply(null,fr)>maxFret)return;
     if(out[k]){if(sc===0)out[k].T=1;else{if(out[k].sc<sc)out[k].sc=sc;if(sc===200)out[k].preferred=1;}return;}
     fi=fing(fr);if(!fi)return;
     ft=fr.filter(function(f){return f>0;});
@@ -581,14 +673,16 @@ window.__identifyChord=identifyChord;
 
 /* ---- çizim ---- */
 function nm(pc){return(S.acc==="♭"||(S.root==="F"&&!S.acc)?FL:SH)[pc%12];}
-function draw(v,rp){
+function draw(v,rp,capo,toneNames){
+  capo=capo||0;
+  function nameAt(midi){var pc=(midi+capo)%12;return toneNames&&toneNames[pc]!==undefined?toneNames[pc]:capo?FIND_NAMES[pc]:nm(midi);}
   var X=function(i){return 24+i*17;},W=function(i){return 2.35-i*.24;},TOP=36,RH=22,R=5,B=v.base,h="",i,r;
   var left=X(0)-W(0)/2,right=X(5)+W(5)/2;
   h+='<svg viewBox="0 18 132 152" role="img" aria-label="'+v.fr.map(function(f){return f<0?"x":f;}).join(" ")+'">';
   // Sap ve perdeler eski genişlikte; yalnızca üst eşik dış tellerin kalınlığını kapsar.
   h+='<rect class="board" x="24" y="36" width="85" height="110"/>';
   for(r=0;r<R;r++){
-    var fret=B+r,mid=TOP+(r+.5)*RH;
+    var fret=B+r+capo,mid=TOP+(r+.5)*RH;
     if([3,5,7,9,12,15,17,19,21,24].indexOf(fret)>=0){
       var marks=fret===12||fret===24?[X(2)-5,X(3)+5]:[(X(2)+X(3))/2];
       marks.forEach(function(x){h+='<circle class="inlay" cx="'+x+'" cy="'+mid+'" r="3.7"/>';});
@@ -603,7 +697,7 @@ function draw(v,rp){
   v.fr.forEach(function(f,i){
     if(f<0)h+='<path class="mx" d="M'+(X(i)-3.5)+' 21l7 7m0-7l-7 7"/>';
     else if(f===0)h+='<circle class="op" cx="'+X(i)+'" cy="24.5" r="4"/>';
-    h+='<text class="tx" x="'+X(i)+'" y="'+(TOP+R*RH+16)+'">'+(f<0?"":nm(TUN[i]+f))+'</text>';
+    h+='<text class="tx" x="'+X(i)+'" y="'+(TOP+R*RH+16)+'">'+(f<0?"":nameAt(TUN[i]+f))+'</text>';
   });
   v.groups.forEach(function(g){
     var y=TOP+(g.f-B+.5)*RH;
@@ -614,7 +708,7 @@ function draw(v,rp){
     var y=TOP+(f-B+.5)*RH,isR=(TUN[i]+f)%12===rp,g=v.groups.filter(function(g){return g.a<=i&&i<=g.b&&g.f===f;})[0];
     var labelString=g.a;
     while(labelString<g.b&&v.fr[labelString]!==g.f)labelString++;
-    var lab=S.mode==="note"?nm(TUN[i]+f):(g.bar&&i!==labelString?"":v.fg[i]);
+    var lab=S.mode==="note"?nameAt(TUN[i]+f):(g.bar&&i!==labelString?"":v.fg[i]);
     h+='<circle class="dot'+(isR?" r":"")+'" cx="'+X(i)+'" cy="'+y+'" r="7.6"/><text class="dt" x="'+X(i)+'" y="'+(y+3.6)+'"'+(S.mode==="note"&&lab.length>1?' style="font-size:8px"':"")+'>'+lab+'</text>';
   });
   return h+"</svg>";
@@ -629,6 +723,7 @@ function stopPlayback(){
   if(activeAudio){activeAudio.pause();activeAudio=null;}
   if(activeAudioUrl){URL.revokeObjectURL(activeAudioUrl);activeAudioUrl=null;}
 }
+function audioNotes(v){return v.notes||v.fr.map(function(f,i){return f<0?null:{midi:TUN[i]+f,string:i};}).filter(Boolean);}
 function strumWebAudio(v,oneByOne,id){
   if(id!==playbackId)return;
   var AudioContextClass=window.AudioContext||window.webkitAudioContext;
@@ -640,10 +735,10 @@ function strumWebAudio(v,oneByOne,id){
   function schedule(){
     if(id!==playbackId)return;
     var t0=AC.currentTime+.02,k=0;
-    v.fr.forEach(function(f,i){
-      if(f<0)return;
+    audioNotes(v).forEach(function(note){
+      var i=note.string;
       var o=AC.createOscillator(),g=AC.createGain(),lp=AC.createBiquadFilter(),tt=t0+k++*(oneByOne?.3:.045);
-      o.setPeriodicWave(pluckWave);o.frequency.value=440*Math.pow(2,(TUN[i]+f-69)/12);
+      o.setPeriodicWave(pluckWave);o.frequency.value=440*Math.pow(2,(note.midi-69)/12);
       lp.type="lowpass";lp.frequency.setValueAtTime(6500,tt);lp.frequency.exponentialRampToValueAtTime(1900,tt+.9);
       g.gain.setValueAtTime(0,tt);g.gain.linearRampToValueAtTime(.17*STRING_LEVEL[i],tt+.004);g.gain.exponentialRampToValueAtTime(.0001,tt+(oneByOne?.85:1.6));
       o.connect(lp);lp.connect(g);g.connect(AC.destination);o.start(tt);o.stop(tt+(oneByOne?.9:1.7));
@@ -655,7 +750,7 @@ function strumWebAudio(v,oneByOne,id){
   else schedule();
 }
 function chordWav(v,oneByOne){
-  var rate=22050,notes=v.fr.map(function(f,i){return f<0?null:{freq:440*Math.pow(2,(TUN[i]+f-69)/12),level:STRING_LEVEL[i]};}).filter(Boolean);
+  var rate=22050,notes=audioNotes(v).map(function(note){return{freq:440*Math.pow(2,(note.midi-69)/12),level:STRING_LEVEL[note.string]};});
   var gap=oneByOne?.3:.055;
   var samples=Math.ceil(rate*((oneByOne?1:1.5)+Math.max(0,notes.length-1)*gap)),buf=new ArrayBuffer(44+samples*2),view=new DataView(buf);
   function label(offset,s){for(var j=0;j<s.length;j++)view.setUint8(offset+j,s.charCodeAt(j));}
@@ -839,8 +934,8 @@ function renderFinder(focusCell){
 }
 for(var cap=0;cap<=12;cap++){var opt=document.createElement("option");opt.value=String(cap);opt.textContent=cap?t("capo")+" "+cap:t("noCapo");$("fcapo").appendChild(opt);}
 $("fcapo").onchange=function(){F.capo=+this.value;saveFinder();renderFinder();};
-function dialogState(){var open=!$("ov").hidden||!$("fov").hidden;document.body.classList.toggle("lock",open);document.querySelector(".wrap").inert=open;}
-function openFinder(){if(!$("ov").hidden)closeHelp();finderOpener=document.activeElement;$("fov").hidden=false;dialogState();$("fcapo").value=String(F.capo);fitFinderBase();renderFinder();$("fx").focus();}
+function dialogState(){var open=!$("ov").hidden||!$("fov").hidden||!$("sov").hidden;document.body.classList.toggle("lock",open);document.querySelector(".wrap").inert=open;}
+function openFinder(){if(!$("sov").hidden)closeSuggest();if(!$("ov").hidden)closeHelp();finderOpener=document.activeElement;$("fov").hidden=false;dialogState();$("fcapo").value=String(F.capo);fitFinderBase();renderFinder();$("fx").focus();}
 function closeFinder(){stopPlayback();$("fov").hidden=true;dialogState();if(finderOpener&&finderOpener.focus)finderOpener.focus();}
 $("fprev").onclick=function(){FB=Math.max(1,FB-1);renderFinder();if($("fprev").disabled)$("fnext").focus();};
 $("fnext").onclick=function(){FB=Math.min(FB_MAX,FB+1);renderFinder();if($("fnext").disabled)$("fprev").focus();};
@@ -852,8 +947,8 @@ $("flisten").onclick=function(){
 $("fopen").onclick=openFinder;$("fx").onclick=closeFinder;
 $("fov").addEventListener("click",function(e){if(e.target===$("fov"))closeFinder();});
 document.addEventListener("keydown",function(e){
-  var modal=!$("fov").hidden?$("fov"):!$("ov").hidden?$("ov"):null;if(!modal)return;
-  if(e.key==="Escape"){e.preventDefault();if(modal===$("fov"))closeFinder();else closeHelp();return;}
+  var modal=!$("sov").hidden?$("sov"):!$("fov").hidden?$("fov"):!$("ov").hidden?$("ov"):null;if(!modal)return;
+  if(e.key==="Escape"){e.preventDefault();if(modal===$("sov"))closeSuggest();else if(modal===$("fov"))closeFinder();else closeHelp();return;}
   if(e.key!=="Tab")return;
   var focusable=Array.from(modal.querySelectorAll('button,select,input,textarea,a[href],summary,[tabindex="0"]')).filter(function(el){
     var details=el.closest("details");return !el.disabled&&(!details||details.open||el.tagName==="SUMMARY");
@@ -862,6 +957,227 @@ document.addEventListener("keydown",function(e){
   if(e.shiftKey&&(document.activeElement===first||!modal.contains(document.activeElement))){e.preventDefault();last.focus();}
   else if(!e.shiftKey&&(document.activeElement===last||!modal.contains(document.activeElement))){e.preventDefault();first.focus();}
 });
+/* ---- Find chords that contain one or two selected notes ---- */
+Object.assign(TX.tr,{
+ suggestOpen:"Akor Bul",suggestTitle:"Notadan akor bul",suggestPick:"Sapta bir veya iki nota seç",suggestApply:"Uygula",
+ suggestCircle:"Beşliler çemberi · kök filtresi",suggestAll:"Tümü",suggestBasic:"Temel",suggestOther:"Diğer",
+ suggestEmpty:"Sapta nota seçip Uygula’ya bas.",suggestOne:"Seçtiğin notanın başka akorlarda hangi derecede bulunduğunu gör.",suggestTwo:"Her iki notayı içeren akorlar ve notaların akordaki görevleri listelenir.",suggestLimit:"En fazla iki nota seçebilirsin. Birini kaldırmak için tekrar dokun.",
+ suggestPending:"Notalar değişti. Sonuçları görmek için Uygula’ya bas.",suggestMatches:"{notes} · {count} akor",suggestNoResults:"Bu filtrede eşleşen akor yok.",
+ suggestCapoHint:"Kapo {n} · Diyagram perdeleri kapoya göredir.",suggestVoicings:"Dinlemek için bir basılışa dokun. Tekrar dokununca arpej çalar.",suggestNoVoicing:"Bu notaları koruyan, mevcut basış kurallarına uygun bir gitar dizilimi bulunamadı.",
+ suggestRemove:"{note} notasını kaldır",suggestSlot:"{n}. nota",suggestTone:"İçerilen notalar",suggestRoots:"Akor kökleri, beşliler sırasıyla",suggestTypes:"Akor türü filtresi"
+});
+Object.assign(TX.en,{
+ suggestOpen:"Find Chords",suggestTitle:"Chords from notes",suggestPick:"Pick one or two notes on the fretboard",suggestApply:"Apply",
+ suggestCircle:"Circle of fifths · root filter",suggestAll:"All",suggestBasic:"Basic",suggestOther:"Other",
+ suggestEmpty:"Pick notes on the fretboard, then press Apply.",suggestOne:"See the selected note’s role in chords with other roots.",suggestTwo:"Find chords containing both notes and see each note’s role.",suggestLimit:"Choose up to two notes. Tap a selected note again to remove it.",
+ suggestPending:"Notes changed. Press Apply to update the results.",suggestMatches:"{notes} · {count} chords",suggestNoResults:"No matching chords for this filter.",
+ suggestCapoHint:"Capo {n} · Diagram frets are relative to the capo.",suggestVoicings:"Tap a voicing to hear it. Tap again to hear an arpeggio.",suggestNoVoicing:"No playable guitar voicing retaining these notes was found under the current fingering rules.",
+ suggestRemove:"Remove {note}",suggestSlot:"Note {n}",suggestTone:"Chord tones",suggestRoots:"Chord roots in circle-of-fifths order",suggestTypes:"Chord type filter"
+});
+TX.tr.hs.push(["Notadan akor bul", "<p><b>Akor Bul</b> ile sapta bir veya iki nota seçip <b>Uygula</b>’ya bas. Tek notada da tüm kökler taranır. Sonuçlar, seçtiğin notanın hangi akorun üçlüsü, beşlisi veya üst derecesi olduğunu gösterir. İki notada ikisini birden içeren akorlar bulunur. Varsayılan Kök dışı filtresi, tek notada aynı kökün akorlarını gizler; Tümü seçeneğiyle onları da gösterebilirsin. Beşliler çemberinden kökü, tür düğmelerinden akor ailesini filtrele. Bir sonucu açarak en fazla 10 basılışı görüp dinleyebilirsin. Seçtiğin sesler basılışlarda korunur. Kapo seçiliyse duyulan notalar kapoya göre hesaplanır; sonuç diyagramlarındaki perdeler kapoya göredir.</p>"]);
+TX.en.hs.push(["Chords from notes", "<p>Press <b>Find Chords</b>, pick one or two notes on the fretboard, then press <b>Apply</b>. All roots are searched even for one note. Results show whether the note is a third, fifth or another chord degree. Two notes find chords containing both pitches. The default Non-root filter hides same-root chords for a single note; choose All roles to include them. Use the circle of fifths to filter roots and the type buttons to filter chord families. Open a result to see and hear up to 10 voicings. Selected pitches are retained in the voicings. A capo transposes sounding notes; result diagrams show frets relative to the capo.</p>"]);
+var CIRCLE_ROOTS=[0,7,2,9,4,11,6,1,8,3,10,5];
+var SUGGEST_TYPES=FIND_TYPES.map(function(type){
+ return Q.find(function(q){return q[0]===type.id;})||[type.id,type.symbol,type.symbol,type.ivs,type.required];
+});
+var SG={notes:[],capo:0,base:1},suggestOpener=null,suggestApplied=[],suggestMatches=[],suggestRoot=null,suggestFamily="all",suggestRoleFilter="nonroot",suggestArpeggio=false;
+try{
+ var storedSuggest=JSON.parse(localStorage.getItem("lmx-chord-suggestions")||"null");
+ if(storedSuggest&&Array.isArray(storedSuggest.notes)&&storedSuggest.notes.length<=2&&
+ storedSuggest.notes.every(function(n){return n&&Number.isInteger(n.s)&&n.s>=0&&n.s<6&&Number.isInteger(n.f)&&n.f>=0&&n.f<=12;})&&
+ Number.isInteger(storedSuggest.capo)&&storedSuggest.capo>=0&&storedSuggest.capo<=12){
+  SG={notes:storedSuggest.notes,capo:storedSuggest.capo,base:Number.isInteger(storedSuggest.base)?Math.max(1,Math.min(8,storedSuggest.base)):1};
+ }
+}catch(e){}
+function saveSuggest(){try{localStorage.setItem("lmx-chord-suggestions",JSON.stringify(SG));}catch(e){}}
+function suggestMidi(n){return TUN[n.s]+SG.capo+n.f;}
+function suggestPcs(){return Array.from(new Set(SG.notes.map(function(n){return suggestMidi(n)%12;})));}
+// Match full pitch-class sets, not incomplete reverse-identification guesses.
+function chordsContaining(pcs){
+ if(!pcs.length)return[];
+ var roots=CIRCLE_ROOTS.slice(),matches=[];
+ roots.forEach(function(root){SUGGEST_TYPES.forEach(function(q,index){
+  var tones=q[3].map(function(iv){return(root+iv)%12;});
+  if(pcs.every(function(pc){return tones.indexOf(pc)>=0;}))matches.push({root:root,q:q,tones:tones,order:index});
+ });});
+ return matches.sort(function(a,b){
+  function rank(root){return pcs.indexOf(root)>=0?12+CIRCLE_ROOTS.indexOf(root):CIRCLE_ROOTS.indexOf(root);}
+  return a.order-b.order||rank(a.root)-rank(b.root);
+ });
+}
+window.__chordsContaining=chordsContaining;
+function suggestionCategory(q){
+ var id=q[0];
+ if(id.indexOf("sus")>=0)return"sus";
+ if(id.indexOf("13")>=0)return"13";
+ if(id.indexOf("11")>=0)return"11";
+ if(id.indexOf("9")>=0)return"9";
+ if(id.indexOf("7")>=0)return"7";
+ if(["maj","min","5","dim","aug"].indexOf(id)>=0)return"basic";
+ return"other";
+}
+function invalidateSuggestions(focusCell){
+ stopPlayback();suggestApplied=[];suggestMatches=[];suggestRoot=null;suggestArpeggio=false;
+ saveSuggest();renderSuggestBoard(focusCell);renderSuggestResults();
+}
+function selectSuggestNote(s,f){
+ var index=SG.notes.findIndex(function(n){return n.s===s&&n.f===f;});
+ if(index>=0)SG.notes.splice(index,1);
+ else if(SG.notes.length<2)SG.notes.push({s:s,f:f});
+ else{$("shint").textContent=t("suggestLimit");return;}
+ invalidateSuggestions(f===0?"open-"+s:"fret-"+s+"-"+f);
+}
+function renderSuggestBoard(focusCell){
+ var grid=$("sneck"),last=SG.base+4;
+ grid.innerHTML="";grid.dataset.capo=String(SG.capo>0);grid.dataset.nut=String(SG.base===1);grid.setAttribute("role","group");grid.setAttribute("aria-label",t("suggestPick"));
+ function cell(tag,cls,text){var el=document.createElement(tag);el.className=cls;el.textContent=text;return el;}
+ function selected(s,f){return SG.notes.some(function(n){return n.s===s&&n.f===f;});}
+ grid.appendChild(cell("div","find-head",""));
+ ["E","A","D","G","B","e"].forEach(function(name,s){
+  var pc=(TUN[s]+SG.capo)%12,button=cell("button","find-open-string","");button.type="button";button.dataset.suggestCell="open-"+s;
+  button.dataset.state=selected(s,0)?"open":"unset";button.innerHTML="<span>"+FIND_NAMES[pc]+"</span>";
+  button.setAttribute("aria-pressed",String(selected(s,0)));button.setAttribute("aria-label",(6-s)+". "+t("stringLabel")+" "+name+" · "+t("openString")+" · "+FIND_NAMES[pc]);
+  button.onclick=function(){selectSuggestNote(s,0);};grid.appendChild(button);
+ });
+ for(var fret=SG.base;fret<=last;fret++)(function(f){
+  var actual=SG.capo+f;grid.appendChild(cell("div","find-head find-fretno",String(actual)));
+  TUN.forEach(function(midi,s){
+   var pc=(midi+actual)%12,button=cell("button","find-fret","");button.type="button";button.dataset.suggestCell="fret-"+s+"-"+f;button.style.setProperty("--sw",(4.2-s*.5).toFixed(2)+"px");
+   if(s===0)button.classList.add("edge-l");if(s===5)button.classList.add("edge-r");
+   var double=actual===12||actual===24,marker=[3,5,7,9,12,15,17,19,21,24].indexOf(actual)>=0&&(double?(s===1||s===3):s===2);
+   button.innerHTML=(marker?'<i class="find-inlay" aria-hidden="true"></i>':"")+"<span>"+FIND_NAMES[pc]+"</span>";
+   button.setAttribute("aria-pressed",String(selected(s,f)));button.setAttribute("aria-label",(6-s)+". "+t("stringLabel")+", "+actual+". "+t("fretLabel")+" · "+FIND_NAMES[pc]);
+   button.onclick=function(){selectSuggestNote(s,f);};grid.appendChild(button);
+  });
+ })(fret);
+ $("sprev").disabled=SG.base<=1;$("snext").disabled=SG.base>=8;
+ $("sprev").classList.toggle("has",SG.notes.some(function(n){return n.f>0&&n.f<SG.base;}));
+ $("snext").classList.toggle("has",SG.notes.some(function(n){return n.f>last;}));
+ $("srange").textContent=t("fretLabel")+" "+(SG.capo+SG.base)+"–"+(SG.capo+last);
+ $("slisten").disabled=!SG.notes.length;$("sapply").disabled=!SG.notes.length;$("sclear").disabled=!SG.notes.length;
+ var box=$("sselected");box.innerHTML="";
+ for(var i=0;i<2;i++)(function(index){
+  var n=SG.notes[index],button=cell("button","suggest-note"+(n?"":" empty"),"");button.type="button";
+  if(n){
+   var midi=suggestMidi(n),name=FIND_NAMES[midi%12]+(Math.floor(midi/12)-1);
+   var label=cell("span","",name),position=cell("small","",(6-n.s)+". "+t("stringLabel")+" · "+(n.f?String(SG.capo+n.f)+". "+t("fretLabel"):t("openString")));
+   label.appendChild(position);button.appendChild(label);button.appendChild(cell("span","remove","×"));button.setAttribute("aria-label",t("suggestRemove").replace("{note}",name));button.onclick=function(){selectSuggestNote(n.s,n.f);};
+  }else{button.textContent=t("suggestSlot").replace("{n}",index+1);button.disabled=true;}
+  box.appendChild(button);
+ })(i);
+ $("shint").textContent=SG.notes.length?(suggestApplied.length?(suggestApplied.length===1?t("suggestOne"):t("suggestTwo")):t("suggestPending")):t("suggestEmpty");
+ if(focusCell){var focus=grid.querySelector('[data-suggest-cell="'+focusCell+'"]');if(focus)focus.focus({preventScroll:true});}
+}
+function applySuggestions(){
+ suggestApplied=suggestPcs();suggestMatches=chordsContaining(suggestApplied);suggestRoot=null;suggestFamily="all";suggestRoleFilter="nonroot";
+ saveSuggest();renderSuggestBoard();renderSuggestResults();
+ if(matchMedia("(max-width:700px)").matches)$("scircle-title").scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'});
+}
+function suggestionToneName(root,q,interval){
+ var degrees={0:0,1:1,2:1,3:2,4:2,5:3,6:4,7:4,8:4,9:5,10:6,11:6},degree=degrees[interval];
+ if(interval===3&&q[0].indexOf("s9")>=0)degree=1;
+ if(interval===6&&q[0].indexOf("s11")>=0)degree=3;
+ if(interval===8&&q[0].indexOf("b13")>=0)degree=5;
+ if(interval===9&&q[0]==="dim7")degree=6;
+ var letters=["C","D","E","F","G","A","B"],rootLetter=FIND_NAMES[root][0],letter=letters[(letters.indexOf(rootLetter)+degree)%7],pc=(root+interval)%12;
+ var accidental=(pc-LET[letter]+18)%12-6;
+ return letter+(accidental>0?"♯".repeat(accidental):"♭".repeat(-accidental));
+}
+
+Object.assign(TX.tr,{
+ suggestRoleTitle:"Notanın görevi",suggestRoleNonroot:"Kök dışı",suggestRoleAll:"Tüm görevler",suggestRoleRoot:"Kök nota",
+ role_root:"kök",role_b2:"küçük 2’li",role_2:"2’li / sus2",role_b3:"küçük 3’lü",role_3:"büyük 3’lü",role_4:"4’lü / sus4",role_b5:"eksik 5’li",role_5:"tam 5’li",role_s5:"artık 5’li",role_6:"6’lı",role_bb7:"eksik 7’li",role_b7:"küçük 7’li",role_7:"büyük 7’li",role_b9:"♭9’lu",role_9:"9’lu",role_s9:"♯9’lu",role_11:"11’li",role_s11:"♯11’li",role_b13:"♭13’lü",role_13:"13’lü"
+});
+Object.assign(TX.en,{
+ suggestRoleTitle:"Note’s role",suggestRoleNonroot:"Non-root",suggestRoleAll:"All roles",suggestRoleRoot:"Root note",
+ role_root:"root",role_b2:"minor 2nd",role_2:"2nd / sus2",role_b3:"minor 3rd",role_3:"major 3rd",role_4:"4th / sus4",role_b5:"diminished 5th",role_5:"perfect 5th",role_s5:"augmented 5th",role_6:"6th",role_bb7:"diminished 7th",role_b7:"minor 7th",role_7:"major 7th",role_b9:"flat 9th",role_9:"9th",role_s9:"sharp 9th",role_11:"11th",role_s11:"sharp 11th",role_b13:"flat 13th",role_13:"13th"
+});
+function suggestionRole(q,interval){
+ var id=q[0];
+ if(interval===0)return{degree:1,key:"root"};
+ if(interval===1)return{degree:9,key:"b9"};
+ if(interval===2)return id.indexOf("sus2")>=0?{degree:2,key:"2"}:{degree:9,key:"9"};
+ if(interval===3)return id.indexOf("s9")>=0?{degree:9,key:"s9"}:{degree:3,key:"b3"};
+ if(interval===4)return{degree:3,key:"3"};
+ if(interval===5)return id.indexOf("sus4")>=0?{degree:4,key:"4"}:{degree:11,key:"11"};
+ if(interval===6)return id.indexOf("s11")>=0?{degree:11,key:"s11"}:{degree:5,key:"b5"};
+ if(interval===7)return{degree:5,key:"5"};
+ if(interval===8)return id.indexOf("b13")>=0?{degree:13,key:"b13"}:{degree:5,key:"s5"};
+ if(interval===9)return id==="dim7"?{degree:7,key:"bb7"}:id.indexOf("13")>=0?{degree:13,key:"13"}:{degree:6,key:"6"};
+ if(interval===10)return{degree:7,key:"b7"};
+ return{degree:7,key:"7"};
+}
+function matchesSuggestedRole(match){
+ if(suggestRoleFilter==="all")return true;
+ return suggestApplied.some(function(pc){var role=suggestionRole(match.q,(pc-match.root+12)%12);return suggestRoleFilter==="nonroot"?role.degree!==1:role.degree===Number(suggestRoleFilter);});
+}
+
+function renderSuggestResults(){
+ var focused=document.activeElement,restoreSelector=null;
+ if(focused&&focused.closest('#scircle,#srole,#sfilters')){
+  ['data-root','data-role-filter','data-family-filter'].some(function(attribute){
+   if(!focused.hasAttribute(attribute))return false;
+   restoreSelector='['+attribute+'="'+focused.getAttribute(attribute)+'"]';return true;
+  });
+ }
+ var circle=$("scircle");circle.innerHTML="";circle.setAttribute("aria-label",t("suggestRoots"));
+ var all=document.createElement("button");all.type="button";all.className="suggest-circle-all";all.dataset.root="all";all.textContent=t("suggestAll");all.disabled=!suggestApplied.length;all.setAttribute("aria-pressed",String(suggestRoot===null));all.onclick=function(){suggestRoot=null;renderSuggestResults();};circle.appendChild(all);
+ CIRCLE_ROOTS.forEach(function(root,index){
+  var count=suggestMatches.filter(function(m){return m.root===root&&matchesSuggestedRole(m)&&(suggestFamily==="all"||suggestionCategory(m.q)===suggestFamily);}).length,angle=index*Math.PI/6-Math.PI/2,button=document.createElement("button");button.type="button";
+  button.style.setProperty("--x",(96*Math.cos(angle)).toFixed(2)+"px");button.style.setProperty("--y",(96*Math.sin(angle)).toFixed(2)+"px");
+  button.textContent=FIND_NAMES[root];var small=document.createElement("small");small.textContent=count;button.appendChild(small);button.dataset.root=root;
+  button.disabled=!count;button.setAttribute("aria-pressed",String(suggestRoot===root));button.setAttribute("aria-label",FIND_NAMES[root]+" · "+count);button.onclick=function(){suggestRoot=suggestRoot===root?null:root;renderSuggestResults();};circle.appendChild(button);
+ });
+ var roleButtons=$("srole");roleButtons.innerHTML="";
+ [["nonroot",t("suggestRoleNonroot")],["all",t("suggestRoleAll")],["1",t("suggestRoleRoot")],["3",LANG==="tr"?"3’lü":"3rd"],["5",LANG==="tr"?"5’li":"5th"],["7",LANG==="tr"?"7’li":"7th"],["9",LANG==="tr"?"9’lu":"9th"],["11",LANG==="tr"?"11’li":"11th"],["13",LANG==="tr"?"13’lü":"13th"],["2","Sus2"],["4","Sus4"],["6",LANG==="tr"?"6’lı":"6th"]].forEach(function(entry){var button=document.createElement("button");button.type="button";button.dataset.roleFilter=entry[0];button.textContent=entry[1];button.setAttribute("aria-pressed",String(suggestRoleFilter===entry[0]));button.onclick=function(){suggestRoleFilter=entry[0];suggestRoot=null;renderSuggestResults();var active=$("srole").querySelector('[data-role-filter="'+entry[0]+'"]');if(active)active.focus({preventScroll:true});};roleButtons.appendChild(button);});
+ var filters=$("sfilters");filters.innerHTML="";filters.setAttribute("aria-label",t("suggestTypes"));
+ [["all",t("suggestAll")],["basic",t("suggestBasic")],["7","7"],["9","9"],["11","11"],["13","13"],["sus","Sus"],["other",t("suggestOther")]].forEach(function(entry){
+  var button=document.createElement("button");button.type="button";button.textContent=entry[1];button.dataset.familyFilter=entry[0];button.setAttribute("aria-pressed",String(suggestFamily===entry[0]));button.onclick=function(){suggestFamily=entry[0];suggestRoot=null;renderSuggestResults();};filters.appendChild(button);
+ });
+ var matches=suggestMatches.filter(function(m){return matchesSuggestedRole(m)&&(suggestRoot===null||m.root===suggestRoot)&&(suggestFamily==="all"||suggestionCategory(m.q)===suggestFamily);});
+ $("ssummary").textContent=suggestApplied.length?t("suggestMatches").replace("{notes}",suggestApplied.map(function(pc){return FIND_NAMES[pc];}).join(" + ")).replace("{count}",matches.length):t("suggestEmpty");
+ var results=$("sresults");results.innerHTML="";
+ if(suggestApplied.length&&!matches.length){var none=document.createElement("p");none.className="suggest-label";none.textContent=t("suggestNoResults");results.appendChild(none);}
+ matches.forEach(function(match){
+  var details=document.createElement("details"),summary=document.createElement("summary"),title=document.createElement("strong"),tones=document.createElement("span");details.className="suggest-result";details.dataset.root=match.root;details.dataset.quality=match.q[0];
+  title.textContent=FIND_NAMES[match.root]+match.q[2];tones.className="suggest-tones";tones.setAttribute("aria-label",t("suggestTone"));
+  match.tones.forEach(function(pc){var span=document.createElement("span");span.dataset.pc=pc;span.textContent=suggestionToneName(match.root,match.q,(pc-match.root+12)%12);if(suggestApplied.indexOf(pc)>=0)span.className="required-tone";tones.appendChild(span);});var main=document.createElement("span"),top=document.createElement("span"),roles=document.createElement("span");main.className="suggest-result-main";top.className="suggest-result-top";roles.className="suggest-roles";
+  top.appendChild(title);top.appendChild(tones);main.appendChild(top);
+  suggestApplied.forEach(function(pc){var role=suggestionRole(match.q,(pc-match.root+12)%12),badge=document.createElement("span"),spelling=suggestionToneName(match.root,match.q,(pc-match.root+12)%12),inputName=FIND_NAMES[pc];badge.dataset.role=role.key;badge.dataset.degree=role.degree;badge.dataset.pc=pc;
+   badge.textContent=inputName+(spelling!==inputName?" ("+spelling+")":"")+" · "+t("role_"+role.key);roles.appendChild(badge);
+  });main.appendChild(roles);summary.appendChild(main);details.appendChild(summary);
+  var rendered=false;
+  details.addEventListener("toggle",function(){if(!details.open||rendered)return;rendered=true;
+   var q=match.q,relativeRoot=(match.root-SG.capo+12)%12,required=suggestApplied.map(function(pc){return(pc-SG.capo+12)%12;}),voicings=gen(relativeRoot,q[3],q[0],q[4],required,24-SG.capo),toneNames={};
+   q[3].forEach(function(iv){toneNames[(match.root+iv)%12]=suggestionToneName(match.root,q,iv);});
+   var content=document.createElement("div");
+   if(!voicings.length){content.className="suggest-none";content.textContent=t("suggestNoVoicing");details.appendChild(content);return;}
+   content.className="suggest-voicings";
+   voicings.forEach(function(v,index){var button=document.createElement("button");button.type="button";button.className="suggest-voicing";button.innerHTML=draw(v,relativeRoot,SG.capo,toneNames)+"<small>"+(index+1)+" / "+voicings.length+" · "+t("findListen")+"</small>";button.setAttribute("aria-label",title.textContent+" · "+t("voicing")+" "+(index+1)+" · "+t("findListen"));var arpeggio=false;button.onclick=function(){strum({fr:v.fr.map(function(f){return f<0?-1:f+SG.capo;})},arpeggio);arpeggio=!arpeggio;};content.appendChild(button);});
+   var hint=document.createElement("p");hint.className="suggest-none";hint.textContent=(SG.capo?t("suggestCapoHint").replace("{n}",SG.capo)+" ":"")+t("suggestVoicings");details.appendChild(hint);details.appendChild(content);
+  });results.appendChild(details);
+ });
+ if(restoreSelector){var restored=$("sov").querySelector(restoreSelector);if(restored&&!restored.disabled)restored.focus({preventScroll:true});}
+}
+for(var cap=0;cap<=12;cap++){var option=document.createElement("option");option.value=cap;$("scapo").appendChild(option);}
+function localizeSuggest(){
+ $("sx").setAttribute("aria-label",t("closeL"));$("scapo").setAttribute("aria-label",t("capo"));$("sprev").setAttribute("aria-label",t("findPrevF"));$("snext").setAttribute("aria-label",t("findNextF"));
+ Array.prototype.forEach.call($("scapo").options,function(option,index){option.textContent=index?t("capo")+" "+index:t("noCapo");});
+ if(!$("sov").hidden){renderSuggestBoard();renderSuggestResults();}
+}
+function openSuggest(){
+ if(!$("ov").hidden)closeHelp();if(!$("fov").hidden)closeFinder();suggestOpener=document.activeElement;
+ $("sov").hidden=false;dialogState();$("scapo").value=SG.capo;renderSuggestBoard();renderSuggestResults();$("sx").focus({preventScroll:true});
+}
+function closeSuggest(){stopPlayback();$("sov").hidden=true;dialogState();if(suggestOpener&&suggestOpener.isConnected)suggestOpener.focus({preventScroll:true});}
+$("sopen").onclick=openSuggest;$("sx").onclick=closeSuggest;$("sapply").onclick=applySuggestions;
+$("sclear").onclick=function(){SG.notes=[];invalidateSuggestions();};
+$("scapo").onchange=function(){SG.capo=+this.value;invalidateSuggestions();};
+$("sprev").onclick=function(){SG.base=Math.max(1,SG.base-1);saveSuggest();renderSuggestBoard();if(this.disabled)$("snext").focus({preventScroll:true});};
+$("snext").onclick=function(){SG.base=Math.min(8,SG.base+1);saveSuggest();renderSuggestBoard();if(this.disabled)$("sprev").focus({preventScroll:true});};
+$("slisten").onclick=function(){strum({notes:SG.notes.map(function(n){return{midi:suggestMidi(n),string:n.s};})},suggestArpeggio);suggestArpeggio=!suggestArpeggio;};
+$("sov").addEventListener("click",function(e){if(e.target===$("sov"))closeSuggest();});
+
 function applyLang(){
   document.documentElement.lang=LANG;document.title=t("title");
   var m=document.querySelector("meta[name=description]");if(m)m.setAttribute("content",t("desc"));
@@ -879,6 +1195,7 @@ function applyLang(){
   $("fx").setAttribute("aria-label",t("closeL"));$("fcapo").setAttribute("aria-label",t("capo"));$("fprev").setAttribute("aria-label",t("findPrevF"));$("fnext").setAttribute("aria-label",t("findNextF"));
   Array.prototype.forEach.call($("fcapo").options,function(o,i){o.textContent=i?t("capo")+" "+i:t("noCapo");});
   if(!$("fov").hidden)renderFinder();
+  localizeSuggest();
   render(true);
 }
 function setTheme(m,save){
@@ -889,7 +1206,7 @@ function setTheme(m,save){
 document.querySelectorAll("#theme button").forEach(function(b){b.onclick=function(){setTheme(b.dataset.t,true);};});
 setTheme(document.documentElement.dataset.theme,false);
 var opener=null;
-function openHelp(){if(!$("fov").hidden)closeFinder();opener=document.activeElement;$("ov").hidden=false;dialogState();$("hx").focus();}
+function openHelp(){if(!$("sov").hidden)closeSuggest();if(!$("fov").hidden)closeFinder();opener=document.activeElement;$("ov").hidden=false;dialogState();$("hx").focus();}
 function closeHelp(){$("ov").hidden=true;dialogState();if(opener&&opener.focus)opener.focus();}
 $("hopen").onclick=openHelp;$("hx").onclick=closeHelp;
 $("ov").addEventListener("click",function(e){if(e.target===$("ov"))closeHelp();});
