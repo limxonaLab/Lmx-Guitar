@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="application-version" content="1.6">
+<meta name="application-version" content="1.7">
 <title>Lmx Chords Akor Bulucu – Gitar Akorları ve Parmak Pozisyonları</title>
 <meta name="description" content="Online gitar akor bulucu. Kök notayı ve akor türünü seç, gitar sapında nota ve parmak konumlarını 10 farklı varyasyonla gör.">
 <link rel="canonical" href="https://limxona.vercel.app/tr/chords">
@@ -210,6 +210,20 @@ svg .mx{stroke:var(--mut);stroke-width:1.4}
 .suggest-circle>button[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:var(--ink)}
 .suggest-circle>button.suggest-circle-all{--x:0px;--y:0px;width:70px;height:70px;font-size:.75rem}
 .suggest-circle button small{display:block;font-size:.6rem;line-height:1;color:inherit;opacity:.75}
+.suggest-key-tools{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 8px}
+.suggest-key-tools .suggest-circle-head{margin:0}
+.suggest-key-tools .seg button{padding:5px 11px;font-size:.76rem}
+.suggest-circle>button.is-out{opacity:.45}
+.suggest-circle>button.is-out[aria-pressed=true]{opacity:1}
+.suggest-key-note{font-size:.78rem;color:var(--mut);margin:-6px 0 12px;text-align:center;min-height:2.6em;line-height:1.5}
+.suggest-group{margin:12px 0 0;font-size:.78rem;font-weight:700;color:var(--fg)}
+.suggest-group:first-child{margin-top:0}
+.suggest-group small{display:block;font-weight:400;color:var(--mut);font-size:.72rem}
+.suggest-roman{flex:none;font-size:.72rem;font-weight:700;color:var(--acc);border:1px solid currentColor;border-radius:6px;padding:0 5px}
+.suggest-roman.out{color:var(--mut)}
+.suggest-far{border:1px dashed var(--line);border-radius:12px;padding:0 10px}
+.suggest-far>summary{cursor:pointer;font-size:.82rem;font-weight:600;color:var(--mut);padding:10px 0}
+.suggest-far-list{display:grid;gap:8px;padding:0 0 10px}
 .suggest-filters{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
 .suggest-filters button{font:600 .75rem var(--sans);border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--mut);padding:6px 9px;cursor:pointer}
 .suggest-filters button[aria-pressed=true]{border-color:var(--acc);background:var(--soft);color:var(--acc)}
@@ -251,7 +265,7 @@ svg .mx{stroke:var(--mut);stroke-width:1.4}
 <div class="wrap">
 <h1 class="sr-only" data-i="h1">Akor bulucu</h1>
 <header class="top">
-<a class="site" href="/"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 4v24M14.7 4v24M21.3 4v24M28 4v24M8 11h20M8 19h20"/><circle cx="14.7" cy="15" r="2.6" fill="currentColor" stroke="none"/><circle cx="21.3" cy="23" r="2.6" fill="currentColor" stroke="none"/></svg><span>LmX Chords <small>v1.6</small></span></a>
+<a class="site" href="/"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 4v24M14.7 4v24M21.3 4v24M28 4v24M8 11h20M8 19h20"/><circle cx="14.7" cy="15" r="2.6" fill="currentColor" stroke="none"/><circle cx="21.3" cy="23" r="2.6" fill="currentColor" stroke="none"/></svg><span>LmX Chords <small>vv1.7</small></span></a>
 <div class="trg"><div class="seg th" id="theme" role="group"><button type="button" data-t="light"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><span data-i="day">Gündüz</span></button><button type="button" data-t="dark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 14A9 9 0 0 1 10 3.2 9 9 0 1 0 20.8 14Z"/></svg><span data-i="night">Gece</span></button></div><div class="seg" id="lang" role="group" aria-label="Dil / Language"><button data-l="tr">TR</button><button data-l="en">EN</button></div><button class="help" id="hopen" type="button">?</button></div>
 </header>
 <div class="roots" id="roots"></div>
@@ -278,8 +292,9 @@ svg .mx{stroke:var(--mut);stroke-width:1.4}
     <p class="suggest-hint" id="shint" role="status" aria-live="polite"></p>
    </section>
    <section class="suggest-output" aria-labelledby="scircle-title">
-    <h3 id="scircle-title" class="suggest-circle-head" data-i="suggestCircle">Beşliler çemberi · kök filtresi</h3>
+    <div class="suggest-key-tools"><h3 id="scircle-title" class="suggest-circle-head" data-i="suggestCircle">Ton seç · beşliler çemberi</h3><div class="seg" id="skeymode" role="group"><button type="button" data-km="maj" data-i="keyMajor">Majör</button><button type="button" data-km="min" data-i="keyMinor">Minör</button></div></div>
     <div class="suggest-circle" id="scircle" role="group"></div>
+    <p class="suggest-key-note" id="skeynote" role="status" aria-live="polite"></p>
     <div class="suggest-role-filter"><h3 class="suggest-role-title" id="srole-title" data-i="suggestRoleTitle">Notanın görevi</h3><div class="suggest-role-buttons" id="srole" role="group" aria-labelledby="srole-title"></div></div>
     <h3 class="suggest-circle-head suggest-type-title" data-i="type">Akor türü</h3><div class="suggest-filters" id="sfilters" role="group"></div>
     <p class="suggest-summary" id="ssummary" role="status" aria-live="polite"></p>
@@ -974,13 +989,57 @@ Object.assign(TX.en,{
  suggestCapoHint:"Capo {n} · Diagram frets are relative to the capo.",suggestVoicings:"Tap a voicing to hear it. Tap again to hear an arpeggio.",suggestNoVoicing:"No playable guitar voicing retaining these notes was found under the current fingering rules.",
  suggestRemove:"Remove {note}",suggestSlot:"Note {n}",suggestTone:"Chord tones",suggestRoots:"Chord roots in circle-of-fifths order",suggestTypes:"Chord type filter"
 });
-TX.tr.hs.push(["Notadan akor bul", "<p><b>Akor Bul</b> ile sapta bir veya iki nota seçip <b>Uygula</b>’ya bas. Tek notada da tüm kökler taranır. Sonuçlar, seçtiğin notanın hangi akorun üçlüsü, beşlisi veya üst derecesi olduğunu gösterir. İki notada ikisini birden içeren akorlar bulunur. Varsayılan Kök dışı filtresi, tek notada aynı kökün akorlarını gizler; Tümü seçeneğiyle onları da gösterebilirsin. Beşliler çemberinden kökü, tür düğmelerinden akor ailesini filtrele. Bir sonucu açarak en fazla 10 basılışı görüp dinleyebilirsin. Seçtiğin sesler basılışlarda korunur. Kapo seçiliyse duyulan notalar kapoya göre hesaplanır; sonuç diyagramlarındaki perdeler kapoya göredir.</p>"]);
-TX.en.hs.push(["Chords from notes", "<p>Press <b>Find Chords</b>, pick one or two notes on the fretboard, then press <b>Apply</b>. All roots are searched even for one note. Results show whether the note is a third, fifth or another chord degree. Two notes find chords containing both pitches. The default Non-root filter hides same-root chords for a single note; choose All roles to include them. Use the circle of fifths to filter roots and the type buttons to filter chord families. Open a result to see and hear up to 10 voicings. Selected pitches are retained in the voicings. A capo transposes sounding notes; result diagrams show frets relative to the capo.</p>"]);
+TX.tr.hs.push(["Notadan akor bul",`<p><b>Ne işe yarar?</b> Çaldığın ya da şarkıda duyduğun bir notaya hangi akorların uyduğunu bulursun. Örneğin melodide E notası varsa bu E; C akorunun 3’lüsü, Am akorunun 5’lisi, Em akorunun kökü olabilir. Böylece melodiye eşlik edecek akorları, notanın akordaki görevini görerek seçersin.</p>
+<ol>
+<li><b>Notayı seç:</b> <b>Akor Bul</b>’a bas, sapta bir veya iki nota seç ve <b>Uygula</b>’ya bas. İki notada ikisini birden içeren akorlar bulunur. Kapo seçiliyse duyulan notalar kapoya göre hesaplanır.</li>
+<li><b>Tonu seç (isteğe bağlı):</b> Beşliler çemberinden şarkının tonunu seç. <b>Majör / Minör</b> düğmesi çemberi majör ya da minör tonlara çevirir; A minör, C majörle aynı konumdadır. Çemberdeki sayı, o tonun seslerinden kurulan ve notanı içeren akor sayısıdır. Sayı 0 ise (soluk düğme) nota o tonun dışındadır. Ortadaki düğme tonu temizler.</li>
+<li><b>Sonuçları oku:</b> Bir sonucu açınca en fazla 10 basılışı görür ve dinlersin (tekrar dokununca arpej çalar). Seçtiğin sesler basılışlarda korunur. Kapo varsa diyagramlardaki perdeler kapoya göredir.</li></ol>
+<p><b>Ton seçiliyken</b> sonuçlar üç gruba ayrılır:</p>
+<ul>
+<li><b>Tonun içinde:</b> yalnızca o tonun seslerinden kurulan akorlar (C majörde C, Dm, Em, F, G, Am, Bdim ve bunların 7’li, 9’lu halleri). Her akorun yanında tondaki derecesi romen rakamıyla yazar: I, ii, iii, IV, V, vi, vii°. Büyük harf majör, küçük harf minör akordur; ° eksik, ø yarı eksik, + artık akordur. Akorlar derecelerine göre dizilir.</li>
+<li><b>Yakın akorlar:</b> yalnızca bir sesi tondan dışarıda olanlar. Ödünç akorlar (C majörde Fm, B♭ gibi) ve ikincil dominantlar (C majörde A7, D7, E7 gibi) buraya girer. Şarkıya renk katmak için kullanılır.</li>
+<li><b>Tonun dışı:</b> geri kalan akorlar, katlanmış durumdadır. Gerekirse açarsın.</li></ul>
+<p>Minör tonda V akoru için yükseltilmiş 7. derece de tona dahildir (A minörde E ve E7 tonun içindedir). Ton seçilince akor adları tona göre yazılır (D♭ majörde C♯ değil D♭ gibi).</p>
+<p><b>Ton seçili değilken</b> tek nota için akorlar notanın görevine göre gruplanır: 3’lü, 5’li, 7’li, renk / uzantı (6, 9, 11, 13, sus) ve kök. Her sonucun altındaki rozet notanın o akordaki görevini de yazar.</p>
+<p><b>Filtreler:</b> “Notanın görevi” düğmeleriyle notanın yalnızca 3’lü, 5’li, 7’li vb. olduğu akorları göster. “Akor türü” düğmeleriyle aileyi (Temel, 7, 9, 11, 13, Sus) sınırla. Varsayılan “Kök dışı”, tek notada onu kök olarak kullanan akorları gizler; “Tüm görevler” ile gösterebilirsin. Seçtiğin nota, kapo ve ton bu tarayıcıda hatırlanır.</p>`]);
+TX.en.hs.push(["Chords from notes",`<p><b>What is it for?</b> Find which chords fit a note you play or hear in a song. For example, if the melody has an E, that E can be the 3rd of a C chord, the 5th of Am, or the root of Em. You choose chords to accompany the melody by seeing the role of the note in each chord.</p>
+<ol>
+<li><b>Pick the note:</b> press <b>Find Chords</b>, pick one or two notes on the fretboard and press <b>Apply</b>. Two notes find chords containing both. With a capo, the sounding notes are calculated relative to the capo.</li>
+<li><b>Pick the key (optional):</b> choose the song’s key on the circle of fifths. The <b>Major / Minor</b> button switches the circle between major and minor keys; A minor sits at the same position as C major. The number on each key is how many chords built from that key’s notes contain your note. A 0 (dimmed button) means the note is outside that key. The center button clears the key.</li>
+<li><b>Read the results:</b> open a result to see and hear up to 10 voicings (tap again for an arpeggio). Selected pitches are retained in the voicings. With a capo, diagram frets are relative to the capo.</li></ol>
+<p><b>With a key selected</b>, results are split into three groups:</p>
+<ul>
+<li><b>In the key:</b> chords built only from that key’s notes (in C major: C, Dm, Em, F, G, Am, Bdim and their 7th and 9th versions). Each chord shows its degree in the key as a Roman numeral: I, ii, iii, IV, V, vi, vii°. Upper case is major, lower case is minor; ° means diminished, ø half-diminished, + augmented. Chords are ordered by degree.</li>
+<li><b>Nearby chords:</b> chords with exactly one note outside the key. Borrowed chords (in C major, Fm or B♭) and secondary dominants (A7, D7, E7 in C major) land here. They add color to a song.</li>
+<li><b>Outside the key:</b> everything else, collapsed. Open it when you need it.</li></ul>
+<p>In a minor key the raised 7th is included so the V chord works (in A minor, E and E7 are in the key). With a key selected, chord names are spelled for that key (D♭ rather than C♯ in D♭ major).</p>
+<p><b>With no key selected</b>, a single note’s chords are grouped by its role: 3rd, 5th, 7th, color / extension (6, 9, 11, 13, sus) and root. The badge under each result also states the note’s role in that chord.</p>
+<p><b>Filters:</b> the “Note’s role” buttons show only chords where the note is a 3rd, 5th, 7th and so on. The “Chord type” buttons limit the family (Basic, 7, 9, 11, 13, Sus). The default “Non-root” hides chords that use a single note as their root; choose “All roles” to include them. Your notes, capo and key are remembered in this browser.</p>`]);
+Object.assign(TX.tr,{
+ keyMajor:"Majör",keyMinor:"Minör",suggestCircle:"Ton seç · beşliler çemberi",suggestRoots:"Tonlar, beşliler çemberi sırasıyla",
+ keyNone:"Ton yok",keyClear:"temizle",keyClearAria:"{key} tonunu temizle",keyLabelMaj:"{n} majör",keyLabelMin:"{n} minör",
+ keyHintNone:"Şarkının tonunu seçersen akorlar o tona göre gruplanır ve romen rakamıyla (I, IV, V…) gösterilir. Çemberdeki sayı, o tonda notanı içeren akor sayısıdır.",
+ keyHint:"{key} · sesler: {scale}. Akorlar tondaki derecelerine göre sıralanır.",
+ groupInKey:"Tonun içinde",groupInKeySub:"Yalnızca bu tonun seslerinden kurulan akorlar",
+ groupNear:"Yakın akorlar",groupNearSub:"Bir sesi tondan dışarıda: ödünç akor, ikincil dominant",groupFar:"Tonun dışı",
+ grp_3:"3’lü olduğu akorlar",grp_5:"5’li olduğu akorlar",grp_7:"7’li olduğu akorlar",grp_ext:"Renk / uzantı olduğu akorlar (6, 9, 11, 13, sus)",grp_1:"Kökü olduğu akorlar",
+ romanHint:"Tondaki derece (romen rakamı)"
+});
+Object.assign(TX.en,{
+ keyMajor:"Major",keyMinor:"Minor",suggestCircle:"Pick a key · circle of fifths",suggestRoots:"Keys in circle-of-fifths order",
+ keyNone:"No key",keyClear:"clear",keyClearAria:"Clear key {key}",keyLabelMaj:"{n} major",keyLabelMin:"{n} minor",
+ keyHintNone:"Pick the song’s key and chords are grouped for that key and shown with Roman numerals (I, IV, V…). The number on each key is how many chords in that key contain your note.",
+ keyHint:"{key} · notes: {scale}. Chords are ordered by their degree in the key.",
+ groupInKey:"In the key",groupInKeySub:"Chords built only from this key’s notes",
+ groupNear:"Nearby chords",groupNearSub:"One note outside the key: borrowed chords, secondary dominants",groupFar:"Outside the key",
+ grp_3:"Chords where it is the 3rd",grp_5:"Chords where it is the 5th",grp_7:"Chords where it is the 7th",grp_ext:"Chords where it is a color / extension (6, 9, 11, 13, sus)",grp_1:"Chords where it is the root",
+ romanHint:"Degree in the key (Roman numeral)"
+});
 var CIRCLE_ROOTS=[0,7,2,9,4,11,6,1,8,3,10,5];
 var SUGGEST_TYPES=FIND_TYPES.map(function(type){
  return Q.find(function(q){return q[0]===type.id;})||[type.id,type.symbol,type.symbol,type.ivs,type.required];
 });
-var SG={notes:[],capo:0,base:1},suggestOpener=null,suggestApplied=[],suggestMatches=[],suggestRoot=null,suggestFamily="all",suggestRoleFilter="nonroot",suggestArpeggio=false;
+var SG={notes:[],capo:0,base:1},suggestOpener=null,suggestApplied=[],suggestMatches=[],suggestKeyPos=null,suggestKeyMode="maj",suggestFamily="all",suggestRoleFilter="nonroot",suggestArpeggio=false;
 try{
  var storedSuggest=JSON.parse(localStorage.getItem("lmx-chord-suggestions")||"null");
  if(storedSuggest&&Array.isArray(storedSuggest.notes)&&storedSuggest.notes.length<=2&&
@@ -990,6 +1049,46 @@ try{
  }
 }catch(e){}
 function saveSuggest(){try{localStorage.setItem("lmx-chord-suggestions",JSON.stringify(SG));}catch(e){}}
+/* ---- Ton (tonalite) seçimi: beşliler çemberi konumu + majör / minör ---- */
+var KEY_MAJ=["C","G","D","A","E","B","F♯","D♭","A♭","E♭","B♭","F"],KEY_MIN=["Am","Em","Bm","F♯m","C♯m","G♯m","D♯m","B♭m","Fm","Cm","Gm","Dm"];
+var ROMAN=["I","♭II","II","♭III","III","IV","♭V","V","♭VI","VI","♭VII","VII"],FLAT_NAMES=["C","D♭","D","E♭","E","F","G♭","G","A♭","A","B♭","B"];
+try{
+  var storedKey=JSON.parse(localStorage.getItem("lmx-chord-key")||"null");
+  if(storedKey&&(storedKey.mode==="maj"||storedKey.mode==="min")){
+    suggestKeyMode=storedKey.mode;
+    if(Number.isInteger(storedKey.pos)&&storedKey.pos>=0&&storedKey.pos<12)suggestKeyPos=storedKey.pos;
+  }
+}catch(e){}
+function saveKey(){try{localStorage.setItem("lmx-chord-key",JSON.stringify({pos:suggestKeyPos,mode:suggestKeyMode}));}catch(e){}}
+function keyName(pos,mode){return mode==="min"?KEY_MIN[pos]:KEY_MAJ[pos];}
+function keyLabel(pos,mode){return t(mode==="min"?"keyLabelMin":"keyLabelMaj").replace("{n}",mode==="min"?KEY_MIN[pos].slice(0,-1):KEY_MAJ[pos]);}
+// Tonun sesleri: majör gam; minörde doğal minör + yükseltilmiş 7. derece (V akoru için).
+function keyContext(pos,mode){
+  var tonic=mode==="min"?(CIRCLE_ROOTS[pos]+9)%12:CIRCLE_ROOTS[pos];
+  var semis=mode==="min"?[0,2,3,5,7,8,10,11]:[0,2,4,5,7,9,11],letters=["C","D","E","F","G","A","B"];
+  var start=letters.indexOf(keyName(pos,mode)[0]),scale=[],spell={},names=[];
+  semis.forEach(function(sm,i){
+    var pc=(tonic+sm)%12,letter=letters[(start+Math.min(i,6))%7],acc=(pc-LET[letter]+18)%12-6;
+    var name=letter+(acc>0?"♯".repeat(acc):"♭".repeat(-acc));
+    scale.push(pc);spell[pc]=name;names.push(name);
+  });
+  return{tonic:tonic,scale:scale,spell:spell,names:names,flats:pos===0||pos>=7,
+    order:mode==="min"?[0,2,3,5,7,8,10,11,1,4,6,9]:[0,2,4,5,7,9,11,1,3,6,8,10]};
+}
+function romanNumeral(iv,q){
+  var s=ROMAN[iv],id=q[0];
+  if(q[3].indexOf(3)>=0&&q[3].indexOf(4)<0)s=s.replace(/[IV]+/,function(x){return x.toLowerCase();});
+  if(id==="dim"||id==="dim7")s+="°";else if(id==="m7b5")s+="ø";else if(id==="aug")s+="+";
+  return s;
+}
+// _tier: 0 = tonun içinde, 1 = bir ses dışarıda (yakın), 2 = uzak
+function annotateMatch(m,ctx){
+  if(!ctx){m._tier=0;m._deg=0;m._roman="";m._name=FIND_NAMES[m.root];return;}
+  var out=0;m.tones.forEach(function(pc){if(ctx.scale.indexOf(pc)<0)out++;});
+  var iv=(m.root-ctx.tonic+12)%12;
+  m._tier=out>1?2:out;m._deg=ctx.order.indexOf(iv);m._roman=romanNumeral(iv,m.q);
+  m._name=ctx.spell[m.root]||(ctx.flats?FLAT_NAMES:FIND_NAMES)[m.root];
+}
 function suggestMidi(n){return TUN[n.s]+SG.capo+n.f;}
 function suggestPcs(){return Array.from(new Set(SG.notes.map(function(n){return suggestMidi(n)%12;})));}
 // Match full pitch-class sets, not incomplete reverse-identification guesses.
@@ -1001,7 +1100,7 @@ function chordsContaining(pcs){
   if(pcs.every(function(pc){return tones.indexOf(pc)>=0;}))matches.push({root:root,q:q,tones:tones,order:index});
  });});
  return matches.sort(function(a,b){
-  function rank(root){return pcs.indexOf(root)>=0?12+CIRCLE_ROOTS.indexOf(root):CIRCLE_ROOTS.indexOf(root);}
+  function rank(root){return CIRCLE_ROOTS.indexOf(root);}
   return a.order-b.order||rank(a.root)-rank(b.root);
  });
 }
@@ -1017,7 +1116,7 @@ function suggestionCategory(q){
  return"other";
 }
 function invalidateSuggestions(focusCell){
- stopPlayback();suggestApplied=[];suggestMatches=[];suggestRoot=null;suggestArpeggio=false;
+ stopPlayback();suggestApplied=[];suggestMatches=[];suggestArpeggio=false;
  saveSuggest();renderSuggestBoard(focusCell);renderSuggestResults();
 }
 function selectSuggestNote(s,f){
@@ -1069,17 +1168,17 @@ function renderSuggestBoard(focusCell){
  if(focusCell){var focus=grid.querySelector('[data-suggest-cell="'+focusCell+'"]');if(focus)focus.focus({preventScroll:true});}
 }
 function applySuggestions(){
- suggestApplied=suggestPcs();suggestMatches=chordsContaining(suggestApplied);suggestRoot=null;suggestFamily="all";suggestRoleFilter="nonroot";
+ suggestApplied=suggestPcs();suggestMatches=chordsContaining(suggestApplied);suggestFamily="all";suggestRoleFilter="nonroot";
  saveSuggest();renderSuggestBoard();renderSuggestResults();
  if(matchMedia("(max-width:700px)").matches)$("scircle-title").scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'});
 }
-function suggestionToneName(root,q,interval){
+function suggestionToneName(root,q,interval,rootName){
  var degrees={0:0,1:1,2:1,3:2,4:2,5:3,6:4,7:4,8:4,9:5,10:6,11:6},degree=degrees[interval];
  if(interval===3&&q[0].indexOf("s9")>=0)degree=1;
  if(interval===6&&q[0].indexOf("s11")>=0)degree=3;
  if(interval===8&&q[0].indexOf("b13")>=0)degree=5;
  if(interval===9&&q[0]==="dim7")degree=6;
- var letters=["C","D","E","F","G","A","B"],rootLetter=FIND_NAMES[root][0],letter=letters[(letters.indexOf(rootLetter)+degree)%7],pc=(root+interval)%12;
+ var letters=["C","D","E","F","G","A","B"],rootLetter=(rootName||FIND_NAMES[root])[0],letter=letters[(letters.indexOf(rootLetter)+degree)%7],pc=(root+interval)%12;
  var accidental=(pc-LET[letter]+18)%12-6;
  return letter+(accidental>0?"♯".repeat(accidental):"♭".repeat(-accidental));
 }
@@ -1114,49 +1213,95 @@ function matchesSuggestedRole(match){
 
 function renderSuggestResults(){
  var focused=document.activeElement,restoreSelector=null;
- if(focused&&focused.closest('#scircle,#srole,#sfilters')){
-  ['data-root','data-role-filter','data-family-filter'].some(function(attribute){
+ if(focused&&focused.closest('#scircle,#skeymode,#srole,#sfilters')){
+  ['data-key-pos','data-km','data-role-filter','data-family-filter'].some(function(attribute){
    if(!focused.hasAttribute(attribute))return false;
    restoreSelector='['+attribute+'="'+focused.getAttribute(attribute)+'"]';return true;
   });
  }
+ var ctxSel=suggestKeyPos===null?null:keyContext(suggestKeyPos,suggestKeyMode);
+ function familyOk(m){return suggestFamily==="all"||suggestionCategory(m.q)===suggestFamily;}
+ function inKeyCount(pos){
+  var sc=keyContext(pos,suggestKeyMode).scale;
+  return suggestMatches.filter(function(m){return matchesSuggestedRole(m)&&familyOk(m)&&m.tones.every(function(pc){return sc.indexOf(pc)>=0;});}).length;
+ }
+ document.querySelectorAll("#skeymode button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.km===suggestKeyMode));});
  var circle=$("scircle");circle.innerHTML="";circle.setAttribute("aria-label",t("suggestRoots"));
- var all=document.createElement("button");all.type="button";all.className="suggest-circle-all";all.dataset.root="all";all.textContent=t("suggestAll");all.disabled=!suggestApplied.length;all.setAttribute("aria-pressed",String(suggestRoot===null));all.onclick=function(){suggestRoot=null;renderSuggestResults();};circle.appendChild(all);
+ var all=document.createElement("button");all.type="button";all.className="suggest-circle-all";all.dataset.keyPos="all";
+ all.disabled=suggestKeyPos===null;all.setAttribute("aria-pressed","false");
+ all.textContent=suggestKeyPos===null?t("keyNone"):keyName(suggestKeyPos,suggestKeyMode);
+ if(suggestKeyPos!==null){var clr=document.createElement("small");clr.textContent=t("keyClear");all.appendChild(clr);}
+ all.setAttribute("aria-label",suggestKeyPos===null?t("keyNone"):t("keyClearAria").replace("{key}",keyLabel(suggestKeyPos,suggestKeyMode)));
+ all.onclick=function(){suggestKeyPos=null;saveKey();renderSuggestResults();};circle.appendChild(all);
  CIRCLE_ROOTS.forEach(function(root,index){
-  var count=suggestMatches.filter(function(m){return m.root===root&&matchesSuggestedRole(m)&&(suggestFamily==="all"||suggestionCategory(m.q)===suggestFamily);}).length,angle=index*Math.PI/6-Math.PI/2,button=document.createElement("button");button.type="button";
+  var count=suggestApplied.length?inKeyCount(index):0,angle=index*Math.PI/6-Math.PI/2,button=document.createElement("button");button.type="button";
   button.style.setProperty("--x",(96*Math.cos(angle)).toFixed(2)+"px");button.style.setProperty("--y",(96*Math.sin(angle)).toFixed(2)+"px");
-  button.textContent=FIND_NAMES[root];var small=document.createElement("small");small.textContent=count;button.appendChild(small);button.dataset.root=root;
-  button.disabled=!count;button.setAttribute("aria-pressed",String(suggestRoot===root));button.setAttribute("aria-label",FIND_NAMES[root]+" · "+count);button.onclick=function(){suggestRoot=suggestRoot===root?null:root;renderSuggestResults();};circle.appendChild(button);
+  button.textContent=keyName(index,suggestKeyMode);
+  if(suggestApplied.length){var small=document.createElement("small");small.textContent=count;button.appendChild(small);if(!count)button.className="is-out";}
+  button.dataset.keyPos=index;button.setAttribute("aria-pressed",String(suggestKeyPos===index));
+  button.setAttribute("aria-label",keyLabel(index,suggestKeyMode)+(suggestApplied.length?" · "+count:""));
+  button.onclick=function(){suggestKeyPos=suggestKeyPos===index?null:index;saveKey();renderSuggestResults();};circle.appendChild(button);
  });
+ $("skeynote").textContent=ctxSel?t("keyHint").replace("{key}",keyLabel(suggestKeyPos,suggestKeyMode)).replace("{scale}",ctxSel.names.slice(0,7).join(" ")+(suggestKeyMode==="min"?" ("+ctxSel.names[7]+")":"")):t("keyHintNone");
  var roleButtons=$("srole");roleButtons.innerHTML="";
- [["nonroot",t("suggestRoleNonroot")],["all",t("suggestRoleAll")],["1",t("suggestRoleRoot")],["3",LANG==="tr"?"3’lü":"3rd"],["5",LANG==="tr"?"5’li":"5th"],["7",LANG==="tr"?"7’li":"7th"],["9",LANG==="tr"?"9’lu":"9th"],["11",LANG==="tr"?"11’li":"11th"],["13",LANG==="tr"?"13’lü":"13th"],["2","Sus2"],["4","Sus4"],["6",LANG==="tr"?"6’lı":"6th"]].forEach(function(entry){var button=document.createElement("button");button.type="button";button.dataset.roleFilter=entry[0];button.textContent=entry[1];button.setAttribute("aria-pressed",String(suggestRoleFilter===entry[0]));button.onclick=function(){suggestRoleFilter=entry[0];suggestRoot=null;renderSuggestResults();var active=$("srole").querySelector('[data-role-filter="'+entry[0]+'"]');if(active)active.focus({preventScroll:true});};roleButtons.appendChild(button);});
+ [["nonroot",t("suggestRoleNonroot")],["all",t("suggestRoleAll")],["1",t("suggestRoleRoot")],["3",LANG==="tr"?"3’lü":"3rd"],["5",LANG==="tr"?"5’li":"5th"],["7",LANG==="tr"?"7’li":"7th"],["9",LANG==="tr"?"9’lu":"9th"],["11",LANG==="tr"?"11’li":"11th"],["13",LANG==="tr"?"13’lü":"13th"],["2","Sus2"],["4","Sus4"],["6",LANG==="tr"?"6’lı":"6th"]].forEach(function(entry){var button=document.createElement("button");button.type="button";button.dataset.roleFilter=entry[0];button.textContent=entry[1];button.setAttribute("aria-pressed",String(suggestRoleFilter===entry[0]));button.onclick=function(){suggestRoleFilter=entry[0];renderSuggestResults();var active=$("srole").querySelector('[data-role-filter="'+entry[0]+'"]');if(active)active.focus({preventScroll:true});};roleButtons.appendChild(button);});
  var filters=$("sfilters");filters.innerHTML="";filters.setAttribute("aria-label",t("suggestTypes"));
  [["all",t("suggestAll")],["basic",t("suggestBasic")],["7","7"],["9","9"],["11","11"],["13","13"],["sus","Sus"],["other",t("suggestOther")]].forEach(function(entry){
-  var button=document.createElement("button");button.type="button";button.textContent=entry[1];button.dataset.familyFilter=entry[0];button.setAttribute("aria-pressed",String(suggestFamily===entry[0]));button.onclick=function(){suggestFamily=entry[0];suggestRoot=null;renderSuggestResults();};filters.appendChild(button);
+  var button=document.createElement("button");button.type="button";button.textContent=entry[1];button.dataset.familyFilter=entry[0];button.setAttribute("aria-pressed",String(suggestFamily===entry[0]));button.onclick=function(){suggestFamily=entry[0];renderSuggestResults();};filters.appendChild(button);
  });
- var matches=suggestMatches.filter(function(m){return matchesSuggestedRole(m)&&(suggestRoot===null||m.root===suggestRoot)&&(suggestFamily==="all"||suggestionCategory(m.q)===suggestFamily);});
- $("ssummary").textContent=suggestApplied.length?t("suggestMatches").replace("{notes}",suggestApplied.map(function(pc){return FIND_NAMES[pc];}).join(" + ")).replace("{count}",matches.length):t("suggestEmpty");
+ suggestMatches.forEach(function(m){annotateMatch(m,ctxSel);});
+ var matches=suggestMatches.filter(function(m){return matchesSuggestedRole(m)&&familyOk(m);});
+ // Tek nota, ton yok: göreve göre grupla (3'lü, 5'li, 7'li, renk, kök).
+ var ROLE_GROUPS=["3","5","7","ext","1"];
+ function roleGroupOf(m){var d=suggestionRole(m.q,(suggestApplied[0]-m.root+12)%12).degree;return d===3?"3":d===5?"5":d===7?"7":d===1?"1":"ext";}
+ if(ctxSel)matches.sort(function(a,b){return a._tier-b._tier||a._deg-b._deg||a.order-b.order;});
+ else if(suggestApplied.length===1)matches.sort(function(a,b){return ROLE_GROUPS.indexOf(roleGroupOf(a))-ROLE_GROUPS.indexOf(roleGroupOf(b));});
+ $("ssummary").textContent=suggestApplied.length?t("suggestMatches").replace("{notes}",suggestApplied.map(function(pc){return FIND_NAMES[pc];}).join(" + ")).replace("{count}",matches.length)+(ctxSel?" · "+keyLabel(suggestKeyPos,suggestKeyMode):""):t("suggestEmpty");
  var results=$("sresults");results.innerHTML="";
  if(suggestApplied.length&&!matches.length){var none=document.createElement("p");none.className="suggest-label";none.textContent=t("suggestNoResults");results.appendChild(none);}
- matches.forEach(function(match){
+ function buildResult(match){
   var details=document.createElement("details"),summary=document.createElement("summary"),title=document.createElement("strong"),tones=document.createElement("span");details.className="suggest-result";details.dataset.root=match.root;details.dataset.quality=match.q[0];
-  title.textContent=FIND_NAMES[match.root]+match.q[2];tones.className="suggest-tones";tones.setAttribute("aria-label",t("suggestTone"));
-  match.tones.forEach(function(pc){var span=document.createElement("span");span.dataset.pc=pc;span.textContent=suggestionToneName(match.root,match.q,(pc-match.root+12)%12);if(suggestApplied.indexOf(pc)>=0)span.className="required-tone";tones.appendChild(span);});var main=document.createElement("span"),top=document.createElement("span"),roles=document.createElement("span");main.className="suggest-result-main";top.className="suggest-result-top";roles.className="suggest-roles";
-  top.appendChild(title);top.appendChild(tones);main.appendChild(top);
-  suggestApplied.forEach(function(pc){var role=suggestionRole(match.q,(pc-match.root+12)%12),badge=document.createElement("span"),spelling=suggestionToneName(match.root,match.q,(pc-match.root+12)%12),inputName=FIND_NAMES[pc];badge.dataset.role=role.key;badge.dataset.degree=role.degree;badge.dataset.pc=pc;
+  title.textContent=match._name+match.q[2];tones.className="suggest-tones";tones.setAttribute("aria-label",t("suggestTone"));
+  match.tones.forEach(function(pc){var span=document.createElement("span");span.dataset.pc=pc;span.textContent=suggestionToneName(match.root,match.q,(pc-match.root+12)%12,match._name);if(suggestApplied.indexOf(pc)>=0)span.className="required-tone";tones.appendChild(span);});var main=document.createElement("span"),top=document.createElement("span"),roles=document.createElement("span");main.className="suggest-result-main";top.className="suggest-result-top";roles.className="suggest-roles";
+  top.appendChild(title);if(match._roman){var rb=document.createElement("span");rb.className="suggest-roman"+(match._tier?" out":"");rb.textContent=match._roman;rb.title=t("romanHint");top.appendChild(rb);}top.appendChild(tones);main.appendChild(top);
+  suggestApplied.forEach(function(pc){var role=suggestionRole(match.q,(pc-match.root+12)%12),badge=document.createElement("span"),spelling=suggestionToneName(match.root,match.q,(pc-match.root+12)%12,match._name),inputName=FIND_NAMES[pc];badge.dataset.role=role.key;badge.dataset.degree=role.degree;badge.dataset.pc=pc;
    badge.textContent=inputName+(spelling!==inputName?" ("+spelling+")":"")+" · "+t("role_"+role.key);roles.appendChild(badge);
   });main.appendChild(roles);summary.appendChild(main);details.appendChild(summary);
   var rendered=false;
   details.addEventListener("toggle",function(){if(!details.open||rendered)return;rendered=true;
    var q=match.q,relativeRoot=(match.root-SG.capo+12)%12,required=suggestApplied.map(function(pc){return(pc-SG.capo+12)%12;}),voicings=gen(relativeRoot,q[3],q[0],q[4],required,24-SG.capo),toneNames={};
-   q[3].forEach(function(iv){toneNames[(match.root+iv)%12]=suggestionToneName(match.root,q,iv);});
+   q[3].forEach(function(iv){toneNames[(match.root+iv)%12]=suggestionToneName(match.root,q,iv,match._name);});
    var content=document.createElement("div");
    if(!voicings.length){content.className="suggest-none";content.textContent=t("suggestNoVoicing");details.appendChild(content);return;}
    content.className="suggest-voicings";
    voicings.forEach(function(v,index){var button=document.createElement("button");button.type="button";button.className="suggest-voicing";button.innerHTML=draw(v,relativeRoot,SG.capo,toneNames)+"<small>"+(index+1)+" / "+voicings.length+" · "+t("findListen")+"</small>";button.setAttribute("aria-label",title.textContent+" · "+t("voicing")+" "+(index+1)+" · "+t("findListen"));var arpeggio=false;button.onclick=function(){strum({fr:v.fr.map(function(f){return f<0?-1:f+SG.capo;})},arpeggio);arpeggio=!arpeggio;};content.appendChild(button);});
    var hint=document.createElement("p");hint.className="suggest-none";hint.textContent=(SG.capo?t("suggestCapoHint").replace("{n}",SG.capo)+" ":"")+t("suggestVoicings");details.appendChild(hint);details.appendChild(content);
-  });results.appendChild(details);
- });
+  });return details;
+ }
+ function addGroup(title,sub){var h=document.createElement("div");h.className="suggest-group";h.textContent=title;if(sub){var sm=document.createElement("small");sm.textContent=sub;h.appendChild(sm);}results.appendChild(h);}
+ if(ctxSel){
+  [[0,"groupInKey","groupInKeySub"],[1,"groupNear","groupNearSub"]].forEach(function(g){
+   var list=matches.filter(function(m){return m._tier===g[0];});
+   if(!list.length)return;
+   addGroup(t(g[1])+" · "+list.length,t(g[2]));
+   list.forEach(function(m){results.appendChild(buildResult(m));});
+  });
+  var far=matches.filter(function(m){return m._tier===2;});
+  if(far.length){
+   var farBox=document.createElement("details"),farSum=document.createElement("summary"),farList=document.createElement("div");
+   farBox.className="suggest-far";farBox.open=!matches.some(function(m){return m._tier<2;});
+   farSum.textContent=t("groupFar")+" · "+far.length;farList.className="suggest-far-list";
+   far.forEach(function(m){farList.appendChild(buildResult(m));});
+   farBox.appendChild(farSum);farBox.appendChild(farList);results.appendChild(farBox);
+  }
+ }else if(suggestApplied.length===1){
+  ROLE_GROUPS.forEach(function(g){
+   var list=matches.filter(function(m){return roleGroupOf(m)===g;});
+   if(!list.length)return;
+   addGroup(t("grp_"+g)+" · "+list.length);
+   list.forEach(function(m){results.appendChild(buildResult(m));});
+  });
+ }else matches.forEach(function(m){results.appendChild(buildResult(m));});
  if(restoreSelector){var restored=$("sov").querySelector(restoreSelector);if(restored&&!restored.disabled)restored.focus({preventScroll:true});}
 }
 for(var cap=0;cap<=12;cap++){var option=document.createElement("option");option.value=cap;$("scapo").appendChild(option);}
@@ -1171,6 +1316,7 @@ function openSuggest(){
 }
 function closeSuggest(){stopPlayback();$("sov").hidden=true;dialogState();if(suggestOpener&&suggestOpener.isConnected)suggestOpener.focus({preventScroll:true});}
 $("sopen").onclick=openSuggest;$("sx").onclick=closeSuggest;$("sapply").onclick=applySuggestions;
+document.querySelectorAll("#skeymode button").forEach(function(b){b.onclick=function(){suggestKeyMode=b.dataset.km;saveKey();renderSuggestResults();};});
 $("sclear").onclick=function(){SG.notes=[];invalidateSuggestions();};
 $("scapo").onchange=function(){SG.capo=+this.value;invalidateSuggestions();};
 $("sprev").onclick=function(){SG.base=Math.max(1,SG.base-1);saveSuggest();renderSuggestBoard();if(this.disabled)$("snext").focus({preventScroll:true});};
