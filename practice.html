@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="application-version" content="1.6">
+<meta name="application-version" content="1.6.1">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>LmX Practice — YouTube Ders Çalışma ve A–B Döngü</title>
 <meta name="description" content="YouTube ders ve örnek parçalarını A–B döngüsüyle çalış. Büyük oynatma çubuğu, hassas ileri geri sarma ve süreli tekrar.">
@@ -190,7 +190,7 @@ body.video-fullscreen{overflow:hidden}
 </head>
 <body>
 <div class="app">
- <header class="header"><a class="brand" href="#" id="brand"><span class="brand-icon" aria-hidden="true"><img src="/lmx-practice-logo.svg" width="36" height="36" alt="" onload="this.parentElement.classList.add('has-logo')" onerror="this.hidden=true;this.nextElementSibling.removeAttribute('hidden')"><svg hidden viewBox="0 0 24 24"><path d="M18 7H7a4 4 0 0 0-4 4v1m3-8-3 3 3 3m0 7h11a4 4 0 0 0 4-4v-1m-3 8 3-3-3-3"/><path d="m10 9 5 3-5 3z"/></svg></span><span><h1>LmX Practice<span style="color:var(--accent)">.</span></h1><small data-i="tagline">Bir bölümü seç. Tekrar et. Oturt.</small></span></a><div class="header-actions"><span class="version">v1.6</span><div class="seg" role="group" aria-label="Language"><button data-lang="tr" type="button" aria-pressed="true">TR</button><button data-lang="en" type="button" aria-pressed="false">EN</button></div><div class="seg theme" role="group" data-aria="theme"><button id="light" type="button" data-aria="light" aria-pressed="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button id="dark" type="button" data-aria="dark" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M20.8 14A9 9 0 0 1 10 3.2 9 9 0 1 0 20.8 14Z"/></svg></button></div></div></header>
+ <header class="header"><a class="brand" href="#" id="brand"><span class="brand-icon" aria-hidden="true"><img src="/lmx-practice-logo.svg" width="36" height="36" alt="" onload="this.parentElement.classList.add('has-logo')" onerror="this.hidden=true;this.nextElementSibling.removeAttribute('hidden')"><svg hidden viewBox="0 0 24 24"><path d="M18 7H7a4 4 0 0 0-4 4v1m3-8-3 3 3 3m0 7h11a4 4 0 0 0 4-4v-1m-3 8 3-3-3-3"/><path d="m10 9 5 3-5 3z"/></svg></span><span><h1>LmX Practice<span style="color:var(--accent)">.</span></h1><small data-i="tagline">Bir bölümü seç. Tekrar et. Oturt.</small></span></a><div class="header-actions"><span class="version">v1.6.1</span><div class="seg" role="group" aria-label="Language"><button data-lang="tr" type="button" aria-pressed="true">TR</button><button data-lang="en" type="button" aria-pressed="false">EN</button></div><div class="seg theme" role="group" data-aria="theme"><button id="light" type="button" data-aria="light" aria-pressed="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button id="dark" type="button" data-aria="dark" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M20.8 14A9 9 0 0 1 10 3.2 9 9 0 1 0 20.8 14Z"/></svg></button></div></div></header>
  <main>
   <form class="url-bar" id="video-form"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 .1l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7-.1l-3 3a5 5 0 0 0 7 7l2-2"/></svg><label class="sr-only" for="video-url" data-i="urlLabel">YouTube video bağlantısı</label><input id="video-url" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://www.youtube.com/watch?v=…" required><button class="btn primary" id="load" type="submit" data-i="load">Video aç</button></form>
   <p class="form-note" id="url-message" role="status"></p>
@@ -304,7 +304,7 @@ class PracticeEngine{
    if(!this.seekHold.playing&&[1,3].includes(state)){this.player.pauseVideo();this.wantedPlaying=false;return;}
    this.wantedPlaying=this.seekHold.playing;
   }else if([1,3].includes(state))this.wantedPlaying=true;else if([0,2,5,-1].includes(state))this.wantedPlaying=false;
-  if(state===0&&this.loopActive&&!this.scrubbing&&this.clock()>this.jumpUntil)this.jumpLoop();
+  if(state===0&&this.loopActive&&this.wantedPlaying&&!this.scrubbing&&this.clock()>this.jumpUntil)this.jumpLoop();
  }
  seek(value,playing=this.wantedPlaying,allow=true){
   const target=clamp(value,0,this.duration||Math.max(0,value));this.current=target;
@@ -361,11 +361,19 @@ class PracticeEngine{
   }
  }
 }
+function normaliseVideoSettings(value){
+ if(!value||typeof value!=='object')return null;
+ const number=(key,fallback,min=0,max=Infinity)=>Number.isFinite(value[key])?clamp(value[key],min,max):fallback;
+ return {position:number('position',0),a:number('a',0),b:value.b===null?null:Number.isFinite(value.b)?Math.max(0,value.b):null,
+  mode:value.mode==='timed'?'timed':'infinite',limit:number('limit',300,1),rate:number('rate',1,.25,4),
+  loopActive:value.loopActive===true,elapsed:number('elapsed',0),laps:Math.floor(number('laps',0)),completed:value.completed===true,
+  volume:number('volume',100,0,100),muted:value.muted===true};
+}
 function normaliseHistory(value){
  if(!Array.isArray(value))return [];
  const seen=new Set();
  return value.filter(item=>item&&typeof item==='object'&&typeof item.id==='string'&&/^[\w-]{11}$/.test(item.id))
-  .map(item=>({id:item.id,title:typeof item.title==='string'?item.title.slice(0,300):'',start:Number.isFinite(item.start)?Math.max(0,item.start):0,openedAt:Number.isFinite(item.openedAt)?item.openedAt:0}))
+  .map(item=>({id:item.id,title:typeof item.title==='string'?item.title.slice(0,300):'',start:Number.isFinite(item.start)?Math.max(0,item.start):0,openedAt:Number.isFinite(item.openedAt)?item.openedAt:0,settings:normaliseVideoSettings(item.settings)}))
   .sort((a,b)=>b.openedAt-a.openedAt).filter(item=>{if(seen.has(item.id))return false;seen.add(item.id);return true;}).slice(0,20);
 }
 // UI
@@ -393,17 +401,48 @@ function setTheme(theme){document.documentElement.dataset.theme=theme;try{localS
 $('light').onclick=()=>setTheme('light');$('dark').onclick=()=>setTheme('dark');setTheme(document.documentElement.dataset.theme||'light');
 document.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{lang=b.dataset.lang;try{localStorage.setItem('lmx-lang',lang);}catch{}applyLang();});
 $('brand').onclick=e=>{e.preventDefault();window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'});};
-function snapshot(){return{version:1,videoId,position:engine?.duration?engine.current:pendingStart,a:pendingRestore?.a??engine?.a??0,b:pendingRestore?.b??engine?.b??null,mode:pendingRestore?.mode||engine?.mode||'infinite',limit:pendingRestore?.limit||engine?.limit||300,rate:pendingRestore?.rate||Number($('speed').value)||1};}
-function save(){if(!videoId)return;try{localStorage.setItem('lmx-practice-state',JSON.stringify(snapshot()));}catch{}}
-function restore(){try{const s=JSON.parse(localStorage.getItem('lmx-practice-state')||'null');if(!s||s.version!==1||!/^[\w-]{11}$/.test(s.videoId))return;pendingRestore={a:Number.isFinite(s.a)&&s.a>=0?s.a:0,b:Number.isFinite(s.b)&&s.b>=0?s.b:null,mode:s.mode==='timed'?'timed':'infinite',limit:Number.isFinite(s.limit)&&s.limit>=1?s.limit:300,rate:Number.isFinite(s.rate)?s.rate:1};$('video-url').value='https://www.youtube.com/watch?v='+s.videoId;openVideo({id:s.videoId,start:Number.isFinite(s.position)?Math.max(0,s.position):0},true);}catch{}}
+function capturePlaybackSettings(){
+ let volume=100,muted=false;try{volume=player.getVolume();muted=player.isMuted();}catch{}
+ return normaliseVideoSettings({position:engine.positionNow(),a:engine.a,b:engine.b,mode:engine.mode,limit:engine.limit,
+  rate:Number($('speed').value)||1,loopActive:engine.loopActive,elapsed:engine.elapsed,laps:engine.laps,completed:engine.completed,volume,muted});
+}
+function snapshot(){
+ const settings=engine?.duration&&durationSeen&&!loadingVideo?capturePlaybackSettings():normaliseVideoSettings(pendingRestore)||normaliseVideoSettings({position:pendingStart});
+ return {version:1,videoId,...settings};
+}
+function save(){
+ if(!videoId)return;
+ const state=snapshot();try{localStorage.setItem('lmx-practice-state',JSON.stringify(state));}catch{}
+ if(engine?.duration&&durationSeen&&!loadingVideo)updateHistorySettings(videoId,state);
+}
+function restore(){
+ try{
+  const state=JSON.parse(localStorage.getItem('lmx-practice-state')||'null');
+  if(!state||state.version!==1||!/^[\w-]{11}$/.test(state.videoId))return;
+  const settings=normaliseVideoSettings(state);
+  $('video-url').value='https://www.youtube.com/watch?v='+state.videoId;
+  openVideo({id:state.videoId,start:settings.position},true,false,settings);
+ }catch{}
+}
 const HISTORY_KEY='lmx-practice-history';
 let videoHistory=[];try{videoHistory=normaliseHistory(JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]'));}catch{}
 function writeHistory(){try{localStorage.setItem(HISTORY_KEY,JSON.stringify(videoHistory));}catch{}}
 function rememberVideo(id,start,title=''){
  const previous=videoHistory.find(item=>item.id===id);
  const newest=videoHistory.reduce((max,item)=>Math.max(max,item.openedAt),0);
- videoHistory=normaliseHistory([{id,start,title:title||previous?.title||'',openedAt:Math.max(Date.now(),newest+1)},...videoHistory.filter(item=>item.id!==id)]);
+ videoHistory=normaliseHistory([{id,start,settings:previous?.settings||null,title:title||previous?.title||'',openedAt:Math.max(Date.now(),newest+1)},...videoHistory.filter(item=>item.id!==id)]);
  writeHistory();drawHistory();
+}
+function updateHistorySettings(id,settings){
+ const entry=videoHistory.find(item=>item.id===id);if(!entry)return;
+ entry.settings=normaliseVideoSettings(settings);writeHistory();
+}
+function playHistoryVideo(id){
+ // Save the outgoing video before looking up the requested row; it may be the current video.
+ save();const entry=videoHistory.find(item=>item.id===id);if(!entry)return;
+ const settings=normaliseVideoSettings(entry.settings)||normaliseVideoSettings({position:entry.start});
+ $('video-url').value='https://www.youtube.com/watch?v='+id;$('video-url').removeAttribute('aria-invalid');
+ openVideo({id,start:settings.position},false,true,settings);
 }
 function updateHistoryTitle(id,title){
  const entry=videoHistory.find(item=>item.id===id);
@@ -423,13 +462,15 @@ function drawHistory(){
   const remove=document.createElement('button');remove.type='button';remove.className='history-delete';remove.textContent=t('historyDelete');remove.setAttribute('aria-label',t('historyDeleteAria').replace('{title}',name.textContent));
   remove.onclick=()=>removeHistoryVideo(item.id);
   const play=document.createElement('button');play.type='button';play.className='history-play';play.textContent='▶ '+t('historyPlay');play.setAttribute('aria-label',t('historyPlayAria').replace('{title}',name.textContent));
-  play.onclick=()=>{$('video-url').value='https://www.youtube.com/watch?v='+item.id;$('video-url').removeAttribute('aria-invalid');openVideo({id:item.id,start:item.start},false,true);};
+  play.onclick=()=>playHistoryVideo(item.id);
   actions.append(remove,play);row.append(name,actions);list.appendChild(row);
  }
 }
 function cueSelectedVideo(){
  const autoplay=pendingAutoplay;pendingAutoplay=false;
- if(autoplay)player.loadVideoById({videoId,startSeconds:pendingStart});
+ // Replace the previous pause guard with the new user's intent before loadVideoById emits PLAYING.
+ if(engine){engine.wantedPlaying=autoplay;engine.seekHold={playing:autoplay,until:performance.now()+900};}
+ if(autoplay){player.loadVideoById({videoId,startSeconds:pendingStart});player.playVideo();}
  else player.cueVideoById({videoId,startSeconds:pendingStart});
 }
 function initAPI(){
@@ -440,11 +481,11 @@ function initAPI(){
  apiTimeout=setTimeout(()=>{if(!window.YT?.Player){apiLoading=false;loadingVideo=false;script.remove();error('apiError');render();}},15000);
 }
 window.onYouTubeIframeAPIReady=()=>{apiLoading=false;clearTimeout(apiTimeout);createOrCue();};
-function openVideo(parsed,restoring=false,autoplay=false){
- if(!parsed)return;playerRebuild=null;pendingAutoplay=autoplay;const different=videoId!==parsed.id;
- if(engine){engine.stopLoop();engine.duration=0;engine.current=parsed.start;engine.state=-1;if(different){engine.a=0;engine.b=null;engine.elapsed=0;engine.laps=0;engine.completed=false;}}
- if(!restoring)pendingRestore=null;
- clearTimeout(seekPreviewTimer);seekPreviewTimer=null;if(engine)engine.scrubbing=false;
+function openVideo(parsed,restoring=false,autoplay=false,settings=null){
+ if(!parsed)return;if(engine?.duration&&durationSeen&&!loadingVideo)save();playerRebuild=null;pendingAutoplay=autoplay;const different=videoId!==parsed.id;
+ if(engine){engine.stopLoop(false);engine.seekHold=null;engine.wantedPlaying=autoplay;engine.duration=0;engine.current=parsed.start;engine.state=-1;if(different){engine.a=0;engine.b=null;engine.elapsed=0;engine.laps=0;engine.completed=false;}}
+ pendingRestore=normaliseVideoSettings(settings);
+ clearTimeout(seekPreviewTimer);seekPreviewTimer=null;clearTimeout(pointPreviewTimer);pointPreviewTimer=null;pointDrag=null;if(engine)engine.scrubbing=false;
  videoId=parsed.id;pendingStart=parsed.start;videoTitle='';durationSeen=0;loadingVideo=true;
  $('url-message').textContent='';$('error-box').hidden=true;$('youtube-link').href='https://www.youtube.com/watch?v='+videoId;
  render();if(!/^https?:$/.test(location.protocol)){loadingVideo=false;error('localFile');$('url-message').textContent=t('localFile');render();return;}
@@ -487,7 +528,18 @@ function updateMetadata(){
    engine.setDuration(duration);
    if(!durationSeen){
     engine.current=clamp(pendingStart,0,duration);durationSeen=duration;
-    if(pendingRestore){engine.a=clamp(pendingRestore.a,0,duration);engine.b=pendingRestore.b===null?duration:clamp(pendingRestore.b,0,duration);engine.mode=pendingRestore.mode;engine.limit=pendingRestore.limit;$('limit').value=formatTime(engine.limit);const rate=pendingRestore.rate;pendingRestore=null;syncRates(rate);engine.setPoint('a',engine.a);}
+    if(pendingRestore){
+     const settings=pendingRestore;pendingRestore=null;
+     engine.a=clamp(settings.a,0,duration);engine.b=settings.b===null?duration:clamp(settings.b,0,duration);
+     engine.setPoint('a',engine.a);engine.mode=settings.mode;engine.limit=settings.limit;$('limit').value=formatTime(engine.limit);
+     engine.elapsed=settings.elapsed;engine.laps=settings.laps;engine.completed=settings.completed;
+     engine.loopActive=settings.loopActive&&engine.validRange();engine.lastTick=performance.now();engine.jumpUntil=performance.now()+150;
+     syncRates(settings.rate);
+     try{player.setVolume(settings.volume);if(settings.muted)player.mute();else player.unMute();}catch{}
+     let position=clamp(pendingStart,0,duration);
+     if(engine.loopActive&&(position<engine.a||position>=engine.b))position=engine.a;
+     engine.seek(position,engine.wantedPlaying);
+    }
     else{if(engine.b===null)engine.b=duration;syncRates();}
     if(playerRebuild){
      const resume=playerRebuild;playerRebuild=null;
@@ -538,7 +590,7 @@ function render(){
  $('laps').textContent=e?.laps||0;$('session-time').textContent=formatTime(mode==='timed'?Math.ceil(Math.max(0,(e?.limit||300)-(e?.elapsed||0))):e?.elapsed||0);$('session-label').textContent=t(mode==='timed'?'remaining':'worked');
 }
 $('video-form').onsubmit=event=>{event.preventDefault();const parsed=parseYouTube($('video-url').value);if(!parsed){$('url-message').textContent=t('invalidUrl');$('video-url').setAttribute('aria-invalid','true');return;}$('video-url').removeAttribute('aria-invalid');openVideo(parsed);};
-$('play').onclick=()=>{if(engine){engine.togglePlay();render();}};
+$('play').onclick=()=>{if(engine){engine.togglePlay();render();save();}};
 function seekBy(delta){if(!engine)return;const pending=engine.seekHold&&performance.now()<engine.seekHold.until;const target=clamp((pending?engine.current:engine.positionNow())+delta,0,engine.duration);engine.endScrub(target);render();save();}
 $('back').onclick=()=>seekBy(-5);$('forward').onclick=()=>seekBy(5);
 $('back-one').onclick=()=>seekBy(-1);$('forward-one').onclick=()=>seekBy(1);
@@ -568,29 +620,44 @@ $('seek').addEventListener('change',finishSeek);window.addEventListener('pointer
 function setPoints(a,b){if(!engine)return;engine.setPoints(a,b);render();save();}
 function mark(which){if(!engine?.duration)return;engine.setPoint(which,engine.positionNow());render();save();}
 $('mark-in').onclick=()=>mark('a');$('mark-out').onclick=()=>mark('b');
-let pointDrag=null;
+let pointDrag=null,pointPreviewTimer=null,pointPreviewLast=-Infinity;
+function previewPoint(){
+ clearTimeout(pointPreviewTimer);pointPreviewTimer=null;
+ if(!pointDrag||!engine?.duration)return;
+ engine.seek(pointDrag.which==='a'?engine.a:engine.b,false);pointPreviewLast=performance.now();render();
+}
 function movePoint(event){
  if(!pointDrag||event.pointerId!==pointDrag.id||!engine?.duration)return;
  const rect=$('scrubber').getBoundingClientRect(),width=Math.max(1,rect.width-40);
  const value=clamp((event.clientX-rect.left-20)/width,0,1)*engine.duration;
- engine.setPoint(pointDrag.which,value);render();
+ engine.setPoint(pointDrag.which,value);
+ engine.current=pointDrag.which==='a'?engine.a:engine.b;
+ const wait=120-(performance.now()-pointPreviewLast);
+ if(wait<=0)previewPoint();else if(pointPreviewTimer===null)pointPreviewTimer=setTimeout(previewPoint,wait);
+ render();
 }
 for(const [id,which] of [['pin-a','a'],['pin-b','b']]){
  const button=$(id);
  button.addEventListener('pointerdown',event=>{
   if(event.button!==0||!engine?.duration)return;
   event.preventDefault();event.stopPropagation();
-  pointDrag={which,id:event.pointerId};button.setPointerCapture(event.pointerId);button.focus({preventScroll:true});
+  engine.account();pointDrag={which,id:event.pointerId};pointPreviewLast=-Infinity;
+  previewPoint();button.setPointerCapture(event.pointerId);button.focus({preventScroll:true});
  });
  button.addEventListener('pointermove',event=>{if(pointDrag){event.preventDefault();movePoint(event);}});
- const finish=event=>{if(pointDrag?.id!==event.pointerId)return;pointDrag=null;if(button.hasPointerCapture(event.pointerId))button.releasePointerCapture(event.pointerId);save();};
+ const finish=event=>{
+  if(pointDrag?.id!==event.pointerId)return;
+  previewPoint();pointDrag=null;pointPreviewLast=-Infinity;
+  if(button.hasPointerCapture(event.pointerId))button.releasePointerCapture(event.pointerId);
+  render();save();
+ };
  button.addEventListener('pointerup',finish);button.addEventListener('pointercancel',finish);button.addEventListener('lostpointercapture',finish);
  button.addEventListener('keydown',event=>{
   if(!engine?.duration||!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
   event.preventDefault();event.stopPropagation();
   const current=which==='a'?engine.a:engine.b;
   const value=event.key==='Home'?0:event.key==='End'?engine.duration:current+(event.key==='ArrowLeft'?-1:1)*FRAME_SECONDS*(event.shiftKey?5:1);
-  engine.setPoint(which,value);render();save();
+  engine.account();engine.seek(engine.current,false);engine.setPoint(which,value);engine.seek(which==='a'?engine.a:engine.b,false);render();save();
  });
 }
 
@@ -599,14 +666,14 @@ function updateLimit(){const value=readTime($('limit').value);if(value===null||v
 $('limit').onchange=updateLimit;$('limit').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();if(updateLimit())$('limit').blur();}};
 $('loop-toggle').onclick=()=>{if(!engine)return;if(engine.loopActive)engine.stopLoop();else{if(engine.mode==='timed'&&!updateLimit())return;if(!engine.startLoop())notice('invalidRange');}render();save();};
 $('speed').onchange=()=>{try{player.setPlaybackRate(Number($('speed').value));}catch{notice('rateUnavailable');}};
-$('volume-toggle').onclick=()=>{if(!playerReady)return;try{if(player.isMuted())player.unMute();else player.mute();}catch{}render();};
-$('volume').oninput=()=>{if(!playerReady)return;try{player.setVolume(Number($('volume').value));if(Number($('volume').value)>0)player.unMute();else player.mute();}catch{}};
+$('volume-toggle').onclick=()=>{if(!playerReady)return;try{if(player.isMuted())player.unMute();else player.mute();}catch{}render();save();};
+$('volume').oninput=()=>{if(!playerReady)return;try{player.setVolume(Number($('volume').value));if(Number($('volume').value)>0)player.unMute();else player.mute();}catch{}save();};
 $('quality-toggle').onclick=()=>{
  if(!playerReady||!engine?.duration)return;
  engine.account();const start=engine.positionNow();
  let volume=100,muted=false;try{volume=player.getVolume();muted=player.isMuted();}catch{}
  playerRebuild={playing:engine.wantedPlaying,loopActive:engine.loopActive,elapsed:engine.elapsed,laps:engine.laps,completed:engine.completed,volume,muted};
- pendingRestore={a:engine.a,b:engine.b,mode:engine.mode,limit:engine.limit,rate:Number($('speed').value)||1};
+ pendingRestore=normaliseVideoSettings({a:engine.a,b:engine.b,mode:engine.mode,limit:engine.limit,rate:Number($('speed').value)||1});
  pendingStart=start;pendingAutoplay=false;nativeControls=!nativeControls;durationSeen=0;loadingVideo=true;
  engine.stopLoop();const old=player;player=null;engine=null;playerReady=false;
  try{old.destroy();}catch{}
@@ -634,7 +701,7 @@ function handlePlaybackKey(e){
  if(e.code==='Space'){
   e.preventDefault();e.stopImmediatePropagation();
   if(e.repeat)return;
-  finishSeek();engine.togglePlay();render();return;
+  finishSeek();engine.togglePlay();render();save();return;
  }
  if(e.repeat||e.target.closest('input,button,a,summary'))return;
  if(e.key==='ArrowLeft'){e.preventDefault();seekBy(-5);}
