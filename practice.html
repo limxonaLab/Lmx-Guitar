@@ -3,10 +3,36 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="application-version" content="1.2">
+<meta name="application-version" content="1.5">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>LmX Practice — YouTube Ders Çalışma ve A–B Döngü</title>
 <meta name="description" content="YouTube ders ve örnek parçalarını A–B döngüsüyle çalış. Büyük oynatma çubuğu, hassas ileri geri sarma ve süreli tekrar.">
+<!-- Google Search Console -->
+<meta name="google-site-verification" content="BXQYRq0FzpFqQAi3HTzZPCIpY7Ohp1PLgaTGQBz2Xt0">
+<!-- Favicon ve ikonlar -->
+<link rel="icon" href="/lmx-practice-logo.ico" sizes="any">
+<link rel="icon" href="/lmx-practice-logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/lmx-practice-logo.png" sizes="512x512">
+<link rel="canonical" href="https://limxona.vercel.app/tr/practice">
+<link rel="alternate" hreflang="tr" href="https://limxona.vercel.app/tr/practice">
+<link rel="alternate" hreflang="en" href="https://limxona.vercel.app/en/practice">
+<link rel="alternate" hreflang="x-default" href="https://limxona.vercel.app/tr/practice">
+<!-- Open Graph / Facebook / WhatsApp -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LmX Practice">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:url" content="https://limxona.vercel.app/tr/practice">
+<meta property="og:title" content="LmX Practice — YouTube Ders Çalışma ve A–B Döngü">
+<meta property="og:description" content="YouTube ders ve örnek parçalarını A–B döngüsüyle çalış. Büyük oynatma çubuğu, hassas ileri geri sarma ve süreli tekrar.">
+<meta property="og:image" content="https://limxona.vercel.app/og-image.png">
+<meta property="og:image:alt" content="LmX Practice">
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://limxona.vercel.app/tr/practice">
+<meta name="twitter:title" content="LmX Practice — YouTube Ders Çalışma ve A–B Döngü">
+<meta name="twitter:description" content="YouTube ders ve örnek parçalarını A–B döngüsüyle çalış. Büyük oynatma çubuğu, hassas ileri geri sarma ve süreli tekrar.">
+<meta name="twitter:image" content="https://limxona.vercel.app/og-image.png">
+<meta name="twitter:image:alt" content="LmX Practice">
 <script>try{const theme=localStorage.getItem('metronom-theme');document.documentElement.dataset.theme=theme==='light'||theme==='dark'?theme:(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');}catch{document.documentElement.dataset.theme='light';}</script>
 <style>
 :root{color-scheme:light;--bg:#f5f3f1;--card:#fff;--fg:#312729;--mut:#827579;--line:#e8e0e0;--accent:#b43c46;--accent2:#95333d;--soft:#fbebed;--button:#f8f5f4;--in:#ab3847;--out:#80607c;--shadow:0 8px 32px #43192304;--radius:20px;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -69,11 +95,42 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px}
 }
 @media(max-width:350px){.compact-bottom #loop-toggle{flex-basis:100%;order:3}.compact-bottom .limit-wrap{flex:1}.compact-bottom .rate-control{margin-left:auto}}
 
+
+.brand-icon{flex:none}.brand-icon img{width:100%;height:100%;display:block;object-fit:contain}.brand-icon.has-logo{background:transparent}
+/* v1.5: precise playhead, visible loop boundaries and compact jog controls. */
+:root{--in:#007c9b;--out:#c74f00}
+:root[data-theme=dark]{--in:#55d9f6;--out:#ffad63}
+.scrubber{padding-top:30px;padding-bottom:14px}
+.track-art{top:54px}
+input[type=range]{z-index:2}
+input[type=range]::-webkit-slider-thumb{background:radial-gradient(circle at center,var(--fg) 0 1px,transparent 1.3px);border:2px solid var(--accent);box-shadow:none}
+input[type=range]::-moz-range-thumb{width:36px;height:36px;background:radial-gradient(circle at center,var(--fg) 0 1px,transparent 1.3px);border:2px solid var(--accent);box-shadow:none}
+.timeline-pin,.timeline-pin.out{top:19px;width:30px;height:25px;min-width:30px!important;display:grid;place-items:center;border:0;border-radius:6px;background:var(--in);color:#fff;font:800 12px system-ui,sans-serif;pointer-events:auto;z-index:5;padding:0;touch-action:none;cursor:ew-resize;transform:translateX(-100%);box-shadow:0 1px 4px #0002}
+.timeline-pin::after{content:"";position:absolute;top:100%;left:100%;transform:translateX(-50%);border-left:6px solid transparent;border-right:6px solid transparent;border-top:10px solid var(--in)}
+.timeline-pin.out{background:var(--out);transform:none}
+.timeline-pin.out::after{left:0;border-top-color:var(--out)}
+.timeline-pin:active:not(:disabled){transform:translateX(-100%)}
+.timeline-pin.out:active:not(:disabled){transform:none}
+:root[data-theme=dark] .timeline-pin{color:#08252c}
+:root[data-theme=dark] .timeline-pin.out{color:#39200d}
+.point-quick.a{background:var(--in);border-color:var(--in);color:#fff}
+.point-quick.b{background:var(--out);border-color:var(--out);color:#fff}
+:root[data-theme=dark] .point-quick.a{color:#08252c}
+:root[data-theme=dark] .point-quick.b{color:#39200d}
+.transport{grid-template-columns:72px 64px minmax(100px,1fr) 64px 72px;grid-template-areas:"back5 back1 play next1 next5" "frames5 frame1 play frame2 frames2";gap:7px}
+.back-five{grid-area:back5}.back-one{grid-area:back1}.forward-one{grid-area:next1}.forward-five{grid-area:next5}
+.back-five-frames{grid-area:frames5}.back-frame{grid-area:frame1}.forward-frame{grid-area:frame2}.forward-five-frames{grid-area:frames2}
+.transport .play{grid-area:play;height:100%;flex-direction:column;gap:8px}
+.transport .skip{height:44px;display:flex;flex-direction:column;justify-content:center;gap:0;line-height:1.25}
+.transport .skip b{font-size:14px;font-weight:650}.transport .skip small{font-size:9px;font-weight:500;color:var(--mut)}
+.transport .frame-btn{background:var(--soft)}
+@media(max-width:620px){.transport{grid-template-columns:39px 35px minmax(76px,1fr) 35px 39px;gap:5px}.transport .skip{height:44px}.transport .skip b{font-size:13px}.transport .skip small{font-size:8px}.transport .play{font-size:12px}}
+
 </style>
 </head>
 <body>
 <div class="app">
- <header class="header"><a class="brand" href="#" id="brand"><span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 7H7a4 4 0 0 0-4 4v1m3-8-3 3 3 3m0 7h11a4 4 0 0 0 4-4v-1m-3 8 3-3-3-3"/><path d="m10 9 5 3-5 3z"/></svg></span><span><h1>LmX Practice<span style="color:var(--accent)">.</span></h1><small data-i="tagline">Bir bölümü seç. Tekrar et. Oturt.</small></span></a><div class="header-actions"><span class="version">v1.1</span><div class="seg" role="group" aria-label="Language"><button data-lang="tr" type="button" aria-pressed="true">TR</button><button data-lang="en" type="button" aria-pressed="false">EN</button></div><div class="seg theme" role="group" data-aria="theme"><button id="light" type="button" data-aria="light" aria-pressed="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button id="dark" type="button" data-aria="dark" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M20.8 14A9 9 0 0 1 10 3.2 9 9 0 1 0 20.8 14Z"/></svg></button></div></div></header>
+ <header class="header"><a class="brand" href="#" id="brand"><span class="brand-icon" aria-hidden="true"><img src="/lmx-practice-logo.svg" width="36" height="36" alt="" onload="this.parentElement.classList.add('has-logo')" onerror="this.hidden=true;this.nextElementSibling.removeAttribute('hidden')"><svg hidden viewBox="0 0 24 24"><path d="M18 7H7a4 4 0 0 0-4 4v1m3-8-3 3 3 3m0 7h11a4 4 0 0 0 4-4v-1m-3 8 3-3-3-3"/><path d="m10 9 5 3-5 3z"/></svg></span><span><h1>LmX Practice<span style="color:var(--accent)">.</span></h1><small data-i="tagline">Bir bölümü seç. Tekrar et. Oturt.</small></span></a><div class="header-actions"><span class="version">v1.5</span><div class="seg" role="group" aria-label="Language"><button data-lang="tr" type="button" aria-pressed="true">TR</button><button data-lang="en" type="button" aria-pressed="false">EN</button></div><div class="seg theme" role="group" data-aria="theme"><button id="light" type="button" data-aria="light" aria-pressed="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button id="dark" type="button" data-aria="dark" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M20.8 14A9 9 0 0 1 10 3.2 9 9 0 1 0 20.8 14Z"/></svg></button></div></div></header>
  <main>
   <form class="url-bar" id="video-form"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 .1l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7-.1l-3 3a5 5 0 0 0 7 7l2-2"/></svg><label class="sr-only" for="video-url" data-i="urlLabel">YouTube video bağlantısı</label><input id="video-url" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://www.youtube.com/watch?v=…" required><button class="btn primary" id="load" type="submit" data-i="load">Video aç</button></form>
   <p class="form-note" id="url-message" role="status"></p>
@@ -82,18 +139,22 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px}
   <div class="video-caption"><h2 class="video-title" id="video-title" data-i="noVideo">Video henüz seçilmedi</h2><span class="status" role="status"><i></i><span id="status-text">Hazır</span></span></div>
   <section class="video-stage" data-aria="videoArea"><div class="player-mount" id="player-host"></div><div class="empty-video" id="empty-video"><div class="empty-icon"><svg viewBox="0 0 32 32"><rect x="3" y="7" width="26" height="18" rx="6"/><path d="m13 12 8 4-8 4z"/></svg></div><h2 data-i="emptyTitle">Dersin burada, odağın müzikte.</h2><p data-i="emptyLead">YouTube bağlantısını yukarıya yapıştırarak başla.</p><div class="tiny"><i></i><span data-i="emptyTiny">İzle · Böl · Tekrar et</span><i></i></div></div></section>
   <section class="card playback-card compact-controls" data-aria="playbackArea">
-   <div class="scrubber" id="scrubber"><div class="track-art"><div class="buffer-line"></div><div class="selection-line"></div><div class="progress-line"></div></div><label class="sr-only" for="seek" data-i="seekLabel">Videoda konum</label><input id="seek" type="range" min="0" max="1" value="0" step="0.01" disabled><span class="timeline-pin" id="pin-a" aria-hidden="true" hidden></span><span class="timeline-pin out" id="pin-b" aria-hidden="true" hidden></span></div>
+   <div class="scrubber" id="scrubber"><div class="track-art"><div class="buffer-line"></div><div class="selection-line"></div><div class="progress-line"></div></div><label class="sr-only" for="seek" data-i="seekLabel">Videoda konum</label><input id="seek" type="range" min="0" max="1" value="0" step="0.01" disabled><button class="timeline-pin" id="pin-a" type="button" data-aria="adjustA" hidden>A</button><button class="timeline-pin out" id="pin-b" type="button" data-aria="adjustB" hidden>B</button></div>
    <div class="quick-loop-row">
     <button class="point-quick a" id="mark-in" type="button" data-aria="setA" disabled><span><b>A</b><small>IN</small></span><strong id="a-value">00:00.0</strong></button>
     <button class="point-quick b" id="mark-out" type="button" data-aria="setB" disabled><span><b>B</b><small>OUT</small></span><strong id="b-value">—</strong></button>
     <div class="seg loop-mode" role="group" data-aria="repeatMode"><button type="button" data-mode="infinite" aria-pressed="true" data-i="infinite">∞ Sonsuz</button><button type="button" data-mode="timed" aria-pressed="false" data-i="timed">Süreli</button></div>
    </div>
    <div class="transport">
-    <button class="skip" id="back" type="button" data-aria="back" disabled>−5</button>
-    <button class="skip frame-btn" id="frame-back" type="button" data-aria="frameBack" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5v14M18 5l-9 7 9 7z"/></svg><small data-i="frame">Kare</small></button>
+    <button class="skip seconds back-five" id="back" type="button" data-aria="back" disabled><b>−5</b><small data-i="seconds">sn</small></button>
+    <button class="skip seconds back-one" id="back-one" type="button" data-aria="backOne" disabled><b>−1</b><small data-i="seconds">sn</small></button>
     <button class="btn primary play" id="play" type="button" aria-pressed="false" disabled><svg viewBox="0 0 24 24" id="play-icon"><path d="m7 4 14 8-14 8z"/></svg><span id="play-text" data-i="play">Oynat</span></button>
-    <button class="skip frame-btn" id="frame-forward" type="button" data-aria="frameForward" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 5v14M6 5l9 7-9 7z"/></svg><small data-i="frame">Kare</small></button>
-    <button class="skip" id="forward" type="button" data-aria="forward" disabled>+5</button>
+    <button class="skip seconds forward-one" id="forward-one" type="button" data-aria="forwardOne" disabled><b>+1</b><small data-i="seconds">sn</small></button>
+    <button class="skip seconds forward-five" id="forward" type="button" data-aria="forward" disabled><b>+5</b><small data-i="seconds">sn</small></button>
+    <button class="skip frame-btn back-five-frames" id="frames-back" type="button" data-aria="framesBack" disabled><b>−5</b><small data-i="frame">Kare</small></button>
+    <button class="skip frame-btn back-frame" id="frame-back" type="button" data-aria="frameBack" disabled><b>−1</b><small data-i="frame">Kare</small></button>
+    <button class="skip frame-btn forward-frame" id="frame-forward" type="button" data-aria="frameForward" disabled><b>+1</b><small data-i="frame">Kare</small></button>
+    <button class="skip frame-btn forward-five-frames" id="frames-forward" type="button" data-aria="framesForward" disabled><b>+5</b><small data-i="frame">Kare</small></button>
    </div>
    <div class="compact-bottom">
     <label class="limit-wrap" id="limit-wrap" hidden><span data-i="workTime">Süre</span><input id="limit" type="text" value="05:00" autocomplete="off" inputmode="numeric" data-aria="workTime" spellcheck="false"></label>
@@ -119,6 +180,7 @@ function formatTime(n,decimal=false){
  n=Math.max(0,Number(n)||0);const tenths=Math.floor(n*10+.00001),h=Math.floor(tenths/36000),m=Math.floor(tenths/600)%60,s=Math.floor(tenths/10)%60;
  return(h?String(h)+':'+String(m).padStart(2,'0'):String(m).padStart(2,'0'))+':'+String(s).padStart(2,'0')+(decimal?'.'+tenths%10:'');
 }
+function formatPoint(n){const hundredths=Math.round(Math.max(0,Number(n)||0)*100);return formatTime(hundredths/100)+'.'+String(hundredths%100).padStart(2,'0');}
 function parseYouTube(text){
  let s=String(text).trim();if(/^[\w-]{11}$/.test(s))return{id:s,start:0};
  if(!/^https?:\/\//i.test(s))s='https://'+s;
@@ -136,6 +198,7 @@ function parseYouTube(text){
  else{const time=readTime(raw);if(time!==null)start=time;}
  return{id,start:Math.max(0,start)};
 }
+const FRAME_SECONDS=1/30;
 class PracticeEngine{
  constructor(player,clock=()=>performance.now()){
   this.player=player;this.clock=clock;this.duration=0;this.current=0;this.state=-1;this.wantedPlaying=false;this.a=0;this.b=null;this.loopActive=false;this.mode='infinite';this.limit=300;this.elapsed=0;this.laps=0;this.completed=false;this.scrubbing=false;this.scrubPlaying=false;this.seekHold=null;this.jumpUntil=0;this.lastTick=clock();this.onNotice=()=>{};
@@ -152,7 +215,7 @@ class PracticeEngine{
   if(this.loopActive&&(target<this.a||target>=this.b))this.stopLoop(false);
   this.seek(target,false);
  }
- validRange(){return this.duration>0&&Number.isFinite(this.a)&&Number.isFinite(this.b)&&this.a>=0&&this.b<=this.duration+.01&&this.b-this.a>=.5;}
+ validRange(){return this.duration>0&&Number.isFinite(this.a)&&Number.isFinite(this.b)&&this.a>=0&&this.b<=this.duration+.01&&this.b-this.a>=FRAME_SECONDS-1e-9;}
  setDuration(value){if(!Number.isFinite(value)||value<=0)return;this.duration=value;this.a=clamp(this.a,0,value);if(this.b!==null)this.b=clamp(this.b,0,value);if(this.loopActive&&!this.validRange())this.stopLoop(false);}
  account(now=this.clock()){
   const dt=Math.max(0,(now-this.lastTick)/1000);this.lastTick=now;
@@ -190,7 +253,19 @@ class PracticeEngine{
   this.seek(value,was,true);this.lastTick=this.clock();
  }
  setPoints(a,b){
-  if(this.loopActive)this.stopLoop(false);this.a=a;this.b=b;this.elapsed=0;this.laps=0;this.completed=false;
+  this.account();
+  this.a=a;this.b=b;
+  if(!this.loopActive){this.elapsed=0;this.laps=0;this.completed=false;}
+  else if(!this.validRange())this.stopLoop(false);
+  else if(this.wantedPlaying&&(this.current<this.a||this.current>=this.b)){
+   this.jumpUntil=this.clock()+150;this.seek(this.a,true);
+  }
+ }
+ setPoint(which,value){
+  if(!this.duration||!Number.isFinite(value))return;
+  const gap=Math.min(FRAME_SECONDS,this.duration);
+  if(which==='a')this.setPoints(clamp(value,0,Math.max(0,(this.b??this.duration)-gap)),this.b??this.duration);
+  else this.setPoints(this.a,clamp(value,Math.min(this.duration,this.a+gap),this.duration));
  }
  startLoop(){
   if(!this.validRange())return false;if(this.mode==='timed'&&!(this.limit>=1))return false;
@@ -216,15 +291,23 @@ class PracticeEngine{
 // UI
 const $=id=>document.getElementById(id);
 function setText(id,value){const node=$(id),text=String(value);if(node.textContent!==text)node.textContent=text;}
-const TEXT={tr:{tagline:'Bir bölümü seç. Tekrar et. Oturt.',theme:'Görünüm',light:'Açık tema',dark:'Koyu tema',videoArea:'YouTube videosu',playbackArea:'Video oynatma kontrolleri',emptyTitle:'Dersin burada, odağın müzikte.',emptyLead:'YouTube bağlantısını yukarıya yapıştırarak başla.',emptyTiny:'İzle · Böl · Tekrar et',urlLabel:'YouTube video bağlantısı',load:'Video aç',openYouTube:'YouTube’da aç',noVideo:'Video henüz seçilmedi',seekLabel:'Videoda konum',play:'Oynat',pause:'Duraklat',back:'5 saniye geri',forward:'5 saniye ileri',speed:'Hız',loopTitle:'A–B Döngü',inLabel:'Başlangıç · IN',outLabel:'Bitiş · OUT',mark:'Şu anı al',inTime:'Döngü başlangıç zamanı',outTime:'Döngü bitiş zamanı',sectionLength:'Seçili bölüm',gotoIn:'A noktasına dön',repeatMode:'Döngü çalışma modu',infinite:'∞ Sonsuz',timed:'Süreli',workTime:'Süre',startLoop:'Döngüyü başlat',stopLoop:'Döngüyü durdur',laps:'tam tur',worked:'çalışıldı',remaining:'kaldı',timerHint:'Süreli modda yalnızca oynatma süresi sayılır; duraklatınca sayaç bekler.',shortcuts:'Klavye kısayolları',shortcutText:'Boşluk: oynat / duraklat · ← →: 5 saniye geri / ileri · I: başlangıcı al · O: bitişi al',savedLocal:'Son video ve ayarların bu tarayıcıda saklanır.',ready:'Hazır',paused:'Duraklatıldı',playing:'Oynatılıyor',buffering:'Yükleniyor',loading:'Video hazırlanıyor',ended:'Video bitti',loopOff:'Kapalı',loopOn:'Döngü açık',complete:'Süre doldu',leftRange:'Döngü dışına geçildi; döngü kapatıldı.',timeComplete:'Çalışma süresi tamamlandı.',invalidUrl:'Geçerli bir YouTube video bağlantısı yapıştır.',invalidTime:'Zamanı dakika:saniye olarak gir. Örnek: 02:35.5',invalidRange:'Bitiş, başlangıçtan en az 0,5 saniye sonra ve video süresi içinde olmalı.',invalidLimit:'Çalışma süresini gir. Örnek: 05:00 (5 dakika).',embedDenied:'Bu video başka sitelerde oynatılamıyor. Farklı bir video bağlantısı deneyebilirsin.',notFound:'Video bulunamadı, kaldırılmış ya da gizli olabilir.',genericError:'YouTube videoyu oynatamadı. Bağlantıyı kontrol edip yeniden aç.',referrerError:'YouTube, bu sitenin kaynak adresini alamadı (153). Sayfayı doğrudan kendi site adresinden aç. Sorun sürerse sitenin veya tarayıcının referrer ayarı kontrol edilmeli.',referrerEmbedded:'YouTube, bu önizlemenin kaynak adresini alamadı (153). Önizleme yerine sayfanın doğrudan HTTP/HTTPS adresini yeni sekmede aç.',apiError:'YouTube’a bağlanılamadı. İnternet bağlantını kontrol edip Video aç düğmesiyle tekrar dene.',autoplayBlocked:'Oynatmak için video üzerindeki YouTube oynat düğmesine dokun.',localFile:'YouTube bu dosya/önizleme adresinden başlatılamıyor. Dosyayı Vercel’deki sitenden veya http://localhost gibi bir web sunucusundan aç; dosyaya çift tıklayarak açma.',rateUnavailable:'Bu videoda seçilen hız kullanılamıyor.',live:'Canlı yayında bu videonun zaman çubuğu henüz hazır değil.'},en:{tagline:'Pick a passage. Repeat. Make it yours.',theme:'Appearance',light:'Light theme',dark:'Dark theme',videoArea:'YouTube video',playbackArea:'Video playback controls',emptyTitle:'Your lesson. Your practice space.',emptyLead:'Paste a YouTube link above to get started.',emptyTiny:'Watch · Mark · Repeat',urlLabel:'YouTube video link',load:'Open video',openYouTube:'Open on YouTube',noVideo:'No video selected',seekLabel:'Video position',play:'Play',pause:'Pause',back:'Back 5 seconds',forward:'Forward 5 seconds',speed:'Speed',loopTitle:'A–B Loop',inLabel:'Start · IN',outLabel:'End · OUT',mark:'Set to now',inTime:'Loop start time',outTime:'Loop end time',sectionLength:'Selected passage',gotoIn:'Back to A',repeatMode:'Loop session mode',infinite:'∞ Infinite',timed:'Timed',workTime:'Time',startLoop:'Start loop',stopLoop:'Stop loop',laps:'full loops',worked:'practiced',remaining:'remaining',timerHint:'Timed mode counts playing time only. The timer waits while paused.',shortcuts:'Keyboard shortcuts',shortcutText:'Space: play / pause · ← →: back / forward 5 seconds · I: set start · O: set end',savedLocal:'Your last video and settings stay in this browser.',ready:'Ready',paused:'Paused',playing:'Playing',buffering:'Buffering',loading:'Preparing video',ended:'Video ended',loopOff:'Off',loopOn:'Loop on',complete:'Time is up',leftRange:'Left the passage; looping is now off.',timeComplete:'Practice session complete.',invalidUrl:'Paste a valid YouTube video link.',invalidTime:'Enter minutes:seconds, for example 02:35.5',invalidRange:'The end must be at least 0.5 seconds after the start and within the video.',invalidLimit:'Enter a session length, for example 05:00 (5 minutes).',embedDenied:'This video cannot play on other websites. Try another video link.',notFound:'The video was removed, is private, or could not be found.',genericError:'YouTube could not play this video. Check the link and open it again.',referrerError:'YouTube did not receive this site’s referrer (153). Open the page directly on your website. If it persists, check the site or browser referrer policy.',referrerEmbedded:'YouTube did not receive this preview’s referrer (153). Open the actual HTTP/HTTPS page directly in a new tab instead of inside a preview.',apiError:'Could not connect to YouTube. Check your connection and try Open video again.',autoplayBlocked:'Tap the YouTube play button inside the video to start playback.',localFile:'YouTube cannot start from this file/preview address. Open the page on your website or a web server such as http://localhost; do not double-click the HTML file.',rateUnavailable:'That speed is unavailable for this video.',live:'The timeline is not ready for this live video.'}};
+const TEXT={tr:{tagline:'Bir bölümü seç. Tekrar et. Oturt.',theme:'Görünüm',light:'Açık tema',dark:'Koyu tema',videoArea:'YouTube videosu',playbackArea:'Video oynatma kontrolleri',emptyTitle:'Dersin burada, odağın müzikte.',emptyLead:'YouTube bağlantısını yukarıya yapıştırarak başla.',emptyTiny:'İzle · Böl · Tekrar et',urlLabel:'YouTube video bağlantısı',load:'Video aç',openYouTube:'YouTube’da aç',noVideo:'Video henüz seçilmedi',seekLabel:'Videoda konum',play:'Oynat',pause:'Duraklat',back:'5 saniye geri',forward:'5 saniye ileri',speed:'Hız',loopTitle:'A–B Döngü',inLabel:'Başlangıç · IN',outLabel:'Bitiş · OUT',mark:'Şu anı al',inTime:'Döngü başlangıç zamanı',outTime:'Döngü bitiş zamanı',sectionLength:'Seçili bölüm',gotoIn:'A noktasına dön',repeatMode:'Döngü çalışma modu',infinite:'∞ Sonsuz',timed:'Süreli',workTime:'Süre',startLoop:'Döngüyü başlat',stopLoop:'Döngüyü durdur',laps:'tam tur',worked:'çalışıldı',remaining:'kaldı',timerHint:'Süreli modda yalnızca oynatma süresi sayılır; duraklatınca sayaç bekler.',shortcuts:'Klavye kısayolları',shortcutText:'Boşluk: oynat / duraklat · ← →: 5 saniye geri / ileri · I: başlangıcı al · O: bitişi al',savedLocal:'Son video ve ayarların bu tarayıcıda saklanır.',ready:'Hazır',paused:'Duraklatıldı',playing:'Oynatılıyor',buffering:'Yükleniyor',loading:'Video hazırlanıyor',ended:'Video bitti',loopOff:'Kapalı',loopOn:'Döngü açık',complete:'Süre doldu',leftRange:'Döngü dışına geçildi; döngü kapatıldı.',timeComplete:'Çalışma süresi tamamlandı.',invalidUrl:'Geçerli bir YouTube video bağlantısı yapıştır.',invalidTime:'Zamanı dakika:saniye olarak gir. Örnek: 02:35.5',invalidRange:'Başlangıç ve bitiş arasında en az bir kare olmalı.',invalidLimit:'Çalışma süresini gir. Örnek: 05:00 (5 dakika).',embedDenied:'Bu video başka sitelerde oynatılamıyor. Farklı bir video bağlantısı deneyebilirsin.',notFound:'Video bulunamadı, kaldırılmış ya da gizli olabilir.',genericError:'YouTube videoyu oynatamadı. Bağlantıyı kontrol edip yeniden aç.',referrerError:'YouTube, bu sitenin kaynak adresini alamadı (153). Sayfayı doğrudan kendi site adresinden aç. Sorun sürerse sitenin veya tarayıcının referrer ayarı kontrol edilmeli.',referrerEmbedded:'YouTube, bu önizlemenin kaynak adresini alamadı (153). Önizleme yerine sayfanın doğrudan HTTP/HTTPS adresini yeni sekmede aç.',apiError:'YouTube’a bağlanılamadı. İnternet bağlantını kontrol edip Video aç düğmesiyle tekrar dene.',autoplayBlocked:'Oynatmak için video üzerindeki YouTube oynat düğmesine dokun.',localFile:'YouTube bu dosya/önizleme adresinden başlatılamıyor. Dosyayı Vercel’deki sitenden veya http://localhost gibi bir web sunucusundan aç; dosyaya çift tıklayarak açma.',rateUnavailable:'Bu videoda seçilen hız kullanılamıyor.',live:'Canlı yayında bu videonun zaman çubuğu henüz hazır değil.'},en:{tagline:'Pick a passage. Repeat. Make it yours.',theme:'Appearance',light:'Light theme',dark:'Dark theme',videoArea:'YouTube video',playbackArea:'Video playback controls',emptyTitle:'Your lesson. Your practice space.',emptyLead:'Paste a YouTube link above to get started.',emptyTiny:'Watch · Mark · Repeat',urlLabel:'YouTube video link',load:'Open video',openYouTube:'Open on YouTube',noVideo:'No video selected',seekLabel:'Video position',play:'Play',pause:'Pause',back:'Back 5 seconds',forward:'Forward 5 seconds',speed:'Speed',loopTitle:'A–B Loop',inLabel:'Start · IN',outLabel:'End · OUT',mark:'Set to now',inTime:'Loop start time',outTime:'Loop end time',sectionLength:'Selected passage',gotoIn:'Back to A',repeatMode:'Loop session mode',infinite:'∞ Infinite',timed:'Timed',workTime:'Time',startLoop:'Start loop',stopLoop:'Stop loop',laps:'full loops',worked:'practiced',remaining:'remaining',timerHint:'Timed mode counts playing time only. The timer waits while paused.',shortcuts:'Keyboard shortcuts',shortcutText:'Space: play / pause · ← →: back / forward 5 seconds · I: set start · O: set end',savedLocal:'Your last video and settings stay in this browser.',ready:'Ready',paused:'Paused',playing:'Playing',buffering:'Buffering',loading:'Preparing video',ended:'Video ended',loopOff:'Off',loopOn:'Loop on',complete:'Time is up',leftRange:'Left the passage; looping is now off.',timeComplete:'Practice session complete.',invalidUrl:'Paste a valid YouTube video link.',invalidTime:'Enter minutes:seconds, for example 02:35.5',invalidRange:'Keep at least one frame between the start and end.',invalidLimit:'Enter a session length, for example 05:00 (5 minutes).',embedDenied:'This video cannot play on other websites. Try another video link.',notFound:'The video was removed, is private, or could not be found.',genericError:'YouTube could not play this video. Check the link and open it again.',referrerError:'YouTube did not receive this site’s referrer (153). Open the page directly on your website. If it persists, check the site or browser referrer policy.',referrerEmbedded:'YouTube did not receive this preview’s referrer (153). Open the actual HTTP/HTTPS page directly in a new tab instead of inside a preview.',apiError:'Could not connect to YouTube. Check your connection and try Open video again.',autoplayBlocked:'Tap the YouTube play button inside the video to start playback.',localFile:'YouTube cannot start from this file/preview address. Open the page on your website or a web server such as http://localhost; do not double-click the HTML file.',rateUnavailable:'That speed is unavailable for this video.',live:'The timeline is not ready for this live video.'}};
 let lang='tr';try{const route=location.pathname.match(/^\/(tr|en)(?:\/|$)/);lang=route?route[1]:(localStorage.getItem('lmx-lang')||((navigator.language||'tr').startsWith('tr')?'tr':'en'));}catch{}if(!TEXT[lang])lang='tr';
-Object.assign(TEXT.tr,{setA:'Şu anı A başlangıcı olarak işaretle',setB:'Şu anı B bitişi olarak işaretle',frame:'Kare',frameBack:'Bir kare geri · yaklaşık 1/30 saniye; duraklatır',frameForward:'Bir kare ileri · yaklaşık 1/30 saniye; duraklatır'});
-Object.assign(TEXT.en,{setA:'Set the current position as start A',setB:'Set the current position as end B',frame:'Frame',frameBack:'Back one frame · approximately 1/30 second; pauses',frameForward:'Forward one frame · approximately 1/30 second; pauses'});
+Object.assign(TEXT.tr,{setA:'Şu anı A başlangıcı olarak işaretle',setB:'Şu anı B bitişi olarak işaretle',frame:'Kare',frameBack:'Bir kare geri · yaklaşık 1/30 saniye; duraklatır',frameForward:'Bir kare ileri · yaklaşık 1/30 saniye; duraklatır',seconds:'sn',backOne:'1 saniye geri',forwardOne:'1 saniye ileri',framesBack:'5 kare geri · yaklaşık 1/6 saniye; duraklatır',framesForward:'5 kare ileri · yaklaşık 1/6 saniye; duraklatır',adjustA:'A başlangıcını sürükle veya ok tuşlarıyla ayarla',adjustB:'B bitişini sürükle veya ok tuşlarıyla ayarla'});
+Object.assign(TEXT.en,{setA:'Set the current position as start A',setB:'Set the current position as end B',frame:'Frame',frameBack:'Back one frame · approximately 1/30 second; pauses',frameForward:'Forward one frame · approximately 1/30 second; pauses',seconds:'s',backOne:'Back 1 second',forwardOne:'Forward 1 second',framesBack:'Back 5 frames · approximately 1/6 second; pauses',framesForward:'Forward 5 frames · approximately 1/6 second; pauses',adjustA:'Drag loop start A or adjust with arrow keys',adjustB:'Drag loop end B or adjust with arrow keys'});
 const t=k=>TEXT[lang][k]||k;
 let player=null,engine=null,playerReady=false,videoId='',videoTitle='',pendingStart=0,pendingRestore=null,apiLoading=false,apiTimeout=null,toastTimer=null,seekLast=-Infinity,seekPreviewTimer=null,saveLast=0,durationSeen=0,loadingVideo=false;
 function notice(key){$('toast').textContent=t(key);$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,3200);}
 function error(key){$('error-text').textContent=t(key);$('error-box').hidden=false;}
-function applyLang(){document.documentElement.lang=lang;document.title=lang==='tr'?'LmX Practice — YouTube Ders Çalışma ve A–B Döngü':'LmX Practice — YouTube Practice & A–B Loop';document.querySelectorAll('[data-i]').forEach(el=>el.textContent=t(el.dataset.i));document.querySelectorAll('[data-aria]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.aria)));document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===lang)));render();}
+function updatePageMeta(){
+ const pageUrl='https://limxona.vercel.app/'+lang+'/practice';
+ const description=lang==='tr'?'YouTube ders ve örnek parçalarını A–B döngüsüyle çalış. Büyük oynatma çubuğu, hassas ileri geri sarma ve süreli tekrar.':'Practice YouTube lessons and songs with A–B loops. Use the large seek bar, fine seeking, playback speed, and infinite or timed repetition.';
+ const canonical=document.querySelector('link[rel="canonical"]');if(canonical)canonical.href=pageUrl;
+ for(const [selector,value] of [['meta[name="description"]',description],['meta[property="og:title"]',document.title],['meta[property="og:description"]',description],['meta[property="og:url"]',pageUrl],['meta[property="og:locale"]',lang==='tr'?'tr_TR':'en_US'],['meta[name="twitter:title"]',document.title],['meta[name="twitter:description"]',description],['meta[name="twitter:url"]',pageUrl]]){
+  const node=document.querySelector(selector);if(node)node.content=value;
+ }
+}
+function applyLang(){document.documentElement.lang=lang;document.title=lang==='tr'?'LmX Practice — YouTube Ders Çalışma ve A–B Döngü':'LmX Practice — YouTube Practice & A–B Loop';updatePageMeta();document.querySelectorAll('[data-i]').forEach(el=>el.textContent=t(el.dataset.i));document.querySelectorAll('[data-aria]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.aria)));document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===lang)));render();}
 function setTheme(theme){document.documentElement.dataset.theme=theme;try{localStorage.setItem('metronom-theme',theme);}catch{}['light','dark'].forEach(mode=>$(mode).setAttribute('aria-pressed',String(mode===theme)));}
 $('light').onclick=()=>setTheme('light');$('dark').onclick=()=>setTheme('dark');setTheme(document.documentElement.dataset.theme||'light');
 document.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{lang=b.dataset.lang;try{localStorage.setItem('lmx-lang',lang);}catch{}applyLang();});
@@ -286,7 +369,7 @@ function updateMetadata(){
    engine.setDuration(duration);
    if(!durationSeen){
     engine.current=clamp(pendingStart,0,duration);durationSeen=duration;
-    if(pendingRestore){engine.a=clamp(pendingRestore.a,0,duration);engine.b=pendingRestore.b===null?duration:clamp(pendingRestore.b,0,duration);engine.mode=pendingRestore.mode;engine.limit=pendingRestore.limit;$('limit').value=formatTime(engine.limit);const rate=pendingRestore.rate;pendingRestore=null;syncRates(rate);}
+    if(pendingRestore){engine.a=clamp(pendingRestore.a,0,duration);engine.b=pendingRestore.b===null?duration:clamp(pendingRestore.b,0,duration);engine.mode=pendingRestore.mode;engine.limit=pendingRestore.limit;$('limit').value=formatTime(engine.limit);const rate=pendingRestore.rate;pendingRestore=null;syncRates(rate);engine.setPoint('a',engine.a);}
     else{if(engine.b===null)engine.b=duration;syncRates();}
     save();
    }
@@ -296,13 +379,13 @@ function updateMetadata(){
 function syncRates(preferred){if(!playerReady)return;try{const rates=player.getAvailablePlaybackRates()||[1],current=preferred??player.getPlaybackRate();$('speed').replaceChildren();rates.forEach(rate=>{const o=document.createElement('option');o.value=rate;o.textContent=rate+'×';$('speed').appendChild(o);});$('speed').value=rates.includes(current)?current:1;if(preferred&&rates.includes(preferred))player.setPlaybackRate(preferred);}catch{}}
 function render(){
  const e=engine,ready=Boolean(playerReady&&e?.duration>0),playing=Boolean(e?.wantedPlaying);
- ['seek','play','back','forward','frame-back','frame-forward','mark-in','mark-out','loop-toggle'].forEach(id=>$(id).disabled=!ready);
+ ['seek','play','back','forward','back-one','forward-one','frame-back','frame-forward','frames-back','frames-forward','mark-in','mark-out','loop-toggle'].forEach(id=>$(id).disabled=!ready);
  $('speed').disabled=!playerReady||$('speed').options.length<2;
  $('video-title').textContent=videoTitle||t(videoId?(loadingVideo?'loading':'videoArea'):'noVideo');
  let status=loadingVideo?'loading':e?.state===3?'buffering':e?.state===1&&playing?'playing':e?.state===0?'ended':e?.state===2?'paused':'ready';
  setText('status-text',t(status));document.body.classList.toggle('playing',playing);
  setText('play-text',t(playing?'pause':'play'));$('play').setAttribute('aria-pressed',String(playing));if($('play-icon').dataset.playing!==String(playing)){$('play-icon').dataset.playing=String(playing);$('play-icon').innerHTML=playing?'<path d="M6 4h4v16H6zm8 0h4v16h-4z"/>':'<path d="m7 4 14 8-14 8z"/>';}
- const duration=e?.duration||0,current=e?.current||pendingStart;
+ const duration=e?.duration||0,current=e?.current??pendingStart;
  if(!e?.scrubbing){$('seek').max=duration||1;$('seek').value=clamp(current,0,duration||1);}
  $('seek').setAttribute('aria-valuetext',formatTime(current,true)+' / '+formatTime(duration));
  let buffered=0;try{buffered=playerReady?player.getVideoLoadedFraction()*100:0;}catch{}
@@ -311,11 +394,11 @@ function render(){
  $('scrubber').style.setProperty('--in-pct',(duration?a/duration*100:0)+'%');$('scrubber').style.setProperty('--loop-width',(duration&&b!==null?Math.max(0,b-a)/duration*100:0)+'%');
  const usable=Math.max(0,$('scrubber').clientWidth-40);
  $('pin-a').hidden=!ready;$('pin-b').hidden=!ready||b===null;
- $('pin-a').textContent='';$('pin-b').textContent='';
+ $('pin-a').textContent='A';$('pin-b').textContent='B';
  $('pin-a').style.left=(20+(duration?a/duration:0)*usable)+'px';$('pin-b').style.left=(20+(duration&&b!==null?b/duration:1)*usable)+'px';
- $('pin-a').title='A · '+formatTime(a,true);$('pin-b').title='B · '+(b===null?'—':formatTime(b,true));
- setText('a-value',formatTime(a,true));setText('b-value',b===null?'—':formatTime(b,true));
- $('mark-in').title=t('setA')+' · '+formatTime(a,true);$('mark-out').title=t('setB')+' · '+(b===null?'—':formatTime(b,true));
+ $('pin-a').title='A · '+formatPoint(a);$('pin-b').title='B · '+(b===null?'—':formatPoint(b));
+ setText('a-value',formatPoint(a));setText('b-value',b===null?'—':formatPoint(b));
+ $('mark-in').title=t('setA')+' · '+formatPoint(a);$('mark-out').title=t('setB')+' · '+(b===null?'—':formatPoint(b));
  const mode=e?.mode||'infinite';document.querySelectorAll('[data-mode]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.mode===mode)));$('limit-wrap').hidden=mode!=='timed';
  setText('loop-toggle',t(e?.loopActive?'stopLoop':'startLoop'));$('loop-toggle').setAttribute('aria-pressed',String(Boolean(e?.loopActive)));
  setText('loop-status',t(e?.loopActive?'loopOn':e?.completed?'complete':'loopOff'));$('loop-status').classList.toggle('on',Boolean(e?.loopActive));
@@ -323,10 +406,13 @@ function render(){
 }
 $('video-form').onsubmit=event=>{event.preventDefault();const parsed=parseYouTube($('video-url').value);if(!parsed){$('url-message').textContent=t('invalidUrl');$('video-url').setAttribute('aria-invalid','true');return;}$('video-url').removeAttribute('aria-invalid');openVideo(parsed);};
 $('play').onclick=()=>{if(engine){engine.togglePlay();render();}};
-function seekBy(delta){if(!engine)return;const target=clamp(engine.current+delta,0,engine.duration);engine.endScrub(target);render();save();}
+function seekBy(delta){if(!engine)return;const pending=engine.seekHold&&performance.now()<engine.seekHold.until;const target=clamp((pending?engine.current:engine.positionNow())+delta,0,engine.duration);engine.endScrub(target);render();save();}
 $('back').onclick=()=>seekBy(-5);$('forward').onclick=()=>seekBy(5);
+$('back-one').onclick=()=>seekBy(-1);$('forward-one').onclick=()=>seekBy(1);
 $('frame-back').onclick=()=>{if(engine){engine.stepFrame(-1);render();save();}};
 $('frame-forward').onclick=()=>{if(engine){engine.stepFrame(1);render();save();}};
+$('frames-back').onclick=()=>{if(engine){engine.stepFrame(-5);render();save();}};
+$('frames-forward').onclick=()=>{if(engine){engine.stepFrame(5);render();save();}};
 function previewScrub(){
  clearTimeout(seekPreviewTimer);seekPreviewTimer=null;
  if(!engine?.scrubbing)return;
@@ -347,14 +433,57 @@ function finishSeek(){
 }
 $('seek').addEventListener('change',finishSeek);window.addEventListener('pointerup',finishSeek);window.addEventListener('pointercancel',finishSeek);window.addEventListener('blur',finishSeek);
 function setPoints(a,b){if(!engine)return;engine.setPoints(a,b);render();save();}
-function mark(which){if(!engine?.duration)return;const now=engine.positionNow();setPoints(which==='a'?now:engine.a,which==='b'?now:engine.b);if(engine.b!==null&&!engine.validRange())notice('invalidRange');}
+function mark(which){if(!engine?.duration)return;engine.setPoint(which,engine.positionNow());render();save();}
 $('mark-in').onclick=()=>mark('a');$('mark-out').onclick=()=>mark('b');
+let pointDrag=null;
+function movePoint(event){
+ if(!pointDrag||event.pointerId!==pointDrag.id||!engine?.duration)return;
+ const rect=$('scrubber').getBoundingClientRect(),width=Math.max(1,rect.width-40);
+ const value=clamp((event.clientX-rect.left-20)/width,0,1)*engine.duration;
+ engine.setPoint(pointDrag.which,value);render();
+}
+for(const [id,which] of [['pin-a','a'],['pin-b','b']]){
+ const button=$(id);
+ button.addEventListener('pointerdown',event=>{
+  if(event.button!==0||!engine?.duration)return;
+  event.preventDefault();event.stopPropagation();
+  pointDrag={which,id:event.pointerId};button.setPointerCapture(event.pointerId);button.focus({preventScroll:true});
+ });
+ button.addEventListener('pointermove',event=>{if(pointDrag){event.preventDefault();movePoint(event);}});
+ const finish=event=>{if(pointDrag?.id!==event.pointerId)return;pointDrag=null;if(button.hasPointerCapture(event.pointerId))button.releasePointerCapture(event.pointerId);save();};
+ button.addEventListener('pointerup',finish);button.addEventListener('pointercancel',finish);button.addEventListener('lostpointercapture',finish);
+ button.addEventListener('keydown',event=>{
+  if(!engine?.duration||!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+  event.preventDefault();event.stopPropagation();
+  const current=which==='a'?engine.a:engine.b;
+  const value=event.key==='Home'?0:event.key==='End'?engine.duration:current+(event.key==='ArrowLeft'?-1:1)*FRAME_SECONDS*(event.shiftKey?5:1);
+  engine.setPoint(which,value);render();save();
+ });
+}
+
 document.querySelectorAll('[data-mode]').forEach(button=>button.onclick=()=>{if(!engine){notice('noVideo');return;}if(engine.loopActive)engine.stopLoop(false);engine.mode=button.dataset.mode;engine.elapsed=0;engine.completed=false;render();save();});
 function updateLimit(){const value=readTime($('limit').value);if(value===null||value<1){$('limit').setAttribute('aria-invalid','true');notice('invalidLimit');return false;}$('limit').removeAttribute('aria-invalid');if(engine){if(engine.loopActive)engine.stopLoop(false);engine.limit=value;engine.elapsed=0;engine.completed=false;}$('limit').value=formatTime(value);render();save();return true;}
 $('limit').onchange=updateLimit;$('limit').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();if(updateLimit())$('limit').blur();}};
 $('loop-toggle').onclick=()=>{if(!engine)return;if(engine.loopActive)engine.stopLoop();else{if(engine.mode==='timed'&&!updateLimit())return;if(!engine.startLoop())notice('invalidRange');}render();save();};
 $('speed').onchange=()=>{try{player.setPlaybackRate(Number($('speed').value));}catch{notice('rateUnavailable');}};
-document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey||e.repeat||e.target.closest('input,select,button,textarea,a,summary')||!engine?.duration)return;if(e.code==='Space'){e.preventDefault();$('play').click();}else if(e.key==='ArrowLeft'){e.preventDefault();seekBy(-5);}else if(e.key==='ArrowRight'){e.preventDefault();seekBy(5);}else if(e.key.toLowerCase()==='i')mark('a');else if(e.key.toLowerCase()==='o')mark('b');});
+function handlePlaybackKey(e){
+ if(e.ctrlKey||e.metaKey||e.altKey||!engine?.duration)return;
+ const editable=e.target.closest('textarea,select,[contenteditable]:not([contenteditable="false"]),input:not([type="range"]):not([type="button"]):not([type="checkbox"]):not([type="radio"])');
+ if(editable)return;
+ if(e.code==='Space'){
+  e.preventDefault();e.stopImmediatePropagation();
+  if(e.repeat)return;
+  finishSeek();engine.togglePlay();render();return;
+ }
+ if(e.repeat||e.target.closest('input,button,a,summary'))return;
+ if(e.key==='ArrowLeft'){e.preventDefault();seekBy(-5);}
+ else if(e.key==='ArrowRight'){e.preventDefault();seekBy(5);}
+ else if(e.key.toLowerCase()==='i')mark('a');else if(e.key.toLowerCase()==='o')mark('b');
+}
+document.addEventListener('keydown',handlePlaybackKey,true);
+document.addEventListener('keyup',e=>{
+ if(e.code==='Space'&&engine?.duration&&!e.target.closest('textarea,select,[contenteditable]:not([contenteditable="false"]),input:not([type="range"]):not([type="button"]):not([type="checkbox"]):not([type="radio"])')){e.preventDefault();e.stopImmediatePropagation();}
+},true);
 setInterval(()=>{if(engine){engine.tick();updateMetadata();render();if(performance.now()-saveLast>1500){saveLast=performance.now();save();}}},80);
 window.addEventListener('pagehide',save);document.addEventListener('visibilitychange',()=>{if(document.hidden)save();});
 document.addEventListener('dblclick',event=>{if(matchMedia('(pointer:coarse)').matches)event.preventDefault();},{passive:false});
