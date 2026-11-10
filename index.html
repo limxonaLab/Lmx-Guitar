@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-<title>Limxona – Online Metronom ve Akort Aleti</title>
-<meta name="description" content="Ücretsiz online metronom ve mikrofon destekli akort aleti. Tempoyu ayarla, ritmini kur, enstrümanını tarayıcıdan akort et.">
+<title>Limxona – Metronom, Akort Aleti, Akor Bulucu ve Practice</title>
+<meta name="description" content="Ücretsiz müzik çalışma araçları: online metronom, mikrofon destekli akort aleti, gitar akor bulucu ve YouTube videoları için A–B döngülü Practice.">
 <link rel="alternate" hreflang="tr" href="https://limxona.vercel.app/tr">
 <link rel="alternate" hreflang="en" href="https://limxona.vercel.app/en">
 <link rel="alternate" hreflang="x-default" href="https://limxona.vercel.app/tr">
@@ -18,11 +18,14 @@
 
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="tr_TR" />
-<meta property="og:site_name" content="Lmx Metronome Tuner" />
+<meta property="og:site_name" content="Limxona" />
 <meta property="og:url" content="https://limxona.vercel.app/tr" />
-<meta property="og:title" content="Lmx Metronome Tuner – Online Metronom ve Akort Aleti" />
-<meta property="og:description" content="Ücretsiz online metronom ve mikrofon destekli akort aleti." />
+<meta property="og:title" content="Limxona – Metronom, Akort Aleti, Akor Bulucu ve Practice" />
+<meta property="og:description" content="Ücretsiz müzik çalışma araçları: online metronom, mikrofon destekli akort aleti, gitar akor bulucu ve YouTube videoları için A–B döngülü Practice." />
 <meta property="og:image" content="https://limxona.vercel.app/og-image.png" />
+<meta name="twitter:url" content="https://limxona.vercel.app/tr">
+<meta name="twitter:title" content="Limxona – Metronom, Akort Aleti, Akor Bulucu ve Practice">
+<meta name="twitter:description" content="Ücretsiz müzik çalışma araçları: online metronom, mikrofon destekli akort aleti, gitar akor bulucu ve YouTube videoları için A–B döngülü Practice.">
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://limxona.vercel.app/og-image.png" />
 
@@ -113,6 +116,14 @@
   
     .tool.chords { --c-acc: #b84a22; --c-chip: #f6e9e2; --c-btn-fg: #ffffff; }
   :root[data-theme="dark"] .tool.chords { --c-acc: #f08a5d; --c-chip: #3a2822; --c-btn-fg: #1b1210; }
+  .tool.chords { --c-btn-bg: var(--c-acc); }
+  .tool.practice { --c-acc: #b43c46; --c-chip: #fbebed; --c-btn-bg: #b43c46; --c-btn-fg: #ffffff; }
+  :root[data-theme="dark"] .tool.practice { --c-acc: #ee909a; --c-chip: #3c252e; --c-btn-bg: #ee909a; --c-btn-fg: #30171d; }
+  .practice-line { width: 100%; max-width: 260px; height: 6px; background: var(--c-line); border-radius: 4px; position: relative; }
+  .practice-line::before { content: ""; position: absolute; left: 20%; right: 20%; height: 100%; background: var(--c-acc); opacity: .4; }
+  .practice-line::after { content: ""; position: absolute; left: 35%; top: -6px; width: 18px; height: 18px; border-radius: 50%; background: var(--c-acc); transition: left .3s; }
+  .practice:hover .practice-line::after { left: 60%; }
+  @media(max-width:420px) { .choices { grid-template-columns: 1fr; } }
   .mini { width: 100%; max-width: 150px; height: 44px; }
   .mini .g { stroke: var(--c-line); stroke-width: 1.4; }
   .mini circle { fill: var(--c-acc); transition: transform .2s; transform-box: fill-box; transform-origin: center; }
@@ -241,16 +252,33 @@
       <ul class="chips">
         <li data-i18n="cC1">Tüm kök notalar</li>
         <li data-i18n="cC2">Maj · Min · 7 · Sus</li>
-        <li data-i18n="cC3">5 varyasyon</li>
+        <li data-i18n="cC3">10 varyasyon</li>
       </ul>
       <div class="demo" aria-hidden="true"><svg class="mini" viewBox="0 0 150 44"><path class="g" d="M10 4v36M40 4v36M70 4v36M100 4v36M130 4v36M10 14h120M10 26h120"/><circle cx="40" cy="20" r="6"/><circle cx="70" cy="32" r="6"/><circle cx="100" cy="8" r="6"/></svg></div>
       <span class="cta" data-i18n="cCta">Akor bulucuyu aç</span>
+    </a>
+    <a class="tool practice" href="/practice" id="linkPractice">
+      <svg class="mark" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M26 12V8a3 3 0 0 0-3-3H9M9 2 6 5l3 3M6 20v4a3 3 0 0 0 3 3h14m0-3 3 3-3 3"/>
+        <path d="m13 11 9 5-9 5z"/>
+      </svg>
+      <div>
+        <h2 data-i18n="pName">Practice</h2>
+        <p class="desc" data-i18n="pDesc">YouTube derslerini ve parçaları seçtiğin bölümü tekrarlayarak çalış.</p>
+      </div>
+      <ul class="chips">
+        <li data-i18n="pC1">A–B döngüsü</li>
+        <li data-i18n="pC2">Oynatma hızı</li>
+        <li data-i18n="pC3">Sonsuz veya süreli</li>
+      </ul>
+      <div class="demo" aria-hidden="true"><div class="practice-line"></div></div>
+      <span class="cta" data-i18n="pCta">Practice’i aç</span>
     </a>
   </main>
 
   <section class="hero">
     <h1 data-i18n="title">Çalmadan önce hazırlan.</h1>
-    <p data-i18n="sub">Tempo için metronom, ses için akort aleti. İkisi de ücretsiz, tarayıcında açılır.</p>
+    <p data-i18n="sub">Temponu ayarla, enstrümanını akort et, akorları keşfet ve YouTube derslerini döngüye al. Hepsi tarayıcında.</p>
   </section>
 
   <footer data-i18n="foot">Ücretsiz, kayıt gerektirmez.</footer>
@@ -261,28 +289,36 @@
   var I18N = {
     tr: {
       htmlLang: 'tr', locale: 'tr_TR',
-      docTitle: 'Lmx Metronome Tuner – Online Metronom ve Akort Aleti',
-      docDesc: 'Ücretsiz online metronom ve mikrofon destekli akort aleti. Tempoyu ayarla, ritmini kur, enstrümanını tarayıcıdan akort et.',
+      docTitle: 'Limxona – Metronom, Akort Aleti, Akor Bulucu ve Practice',
+      docDesc: 'Ücretsiz müzik çalışma araçları: online metronom, mikrofon destekli akort aleti, gitar akor bulucu ve YouTube videoları için A–B döngülü Practice.',
       title: 'Çalmadan önce hazırlan.',
-      sub: 'Tempo için metronom, ses için akort aleti. İkisi de ücretsiz, tarayıcında açılır.',
+      sub: 'Temponu ayarla, enstrümanını akort et, akorları keşfet ve YouTube derslerini döngüye al. Hepsi tarayıcında.',
       mName: 'Metronom', mDesc: 'Tempoyu ayarla, kendi ritmini kur ve kaydet.',
       mC1: '30–300 BPM', mC2: 'Ölçüler ve vurgular', mC3: 'Kayıtlı ritimler', mCta: 'Metronomu aç',
       tName: 'Akort aleti', tDesc: 'Mikrofonla enstrümanını saniyeler içinde akort et.',
       tC1: 'Kromatik', tC2: 'Gitar', tC3: 'Ukulele', tCta: 'Akort aletini aç',
+      cName: 'Akor bulucu', cDesc: 'Akoru seç, gitar sapında nota ve parmak konumlarını gör.',
+      cC1: 'Tüm kök notalar', cC2: 'Maj · Min · 7 · Sus', cC3: '10 varyasyon', cCta: 'Akor bulucuyu aç',
+      pName: 'Practice', pDesc: 'YouTube derslerini ve parçaları seçtiğin bölümü tekrarlayarak çalış.',
+      pC1: 'A–B döngüsü', pC2: 'Oynatma hızı', pC3: 'Sonsuz veya süreli', pCta: 'Practice’i aç',
       foot: 'Ücretsiz, kayıt gerektirmez.',
       themeLight: 'Gündüz teması', themeNight: 'Gece teması',
       langGroup: 'Dil / Language', themeGroup: 'Görünüm'
     },
     en: {
       htmlLang: 'en', locale: 'en_US',
-      docTitle: 'Lmx Metronome Tuner – Online Metronome and Tuner',
-      docDesc: 'Free online metronome and microphone-based instrument tuner. Set your tempo, build your rhythm and tune your instrument right in the browser.',
+      docTitle: 'Limxona – Metronome, Tuner, Chord Finder & Practice',
+      docDesc: 'Free music practice tools: an online metronome, microphone tuner, guitar chord finder and A–B loops for YouTube lessons and songs.',
       title: 'Get ready before you play.',
-      sub: 'A metronome for tempo, a tuner for pitch. Both free, right in your browser.',
+      sub: 'Set your tempo, tune your instrument, explore chords and loop YouTube lessons. All in your browser.',
       mName: 'Metronome', mDesc: 'Set the tempo, build your own rhythm and save it.',
       mC1: '30–300 BPM', mC2: 'Time signatures & accents', mC3: 'Saved rhythms', mCta: 'Open metronome',
       tName: 'Tuner', tDesc: 'Tune your instrument with your microphone in seconds.',
       tC1: 'Chromatic', tC2: 'Guitar', tC3: 'Ukulele', tCta: 'Open tuner',
+      cName: 'Chord finder', cDesc: 'Choose a chord and see notes and finger positions on the guitar fretboard.',
+      cC1: 'All root notes', cC2: 'Maj · Min · 7 · Sus', cC3: '10 variations', cCta: 'Open chord finder',
+      pName: 'Practice', pDesc: 'Practice YouTube lessons and songs by repeating a passage of your choice.',
+      pC1: 'A–B loops', pC2: 'Playback speed', pC3: 'Infinite or timed', pCta: 'Open Practice',
       foot: 'Free, no sign-up needed.',
       themeLight: 'Day theme', themeNight: 'Night theme',
       langGroup: 'Language / Dil', themeGroup: 'Appearance'
@@ -315,6 +351,11 @@
     setMeta('meta[property="og:locale"]', 'content', d.locale);
     document.getElementById('linkMetro').href = '/' + lang + '/metronome';
     document.getElementById('linkTuner').href = '/' + lang + '/tuner';
+    document.getElementById('linkChords').href = '/' + lang + '/chords';
+    document.getElementById('linkPractice').href = '/' + lang + '/practice';
+    setMeta('meta[name="twitter:url"]', 'content', pageUrl);
+    setMeta('meta[name="twitter:title"]', 'content', d.docTitle);
+    setMeta('meta[name="twitter:description"]', 'content', d.docDesc);
     setMeta('meta[name="description"]', 'content', d.docDesc);
     setMeta('meta[property="og:title"]', 'content', d.docTitle);
     setMeta('meta[property="og:description"]', 'content', d.docDesc);
