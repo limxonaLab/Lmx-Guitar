@@ -8,10 +8,12 @@
     { "source": "/index.html", "destination": "/tr", "permanent": true },
     { "source": "/metronome", "destination": "/tr/metronome", "permanent": true },
     { "source": "/tuner", "destination": "/tr/tuner", "permanent": true },
-	{ "source": "/chords", "destination": "/tr/tuner", "permanent": true },
+	{ "source": "/chords", "destination": "/tr/chords", "permanent": true },
+	{ "source": "/pratice", "destination": "/tr/pratice", "permanent": true },
     { "source": "/metronome.html", "destination": "/tr/metronome", "permanent": true },
     { "source": "/tuner.html", "destination": "/tr/tuner", "permanent": true },
-	{ "source": "/chords.html", "destination": "/tr/chords", "permanent": true }
+	{ "source": "/chords.html", "destination": "/tr/chords", "permanent": true },
+	{ "source": "/pratice.html", "destination": "/tr/pratice", "permanent": true }
   ],
   "rewrites": [
     { "source": "/tr", "destination": "/api/page?lang=tr&page=index" },
@@ -21,6 +23,8 @@
     { "source": "/tr/tuner", "destination": "/api/page?lang=tr&page=tuner" },
     { "source": "/en/tuner", "destination": "/api/page?lang=en&page=tuner" },
 	{ "source": "/tr/chords", "destination": "/api/page?lang=tr&page=chords" },
-    { "source": "/en/chords", "destination": "/api/page?lang=en&page=chords" }
+    { "source": "/en/chords", "destination": "/api/page?lang=en&page=chords" },
+	{ "source": "/tr/pratice", "destination": "/api/page?lang=tr&page=pratice" },
+    { "source": "/en/pratice", "destination": "/api/page?lang=en&page=pratice" }
   ]
 }
