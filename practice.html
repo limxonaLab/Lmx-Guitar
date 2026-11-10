@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="application-version" content="1.5">
+<meta name="application-version" content="1.6">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>LmX Practice — YouTube Ders Çalışma ve A–B Döngü</title>
 <meta name="description" content="YouTube ders ve örnek parçalarını A–B döngüsüyle çalış. Büyük oynatma çubuğu, hassas ileri geri sarma ve süreli tekrar.">
@@ -126,24 +126,98 @@ input[type=range]::-moz-range-thumb{width:36px;height:36px;background:radial-gra
 .transport .frame-btn{background:var(--soft)}
 @media(max-width:620px){.transport{grid-template-columns:39px 35px minmax(76px,1fr) 35px 39px;gap:5px}.transport .skip{height:44px}.transport .skip b{font-size:13px}.transport .skip small{font-size:8px}.transport .play{font-size:12px}}
 
+
+/* v1.6: compact controls and recent videos. */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+.video-caption{display:block;min-width:0}
+.video-caption .video-title{display:block;width:100%;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:20px;height:20px}
+.compact-bottom{margin:0 0 12px;gap:8px}
+#loop-toggle{background:#c65a09;border-color:#c65a09;color:#fff}
+#loop-toggle:hover:not(:disabled){background:#ac4c05;border-color:#ac4c05}
+#loop-toggle[aria-pressed="true"]{background:#087d45;border-color:#087d45;color:#fff}
+#loop-toggle[aria-pressed="true"]:hover{background:#06683a;border-color:#06683a}
+:root[data-theme=dark] #loop-toggle{color:#fff}
+.transport{grid-template-columns:repeat(4,minmax(0,1fr)) 96px repeat(4,minmax(0,1fr));grid-template-areas:"back5 back1 frames5 frame1 play frame2 frames2 next1 next5";gap:7px;max-width:760px;margin-inline:auto}
+.transport .play{height:44px;min-height:44px;flex-direction:row;padding:4px 8px;gap:5px;background:#ff0000;border-color:#ff0000;color:#fff}
+.transport .play:hover:not(:disabled){background:#d90000;border-color:#d90000}
+:root[data-theme=dark] .transport .play{color:#fff}
+.transport .skip{height:44px;min-height:44px;padding:2px 0}
+.transport .skip b{line-height:18px}
+.history-card{padding:18px 20px}
+.history-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.history-heading h2{font-size:14px;margin:0;font-weight:650}
+.history-count{font-size:11px;color:var(--mut);white-space:nowrap;font-variant-numeric:tabular-nums}
+.history-list{display:grid;gap:7px}
+.history-empty{font-size:12px;color:var(--mut);margin:0;padding:4px 0}
+.history-row{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:11px;padding:9px 10px;background:var(--button);min-width:0}
+.history-name{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:12px;font-weight:550}
+.history-actions{display:flex;gap:5px;flex:none}
+.history-actions button{min-height:36px;padding:6px 10px;font-size:11px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--fg);white-space:nowrap}
+.history-actions .history-play{background:var(--soft);border-color:var(--accent);color:var(--accent);font-weight:650}
+.history-actions .history-delete{color:var(--mut)}
+@media(max-width:620px){
+ .transport{grid-template-columns:repeat(4,minmax(0,1fr)) 44px repeat(4,minmax(0,1fr));gap:3px;max-width:none}
+ .transport .play{padding:3px;gap:0}
+ .transport .play #play-text{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+ .transport .play svg{width:17px;height:17px}
+ .transport .skip b{font-size:12px}.transport .skip small{font-size:8px}
+ .compact-bottom{margin-bottom:10px}
+ .history-card{padding:15px 12px}.history-row{padding:8px;gap:6px}.history-name{font-size:11px}
+ .history-actions button{padding:6px 8px;font-size:10px}
+}
+/* iOS avoids focus zoom when editable controls have at least 16px text. */
+@media(max-width:620px),(pointer:coarse){input:not([type="range"]),textarea,select,.url-bar input,.limit-wrap input,.rate-control select{font-size:16px!important}}
+
+
+.player-shell{min-width:0}
+.media-toolbar{display:flex;align-items:center;gap:9px;padding:8px 3px 0;min-width:0}
+.media-button{display:grid;place-items:center;flex:none;min-width:36px;height:36px;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--fg);font-size:11px}
+.media-button svg{width:19px;height:19px}
+.media-toolbar input.volume-slider{appearance:auto;-webkit-appearance:auto;flex:0 1 90px;width:90px;min-width:35px;height:28px;z-index:auto;accent-color:var(--accent);padding:0}
+.media-toolbar input.volume-slider::-webkit-slider-runnable-track{background:var(--line);height:4px}
+.media-toolbar input.volume-slider::-webkit-slider-thumb{width:14px;height:14px;margin-top:-5px;border:0;background:var(--accent);box-shadow:none}
+.media-toolbar input.volume-slider::-moz-range-track{background:var(--line);height:4px}
+.media-toolbar input.volume-slider::-moz-range-thumb{width:14px;height:14px;border:0;background:var(--accent);box-shadow:none}
+.media-time{margin-right:auto;white-space:nowrap;color:var(--mut);font:11px ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.quality-button[aria-pressed="true"]{border-color:var(--accent);background:var(--soft);color:var(--accent)}
+body.video-fullscreen{overflow:hidden}
+.player-shell.is-fullscreen{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;flex-direction:column;padding:max(8px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));width:100%;height:100%;height:100dvh}
+.player-shell.is-fullscreen .video-stage{flex:1;min-height:0;max-height:none;height:auto;border-radius:0;aspect-ratio:auto}
+.player-shell.is-fullscreen .media-toolbar{flex:none}
+@media(max-width:620px){.media-toolbar{gap:5px}.media-button{min-width:32px;width:32px;height:34px;padding:5px}.quality-button{width:auto;min-width:45px;font-size:10px}.media-time{font-size:10px}.media-toolbar input.volume-slider{flex-basis:58px;width:58px}}
+
 </style>
 </head>
 <body>
 <div class="app">
- <header class="header"><a class="brand" href="#" id="brand"><span class="brand-icon" aria-hidden="true"><img src="/lmx-practice-logo.svg" width="36" height="36" alt="" onload="this.parentElement.classList.add('has-logo')" onerror="this.hidden=true;this.nextElementSibling.removeAttribute('hidden')"><svg hidden viewBox="0 0 24 24"><path d="M18 7H7a4 4 0 0 0-4 4v1m3-8-3 3 3 3m0 7h11a4 4 0 0 0 4-4v-1m-3 8 3-3-3-3"/><path d="m10 9 5 3-5 3z"/></svg></span><span><h1>LmX Practice<span style="color:var(--accent)">.</span></h1><small data-i="tagline">Bir bölümü seç. Tekrar et. Oturt.</small></span></a><div class="header-actions"><span class="version">v1.5</span><div class="seg" role="group" aria-label="Language"><button data-lang="tr" type="button" aria-pressed="true">TR</button><button data-lang="en" type="button" aria-pressed="false">EN</button></div><div class="seg theme" role="group" data-aria="theme"><button id="light" type="button" data-aria="light" aria-pressed="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button id="dark" type="button" data-aria="dark" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M20.8 14A9 9 0 0 1 10 3.2 9 9 0 1 0 20.8 14Z"/></svg></button></div></div></header>
+ <header class="header"><a class="brand" href="#" id="brand"><span class="brand-icon" aria-hidden="true"><img src="/lmx-practice-logo.svg" width="36" height="36" alt="" onload="this.parentElement.classList.add('has-logo')" onerror="this.hidden=true;this.nextElementSibling.removeAttribute('hidden')"><svg hidden viewBox="0 0 24 24"><path d="M18 7H7a4 4 0 0 0-4 4v1m3-8-3 3 3 3m0 7h11a4 4 0 0 0 4-4v-1m-3 8 3-3-3-3"/><path d="m10 9 5 3-5 3z"/></svg></span><span><h1>LmX Practice<span style="color:var(--accent)">.</span></h1><small data-i="tagline">Bir bölümü seç. Tekrar et. Oturt.</small></span></a><div class="header-actions"><span class="version">v1.6</span><div class="seg" role="group" aria-label="Language"><button data-lang="tr" type="button" aria-pressed="true">TR</button><button data-lang="en" type="button" aria-pressed="false">EN</button></div><div class="seg theme" role="group" data-aria="theme"><button id="light" type="button" data-aria="light" aria-pressed="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button id="dark" type="button" data-aria="dark" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M20.8 14A9 9 0 0 1 10 3.2 9 9 0 1 0 20.8 14Z"/></svg></button></div></div></header>
  <main>
   <form class="url-bar" id="video-form"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 .1l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7-.1l-3 3a5 5 0 0 0 7 7l2-2"/></svg><label class="sr-only" for="video-url" data-i="urlLabel">YouTube video bağlantısı</label><input id="video-url" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://www.youtube.com/watch?v=…" required><button class="btn primary" id="load" type="submit" data-i="load">Video aç</button></form>
   <p class="form-note" id="url-message" role="status"></p>
   <div class="error-box" id="error-box" role="alert" hidden><p id="error-text"></p><a id="youtube-link" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" data-i="openYouTube">YouTube’da aç</a></div>
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-  <div class="video-caption"><h2 class="video-title" id="video-title" data-i="noVideo">Video henüz seçilmedi</h2><span class="status" role="status"><i></i><span id="status-text">Hazır</span></span></div>
+  <div class="video-caption"><h2 class="video-title" id="video-title" data-i="noVideo">Video henüz seçilmedi</h2></div>
+  <div class="player-shell" id="player-shell">
   <section class="video-stage" data-aria="videoArea"><div class="player-mount" id="player-host"></div><div class="empty-video" id="empty-video"><div class="empty-icon"><svg viewBox="0 0 32 32"><rect x="3" y="7" width="26" height="18" rx="6"/><path d="m13 12 8 4-8 4z"/></svg></div><h2 data-i="emptyTitle">Dersin burada, odağın müzikte.</h2><p data-i="emptyLead">YouTube bağlantısını yukarıya yapıştırarak başla.</p><div class="tiny"><i></i><span data-i="emptyTiny">İzle · Böl · Tekrar et</span><i></i></div></div></section>
+   <div class="media-toolbar">
+    <button class="media-button" id="volume-toggle" type="button" data-aria="mute" disabled><svg viewBox="0 0 24 24" id="volume-icon" aria-hidden="true"><path d="m11 5-6 4H2v6h3l6 4zM15 8c2 2 2 6 0 8m3-11c4 4 4 10 0 14"/></svg></button>
+    <input class="volume-slider" id="volume" type="range" min="0" max="100" step="1" value="100" data-aria="volume" disabled>
+    <span class="media-time" id="media-time">00:00 / 00:00</span>
+    <button class="media-button quality-button" id="quality-toggle" type="button" aria-pressed="false" data-i="quality" data-aria="qualityToggle" disabled>Kalite</button>
+    <button class="media-button" id="video-fullscreen" type="button" data-aria="fullscreen" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
+   </div>
+  </div>
   <section class="card playback-card compact-controls" data-aria="playbackArea">
    <div class="scrubber" id="scrubber"><div class="track-art"><div class="buffer-line"></div><div class="selection-line"></div><div class="progress-line"></div></div><label class="sr-only" for="seek" data-i="seekLabel">Videoda konum</label><input id="seek" type="range" min="0" max="1" value="0" step="0.01" disabled><button class="timeline-pin" id="pin-a" type="button" data-aria="adjustA" hidden>A</button><button class="timeline-pin out" id="pin-b" type="button" data-aria="adjustB" hidden>B</button></div>
    <div class="quick-loop-row">
     <button class="point-quick a" id="mark-in" type="button" data-aria="setA" disabled><span><b>A</b><small>IN</small></span><strong id="a-value">00:00.0</strong></button>
     <button class="point-quick b" id="mark-out" type="button" data-aria="setB" disabled><span><b>B</b><small>OUT</small></span><strong id="b-value">—</strong></button>
     <div class="seg loop-mode" role="group" data-aria="repeatMode"><button type="button" data-mode="infinite" aria-pressed="true" data-i="infinite">∞ Sonsuz</button><button type="button" data-mode="timed" aria-pressed="false" data-i="timed">Süreli</button></div>
+   </div>
+   <div class="compact-bottom">
+    <label class="limit-wrap" id="limit-wrap" hidden><span data-i="workTime">Süre</span><input id="limit" type="text" value="05:00" autocomplete="off" inputmode="numeric" data-aria="workTime" spellcheck="false"></label>
+    <label class="rate-control"><span data-i="speed">Hız</span><select id="speed" data-aria="speed" disabled><option value="1">1×</option></select></label>
+    <button id="loop-toggle" class="btn primary" type="button" aria-pressed="false" data-i="startLoop" disabled>Döngüyü başlat</button>
    </div>
    <div class="transport">
     <button class="skip seconds back-five" id="back" type="button" data-aria="back" disabled><b>−5</b><small data-i="seconds">sn</small></button>
@@ -156,12 +230,11 @@ input[type=range]::-moz-range-thumb{width:36px;height:36px;background:radial-gra
     <button class="skip frame-btn forward-frame" id="frame-forward" type="button" data-aria="frameForward" disabled><b>+1</b><small data-i="frame">Kare</small></button>
     <button class="skip frame-btn forward-five-frames" id="frames-forward" type="button" data-aria="framesForward" disabled><b>+5</b><small data-i="frame">Kare</small></button>
    </div>
-   <div class="compact-bottom">
-    <label class="limit-wrap" id="limit-wrap" hidden><span data-i="workTime">Süre</span><input id="limit" type="text" value="05:00" autocomplete="off" inputmode="numeric" data-aria="workTime" spellcheck="false"></label>
-    <label class="rate-control"><span data-i="speed">Hız</span><select id="speed" data-aria="speed" disabled><option value="1">1×</option></select></label>
-    <button id="loop-toggle" class="btn primary" type="button" aria-pressed="false" data-i="startLoop" disabled>Döngüyü başlat</button>
-   </div>
    <div class="compact-stats"><span><strong id="laps">0</strong> <span data-i="laps">tam tur</span></span><span id="session-metric"><strong id="session-time">00:00</strong> <span id="session-label" data-i="worked">çalışıldı</span></span><span class="badge" id="loop-status">Kapalı</span></div>
+  </section>
+  <section class="card history-card" aria-labelledby="history-title">
+   <div class="history-heading"><h2 id="history-title" data-i="historyTitle">Son açılan videolar</h2><span class="history-count" id="history-count">0 / 20</span></div>
+   <div class="history-list" id="history-list"></div>
   </section>
  </main>
  <footer class="footer"><details><summary data-i="shortcuts">Klavye kısayolları</summary><p data-i="shortcutText">Boşluk: oynat / duraklat · ← →: 5 saniye geri / ileri · I: başlangıcı al · O: bitişi al</p></details><span data-i="savedLocal">Son video ve ayarların bu tarayıcıda saklanır.</span></footer>
@@ -288,14 +361,22 @@ class PracticeEngine{
   }
  }
 }
+function normaliseHistory(value){
+ if(!Array.isArray(value))return [];
+ const seen=new Set();
+ return value.filter(item=>item&&typeof item==='object'&&typeof item.id==='string'&&/^[\w-]{11}$/.test(item.id))
+  .map(item=>({id:item.id,title:typeof item.title==='string'?item.title.slice(0,300):'',start:Number.isFinite(item.start)?Math.max(0,item.start):0,openedAt:Number.isFinite(item.openedAt)?item.openedAt:0}))
+  .sort((a,b)=>b.openedAt-a.openedAt).filter(item=>{if(seen.has(item.id))return false;seen.add(item.id);return true;}).slice(0,20);
+}
 // UI
 const $=id=>document.getElementById(id);
 function setText(id,value){const node=$(id),text=String(value);if(node.textContent!==text)node.textContent=text;}
 const TEXT={tr:{tagline:'Bir bölümü seç. Tekrar et. Oturt.',theme:'Görünüm',light:'Açık tema',dark:'Koyu tema',videoArea:'YouTube videosu',playbackArea:'Video oynatma kontrolleri',emptyTitle:'Dersin burada, odağın müzikte.',emptyLead:'YouTube bağlantısını yukarıya yapıştırarak başla.',emptyTiny:'İzle · Böl · Tekrar et',urlLabel:'YouTube video bağlantısı',load:'Video aç',openYouTube:'YouTube’da aç',noVideo:'Video henüz seçilmedi',seekLabel:'Videoda konum',play:'Oynat',pause:'Duraklat',back:'5 saniye geri',forward:'5 saniye ileri',speed:'Hız',loopTitle:'A–B Döngü',inLabel:'Başlangıç · IN',outLabel:'Bitiş · OUT',mark:'Şu anı al',inTime:'Döngü başlangıç zamanı',outTime:'Döngü bitiş zamanı',sectionLength:'Seçili bölüm',gotoIn:'A noktasına dön',repeatMode:'Döngü çalışma modu',infinite:'∞ Sonsuz',timed:'Süreli',workTime:'Süre',startLoop:'Döngüyü başlat',stopLoop:'Döngüyü durdur',laps:'tam tur',worked:'çalışıldı',remaining:'kaldı',timerHint:'Süreli modda yalnızca oynatma süresi sayılır; duraklatınca sayaç bekler.',shortcuts:'Klavye kısayolları',shortcutText:'Boşluk: oynat / duraklat · ← →: 5 saniye geri / ileri · I: başlangıcı al · O: bitişi al',savedLocal:'Son video ve ayarların bu tarayıcıda saklanır.',ready:'Hazır',paused:'Duraklatıldı',playing:'Oynatılıyor',buffering:'Yükleniyor',loading:'Video hazırlanıyor',ended:'Video bitti',loopOff:'Kapalı',loopOn:'Döngü açık',complete:'Süre doldu',leftRange:'Döngü dışına geçildi; döngü kapatıldı.',timeComplete:'Çalışma süresi tamamlandı.',invalidUrl:'Geçerli bir YouTube video bağlantısı yapıştır.',invalidTime:'Zamanı dakika:saniye olarak gir. Örnek: 02:35.5',invalidRange:'Başlangıç ve bitiş arasında en az bir kare olmalı.',invalidLimit:'Çalışma süresini gir. Örnek: 05:00 (5 dakika).',embedDenied:'Bu video başka sitelerde oynatılamıyor. Farklı bir video bağlantısı deneyebilirsin.',notFound:'Video bulunamadı, kaldırılmış ya da gizli olabilir.',genericError:'YouTube videoyu oynatamadı. Bağlantıyı kontrol edip yeniden aç.',referrerError:'YouTube, bu sitenin kaynak adresini alamadı (153). Sayfayı doğrudan kendi site adresinden aç. Sorun sürerse sitenin veya tarayıcının referrer ayarı kontrol edilmeli.',referrerEmbedded:'YouTube, bu önizlemenin kaynak adresini alamadı (153). Önizleme yerine sayfanın doğrudan HTTP/HTTPS adresini yeni sekmede aç.',apiError:'YouTube’a bağlanılamadı. İnternet bağlantını kontrol edip Video aç düğmesiyle tekrar dene.',autoplayBlocked:'Oynatmak için video üzerindeki YouTube oynat düğmesine dokun.',localFile:'YouTube bu dosya/önizleme adresinden başlatılamıyor. Dosyayı Vercel’deki sitenden veya http://localhost gibi bir web sunucusundan aç; dosyaya çift tıklayarak açma.',rateUnavailable:'Bu videoda seçilen hız kullanılamıyor.',live:'Canlı yayında bu videonun zaman çubuğu henüz hazır değil.'},en:{tagline:'Pick a passage. Repeat. Make it yours.',theme:'Appearance',light:'Light theme',dark:'Dark theme',videoArea:'YouTube video',playbackArea:'Video playback controls',emptyTitle:'Your lesson. Your practice space.',emptyLead:'Paste a YouTube link above to get started.',emptyTiny:'Watch · Mark · Repeat',urlLabel:'YouTube video link',load:'Open video',openYouTube:'Open on YouTube',noVideo:'No video selected',seekLabel:'Video position',play:'Play',pause:'Pause',back:'Back 5 seconds',forward:'Forward 5 seconds',speed:'Speed',loopTitle:'A–B Loop',inLabel:'Start · IN',outLabel:'End · OUT',mark:'Set to now',inTime:'Loop start time',outTime:'Loop end time',sectionLength:'Selected passage',gotoIn:'Back to A',repeatMode:'Loop session mode',infinite:'∞ Infinite',timed:'Timed',workTime:'Time',startLoop:'Start loop',stopLoop:'Stop loop',laps:'full loops',worked:'practiced',remaining:'remaining',timerHint:'Timed mode counts playing time only. The timer waits while paused.',shortcuts:'Keyboard shortcuts',shortcutText:'Space: play / pause · ← →: back / forward 5 seconds · I: set start · O: set end',savedLocal:'Your last video and settings stay in this browser.',ready:'Ready',paused:'Paused',playing:'Playing',buffering:'Buffering',loading:'Preparing video',ended:'Video ended',loopOff:'Off',loopOn:'Loop on',complete:'Time is up',leftRange:'Left the passage; looping is now off.',timeComplete:'Practice session complete.',invalidUrl:'Paste a valid YouTube video link.',invalidTime:'Enter minutes:seconds, for example 02:35.5',invalidRange:'Keep at least one frame between the start and end.',invalidLimit:'Enter a session length, for example 05:00 (5 minutes).',embedDenied:'This video cannot play on other websites. Try another video link.',notFound:'The video was removed, is private, or could not be found.',genericError:'YouTube could not play this video. Check the link and open it again.',referrerError:'YouTube did not receive this site’s referrer (153). Open the page directly on your website. If it persists, check the site or browser referrer policy.',referrerEmbedded:'YouTube did not receive this preview’s referrer (153). Open the actual HTTP/HTTPS page directly in a new tab instead of inside a preview.',apiError:'Could not connect to YouTube. Check your connection and try Open video again.',autoplayBlocked:'Tap the YouTube play button inside the video to start playback.',localFile:'YouTube cannot start from this file/preview address. Open the page on your website or a web server such as http://localhost; do not double-click the HTML file.',rateUnavailable:'That speed is unavailable for this video.',live:'The timeline is not ready for this live video.'}};
 let lang='tr';try{const route=location.pathname.match(/^\/(tr|en)(?:\/|$)/);lang=route?route[1]:(localStorage.getItem('lmx-lang')||((navigator.language||'tr').startsWith('tr')?'tr':'en'));}catch{}if(!TEXT[lang])lang='tr';
-Object.assign(TEXT.tr,{setA:'Şu anı A başlangıcı olarak işaretle',setB:'Şu anı B bitişi olarak işaretle',frame:'Kare',frameBack:'Bir kare geri · yaklaşık 1/30 saniye; duraklatır',frameForward:'Bir kare ileri · yaklaşık 1/30 saniye; duraklatır',seconds:'sn',backOne:'1 saniye geri',forwardOne:'1 saniye ileri',framesBack:'5 kare geri · yaklaşık 1/6 saniye; duraklatır',framesForward:'5 kare ileri · yaklaşık 1/6 saniye; duraklatır',adjustA:'A başlangıcını sürükle veya ok tuşlarıyla ayarla',adjustB:'B bitişini sürükle veya ok tuşlarıyla ayarla'});
-Object.assign(TEXT.en,{setA:'Set the current position as start A',setB:'Set the current position as end B',frame:'Frame',frameBack:'Back one frame · approximately 1/30 second; pauses',frameForward:'Forward one frame · approximately 1/30 second; pauses',seconds:'s',backOne:'Back 1 second',forwardOne:'Forward 1 second',framesBack:'Back 5 frames · approximately 1/6 second; pauses',framesForward:'Forward 5 frames · approximately 1/6 second; pauses',adjustA:'Drag loop start A or adjust with arrow keys',adjustB:'Drag loop end B or adjust with arrow keys'});
+Object.assign(TEXT.tr,{setA:'Şu anı A başlangıcı olarak işaretle',setB:'Şu anı B bitişi olarak işaretle',frame:'Kare',frameBack:'Bir kare geri · yaklaşık 1/30 saniye; duraklatır',frameForward:'Bir kare ileri · yaklaşık 1/30 saniye; duraklatır',volume:'Ses seviyesi',mute:'Sesi kapat',unmute:'Sesi aç',quality:'Kalite',qualityToggle:'YouTube kontrollerini ve kalite ayarlarını göster veya gizle',fullscreen:'Tam ekran',exitFullscreen:'Tam ekrandan çık',fullscreenError:'Tam ekran açılamadı.',historyTitle:'Son açılan videolar',historyEmpty:'Açtığın son 20 video burada görünür.',historyPlay:'Oynat',historyDelete:'Sil',historyPlayAria:'{title} videosunu aç ve oynat',historyDeleteAria:'{title} videosunu geçmişten sil',seconds:'sn',backOne:'1 saniye geri',forwardOne:'1 saniye ileri',framesBack:'5 kare geri · yaklaşık 1/6 saniye; duraklatır',framesForward:'5 kare ileri · yaklaşık 1/6 saniye; duraklatır',adjustA:'A başlangıcını sürükle veya ok tuşlarıyla ayarla',adjustB:'B bitişini sürükle veya ok tuşlarıyla ayarla'});
+Object.assign(TEXT.en,{setA:'Set the current position as start A',setB:'Set the current position as end B',frame:'Frame',frameBack:'Back one frame · approximately 1/30 second; pauses',frameForward:'Forward one frame · approximately 1/30 second; pauses',volume:'Volume',mute:'Mute',unmute:'Unmute',quality:'Quality',qualityToggle:'Show or hide YouTube controls and quality settings',fullscreen:'Fullscreen',exitFullscreen:'Exit fullscreen',fullscreenError:'Could not open fullscreen.',historyTitle:'Recently opened videos',historyEmpty:'Your 20 most recent videos will appear here.',historyPlay:'Play',historyDelete:'Delete',historyPlayAria:'Open and play {title}',historyDeleteAria:'Remove {title} from history',seconds:'s',backOne:'Back 1 second',forwardOne:'Forward 1 second',framesBack:'Back 5 frames · approximately 1/6 second; pauses',framesForward:'Forward 5 frames · approximately 1/6 second; pauses',adjustA:'Drag loop start A or adjust with arrow keys',adjustB:'Drag loop end B or adjust with arrow keys'});
 const t=k=>TEXT[lang][k]||k;
+let pendingAutoplay=false,nativeControls=false,playerRebuild=null;
 let player=null,engine=null,playerReady=false,videoId='',videoTitle='',pendingStart=0,pendingRestore=null,apiLoading=false,apiTimeout=null,toastTimer=null,seekLast=-Infinity,seekPreviewTimer=null,saveLast=0,durationSeen=0,loadingVideo=false;
 function notice(key){$('toast').textContent=t(key);$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,3200);}
 function error(key){$('error-text').textContent=t(key);$('error-box').hidden=false;}
@@ -307,7 +388,7 @@ function updatePageMeta(){
   const node=document.querySelector(selector);if(node)node.content=value;
  }
 }
-function applyLang(){document.documentElement.lang=lang;document.title=lang==='tr'?'LmX Practice — YouTube Ders Çalışma ve A–B Döngü':'LmX Practice — YouTube Practice & A–B Loop';updatePageMeta();document.querySelectorAll('[data-i]').forEach(el=>el.textContent=t(el.dataset.i));document.querySelectorAll('[data-aria]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.aria)));document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===lang)));render();}
+function applyLang(){document.documentElement.lang=lang;document.title=lang==='tr'?'LmX Practice — YouTube Ders Çalışma ve A–B Döngü':'LmX Practice — YouTube Practice & A–B Loop';updatePageMeta();document.querySelectorAll('[data-i]').forEach(el=>el.textContent=t(el.dataset.i));document.querySelectorAll('[data-aria]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.aria)));document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===lang)));drawHistory();render();}
 function setTheme(theme){document.documentElement.dataset.theme=theme;try{localStorage.setItem('metronom-theme',theme);}catch{}['light','dark'].forEach(mode=>$(mode).setAttribute('aria-pressed',String(mode===theme)));}
 $('light').onclick=()=>setTheme('light');$('dark').onclick=()=>setTheme('dark');setTheme(document.documentElement.dataset.theme||'light');
 document.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{lang=b.dataset.lang;try{localStorage.setItem('lmx-lang',lang);}catch{}applyLang();});
@@ -315,6 +396,42 @@ $('brand').onclick=e=>{e.preventDefault();window.scrollTo({top:0,behavior:matchM
 function snapshot(){return{version:1,videoId,position:engine?.duration?engine.current:pendingStart,a:pendingRestore?.a??engine?.a??0,b:pendingRestore?.b??engine?.b??null,mode:pendingRestore?.mode||engine?.mode||'infinite',limit:pendingRestore?.limit||engine?.limit||300,rate:pendingRestore?.rate||Number($('speed').value)||1};}
 function save(){if(!videoId)return;try{localStorage.setItem('lmx-practice-state',JSON.stringify(snapshot()));}catch{}}
 function restore(){try{const s=JSON.parse(localStorage.getItem('lmx-practice-state')||'null');if(!s||s.version!==1||!/^[\w-]{11}$/.test(s.videoId))return;pendingRestore={a:Number.isFinite(s.a)&&s.a>=0?s.a:0,b:Number.isFinite(s.b)&&s.b>=0?s.b:null,mode:s.mode==='timed'?'timed':'infinite',limit:Number.isFinite(s.limit)&&s.limit>=1?s.limit:300,rate:Number.isFinite(s.rate)?s.rate:1};$('video-url').value='https://www.youtube.com/watch?v='+s.videoId;openVideo({id:s.videoId,start:Number.isFinite(s.position)?Math.max(0,s.position):0},true);}catch{}}
+const HISTORY_KEY='lmx-practice-history';
+let videoHistory=[];try{videoHistory=normaliseHistory(JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]'));}catch{}
+function writeHistory(){try{localStorage.setItem(HISTORY_KEY,JSON.stringify(videoHistory));}catch{}}
+function rememberVideo(id,start,title=''){
+ const previous=videoHistory.find(item=>item.id===id);
+ const newest=videoHistory.reduce((max,item)=>Math.max(max,item.openedAt),0);
+ videoHistory=normaliseHistory([{id,start,title:title||previous?.title||'',openedAt:Math.max(Date.now(),newest+1)},...videoHistory.filter(item=>item.id!==id)]);
+ writeHistory();drawHistory();
+}
+function updateHistoryTitle(id,title){
+ const entry=videoHistory.find(item=>item.id===id);
+ if(!entry||!title||entry.title===title)return;
+ entry.title=String(title).slice(0,300);writeHistory();drawHistory();
+}
+function removeHistoryVideo(id){
+ videoHistory=videoHistory.filter(item=>item.id!==id);writeHistory();drawHistory();
+}
+function drawHistory(){
+ const list=$('history-list');list.replaceChildren();$('history-count').textContent=videoHistory.length+' / 20';
+ if(!videoHistory.length){const empty=document.createElement('p');empty.className='history-empty';empty.textContent=t('historyEmpty');list.appendChild(empty);return;}
+ for(const item of videoHistory){
+  const row=document.createElement('div');row.className='history-row';row.dataset.videoId=item.id;
+  const name=document.createElement('span');name.className='history-name';name.textContent=item.title||'YouTube · '+item.id;name.title=name.textContent;
+  const actions=document.createElement('div');actions.className='history-actions';
+  const remove=document.createElement('button');remove.type='button';remove.className='history-delete';remove.textContent=t('historyDelete');remove.setAttribute('aria-label',t('historyDeleteAria').replace('{title}',name.textContent));
+  remove.onclick=()=>removeHistoryVideo(item.id);
+  const play=document.createElement('button');play.type='button';play.className='history-play';play.textContent='▶ '+t('historyPlay');play.setAttribute('aria-label',t('historyPlayAria').replace('{title}',name.textContent));
+  play.onclick=()=>{$('video-url').value='https://www.youtube.com/watch?v='+item.id;$('video-url').removeAttribute('aria-invalid');openVideo({id:item.id,start:item.start},false,true);};
+  actions.append(remove,play);row.append(name,actions);list.appendChild(row);
+ }
+}
+function cueSelectedVideo(){
+ const autoplay=pendingAutoplay;pendingAutoplay=false;
+ if(autoplay)player.loadVideoById({videoId,startSeconds:pendingStart});
+ else player.cueVideoById({videoId,startSeconds:pendingStart});
+}
 function initAPI(){
  if(window.YT?.Player){createOrCue();return;}
  if(apiLoading)return;apiLoading=true;
@@ -323,19 +440,20 @@ function initAPI(){
  apiTimeout=setTimeout(()=>{if(!window.YT?.Player){apiLoading=false;loadingVideo=false;script.remove();error('apiError');render();}},15000);
 }
 window.onYouTubeIframeAPIReady=()=>{apiLoading=false;clearTimeout(apiTimeout);createOrCue();};
-function openVideo(parsed,restoring=false){
- if(!parsed)return;const different=videoId!==parsed.id;
+function openVideo(parsed,restoring=false,autoplay=false){
+ if(!parsed)return;playerRebuild=null;pendingAutoplay=autoplay;const different=videoId!==parsed.id;
  if(engine){engine.stopLoop();engine.duration=0;engine.current=parsed.start;engine.state=-1;if(different){engine.a=0;engine.b=null;engine.elapsed=0;engine.laps=0;engine.completed=false;}}
  if(!restoring)pendingRestore=null;
  clearTimeout(seekPreviewTimer);seekPreviewTimer=null;if(engine)engine.scrubbing=false;
  videoId=parsed.id;pendingStart=parsed.start;videoTitle='';durationSeen=0;loadingVideo=true;
  $('url-message').textContent='';$('error-box').hidden=true;$('youtube-link').href='https://www.youtube.com/watch?v='+videoId;
  render();if(!/^https?:$/.test(location.protocol)){loadingVideo=false;error('localFile');$('url-message').textContent=t('localFile');render();return;}
+ if(!restoring)rememberVideo(parsed.id,parsed.start);
  initAPI();
 }
 function createOrCue(){
  if(!videoId)return;
- if(player&&playerReady){player.cueVideoById({videoId,startSeconds:pendingStart});return;}
+ if(player&&playerReady){cueSelectedVideo();return;}
  if(player)return;
  $('empty-video').hidden=true;
  // Configure the enclosing iframe before its first navigation. Setting this
@@ -345,25 +463,25 @@ function createOrCue(){
  mount.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
  mount.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen');
  mount.setAttribute('allowfullscreen','');
- const params=new URLSearchParams({enablejsapi:'1',playsinline:'1',controls:'1',rel:'0',autoplay:'0',origin:location.origin});
+ const params=new URLSearchParams({enablejsapi:'1',playsinline:'1',controls:nativeControls?'1':'0',rel:'0',autoplay:'0',origin:location.origin});
  mount.src='https://www.youtube.com/embed/'+encodeURIComponent(videoId)+'?'+params.toString();
  $('player-host').replaceChildren(mount);
  // The IFrame API attaches to the already configured iframe.
  player=new YT.Player('youtube-player',{events:{onReady:event=>{
   player=event.target;playerReady=true;engine=new PracticeEngine(player);engine.onNotice=notice;
   player.getIframe().title=t('videoArea');player.getIframe().setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen');
-  player.cueVideoById({videoId,startSeconds:pendingStart});render();
+  cueSelectedVideo();render();
  },onStateChange:event=>{
-  if(!engine)return;engine.stateChanged(event.data);
+  if((event.target&&event.target!==player)||!engine)return;engine.stateChanged(event.data);
   if([1,2,5,0].includes(event.data))loadingVideo=false;
   updateMetadata();render();
- },onPlaybackRateChange:()=>{syncRates();save();},onError:event=>{loadingVideo=false;if(engine){engine.stopLoop(false);engine.wantedPlaying=false;}error([101,150].includes(event.data)?'embedDenied':event.data===100?'notFound':event.data===153?(window.top!==window.self?'referrerEmbedded':'referrerError'):event.data===2?'invalidUrl':'genericError');render();},onAutoplayBlocked:()=>{if(engine)engine.wantedPlaying=false;notice('autoplayBlocked');render();}}});
+ },onPlaybackRateChange:event=>{if(event.target&&event.target!==player)return;syncRates();save();},onError:event=>{if(event.target&&event.target!==player)return;loadingVideo=false;if(engine){engine.stopLoop(false);engine.wantedPlaying=false;}error([101,150].includes(event.data)?'embedDenied':event.data===100?'notFound':event.data===153?(window.top!==window.self?'referrerEmbedded':'referrerError'):event.data===2?'invalidUrl':'genericError');render();},onAutoplayBlocked:event=>{if(event.target&&event.target!==player)return;if(engine)engine.wantedPlaying=false;notice('autoplayBlocked');render();}}});
 }
 function updateMetadata(){
  if(!playerReady||!engine)return;
  try{
   const data=player.getVideoData();if(data.video_id&&data.video_id!==videoId)return;
-  if(data.title)videoTitle=data.title;
+  if(data.title){videoTitle=data.title;updateHistoryTitle(videoId,data.title);}
   const duration=player.getDuration();
   if(duration>0){
    engine.setDuration(duration);
@@ -371,6 +489,13 @@ function updateMetadata(){
     engine.current=clamp(pendingStart,0,duration);durationSeen=duration;
     if(pendingRestore){engine.a=clamp(pendingRestore.a,0,duration);engine.b=pendingRestore.b===null?duration:clamp(pendingRestore.b,0,duration);engine.mode=pendingRestore.mode;engine.limit=pendingRestore.limit;$('limit').value=formatTime(engine.limit);const rate=pendingRestore.rate;pendingRestore=null;syncRates(rate);engine.setPoint('a',engine.a);}
     else{if(engine.b===null)engine.b=duration;syncRates();}
+    if(playerRebuild){
+     const resume=playerRebuild;playerRebuild=null;
+     engine.elapsed=resume.elapsed;engine.laps=resume.laps;engine.completed=resume.completed;
+     engine.loopActive=resume.loopActive&&engine.validRange();engine.lastTick=performance.now();engine.jumpUntil=performance.now()+150;
+     try{player.setVolume(resume.volume);if(resume.muted)player.mute();else player.unMute();}catch{}
+     engine.seek(pendingStart,resume.playing);
+    }
     save();
    }
   }
@@ -379,13 +504,21 @@ function updateMetadata(){
 function syncRates(preferred){if(!playerReady)return;try{const rates=player.getAvailablePlaybackRates()||[1],current=preferred??player.getPlaybackRate();$('speed').replaceChildren();rates.forEach(rate=>{const o=document.createElement('option');o.value=rate;o.textContent=rate+'×';$('speed').appendChild(o);});$('speed').value=rates.includes(current)?current:1;if(preferred&&rates.includes(preferred))player.setPlaybackRate(preferred);}catch{}}
 function render(){
  const e=engine,ready=Boolean(playerReady&&e?.duration>0),playing=Boolean(e?.wantedPlaying);
- ['seek','play','back','forward','back-one','forward-one','frame-back','frame-forward','frames-back','frames-forward','mark-in','mark-out','loop-toggle'].forEach(id=>$(id).disabled=!ready);
+ ['volume-toggle','volume','quality-toggle','video-fullscreen','seek','play','back','forward','back-one','forward-one','frame-back','frame-forward','frames-back','frames-forward','mark-in','mark-out','loop-toggle'].forEach(id=>$(id).disabled=!ready);
  $('speed').disabled=!playerReady||$('speed').options.length<2;
- $('video-title').textContent=videoTitle||t(videoId?(loadingVideo?'loading':'videoArea'):'noVideo');
- let status=loadingVideo?'loading':e?.state===3?'buffering':e?.state===1&&playing?'playing':e?.state===0?'ended':e?.state===2?'paused':'ready';
- setText('status-text',t(status));document.body.classList.toggle('playing',playing);
- setText('play-text',t(playing?'pause':'play'));$('play').setAttribute('aria-pressed',String(playing));if($('play-icon').dataset.playing!==String(playing)){$('play-icon').dataset.playing=String(playing);$('play-icon').innerHTML=playing?'<path d="M6 4h4v16H6zm8 0h4v16h-4z"/>':'<path d="m7 4 14 8-14 8z"/>';}
+ $('video-title').textContent=videoTitle||t(videoId?(loadingVideo?'loading':'videoArea'):'noVideo');$('video-title').title=$('video-title').textContent;
+ document.body.classList.toggle('playing',playing);
+ setText('play-text',t(playing?'pause':'play'));$('play').setAttribute('aria-pressed',String(playing));$('play').setAttribute('aria-label',t(playing?'pause':'play'));if($('play-icon').dataset.playing!==String(playing)){$('play-icon').dataset.playing=String(playing);$('play-icon').innerHTML=playing?'<path d="M6 4h4v16H6zm8 0h4v16h-4z"/>':'<path d="m7 4 14 8-14 8z"/>';}
  const duration=e?.duration||0,current=e?.current??pendingStart;
+ $('media-time').textContent=formatTime(current)+' / '+formatTime(duration);
+ $('quality-toggle').setAttribute('aria-pressed',String(nativeControls));
+ try{
+  const muted=playerReady?player.isMuted():false,volume=playerReady?player.getVolume():100;
+  if(document.activeElement!==$('volume'))$('volume').value=muted?0:volume;
+  $('volume-toggle').setAttribute('aria-label',t(muted?'unmute':'mute'));
+  $('volume-icon').innerHTML=muted?'<path d="m11 5-6 4H2v6h3l6 4zM16 9l5 6m0-6-5 6"/>':'<path d="m11 5-6 4H2v6h3l6 4zM15 8c2 2 2 6 0 8m3-11c4 4 4 10 0 14"/>';
+ }catch{}
+
  if(!e?.scrubbing){$('seek').max=duration||1;$('seek').value=clamp(current,0,duration||1);}
  $('seek').setAttribute('aria-valuetext',formatTime(current,true)+' / '+formatTime(duration));
  let buffered=0;try{buffered=playerReady?player.getVideoLoadedFraction()*100:0;}catch{}
@@ -466,6 +599,34 @@ function updateLimit(){const value=readTime($('limit').value);if(value===null||v
 $('limit').onchange=updateLimit;$('limit').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();if(updateLimit())$('limit').blur();}};
 $('loop-toggle').onclick=()=>{if(!engine)return;if(engine.loopActive)engine.stopLoop();else{if(engine.mode==='timed'&&!updateLimit())return;if(!engine.startLoop())notice('invalidRange');}render();save();};
 $('speed').onchange=()=>{try{player.setPlaybackRate(Number($('speed').value));}catch{notice('rateUnavailable');}};
+$('volume-toggle').onclick=()=>{if(!playerReady)return;try{if(player.isMuted())player.unMute();else player.mute();}catch{}render();};
+$('volume').oninput=()=>{if(!playerReady)return;try{player.setVolume(Number($('volume').value));if(Number($('volume').value)>0)player.unMute();else player.mute();}catch{}};
+$('quality-toggle').onclick=()=>{
+ if(!playerReady||!engine?.duration)return;
+ engine.account();const start=engine.positionNow();
+ let volume=100,muted=false;try{volume=player.getVolume();muted=player.isMuted();}catch{}
+ playerRebuild={playing:engine.wantedPlaying,loopActive:engine.loopActive,elapsed:engine.elapsed,laps:engine.laps,completed:engine.completed,volume,muted};
+ pendingRestore={a:engine.a,b:engine.b,mode:engine.mode,limit:engine.limit,rate:Number($('speed').value)||1};
+ pendingStart=start;pendingAutoplay=false;nativeControls=!nativeControls;durationSeen=0;loadingVideo=true;
+ engine.stopLoop();const old=player;player=null;engine=null;playerReady=false;
+ try{old.destroy();}catch{}
+ createOrCue();render();
+};
+let videoFullscreen=false;
+function syncVideoFullscreen(){
+ const shell=$('player-shell');shell.classList.toggle('is-fullscreen',videoFullscreen);document.body.classList.toggle('video-fullscreen',videoFullscreen);
+ $('video-fullscreen').setAttribute('aria-label',t(videoFullscreen?'exitFullscreen':'fullscreen'));
+}
+async function toggleVideoFullscreen(){
+ const shell=$('player-shell');
+ if(videoFullscreen){videoFullscreen=false;syncVideoFullscreen();try{if(document.fullscreenElement===shell)await document.exitFullscreen();}catch{}return;}
+ videoFullscreen=true;syncVideoFullscreen();
+ try{if(shell.requestFullscreen)await shell.requestFullscreen();}catch{/* The screen-filling fallback remains available on iOS. */}
+}
+$('video-fullscreen').onclick=toggleVideoFullscreen;
+document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&videoFullscreen){videoFullscreen=false;syncVideoFullscreen();}});
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&videoFullscreen){event.preventDefault();videoFullscreen=false;syncVideoFullscreen();try{if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});}catch{}}});
+
 function handlePlaybackKey(e){
  if(e.ctrlKey||e.metaKey||e.altKey||!engine?.duration)return;
  const editable=e.target.closest('textarea,select,[contenteditable]:not([contenteditable="false"]),input:not([type="range"]):not([type="button"]):not([type="checkbox"]):not([type="radio"])');
