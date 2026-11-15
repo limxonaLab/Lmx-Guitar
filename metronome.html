@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="application-version" content="4.1">
+<meta name="application-version" content="4.2.2">
 <!-- Temel Meta Etiketleri -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
@@ -409,7 +409,7 @@ body.note-editor-open{overflow:hidden}
 
 <div class="app">
  <header class="topbar">
-  <div class="brand" id="brand-btn" role="button" tabindex="0" data-i18n-title="brandTitle" title="Sayfayı yenile" style="cursor:pointer"><div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5h8l6 23H6L12 5Z"/><path d="m16 23 7-17M11 24h10M15 10h3"/><circle cx="20.5" cy="11.5" r="2" fill="currentColor" stroke="none"/></svg></div><div><h1><span data-i18n="brandName">Lmx Metronom v4.1</span><span style="color:var(--acc)">.</span></h1><div class="tagline" data-i18n="tagline">Kendi ritmini bul.</div></div></div>
+  <div class="brand" id="brand-btn" role="button" tabindex="0" data-i18n-title="brandTitle" title="Sayfayı yenile" style="cursor:pointer"><div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5h8l6 23H6L12 5Z"/><path d="m16 23 7-17M11 24h10M15 10h3"/><circle cx="20.5" cy="11.5" r="2" fill="currentColor" stroke="none"/></svg></div><div><h1><span data-i18n="brandName">Lmx Metronom v4.2.2</span><span style="color:var(--acc)">.</span></h1><div class="tagline" data-i18n="tagline">Kendi ritmini bul.</div></div></div>
   <div class="top-actions"><div class="lang" role="group" data-i18n-aria="langGroup" aria-label="Dil / Language"><button type="button" data-lang="tr" aria-pressed="true">TR</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div><div class="theme-switch" role="group" data-i18n-aria="themeGroup" aria-label="Görünüm"><button id="theme-light" data-i18n-aria="themeLightAria" aria-label="Gündüz teması" aria-pressed="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button id="theme-dark" data-i18n-aria="themeNightAria" aria-label="Gece teması" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M20.8 14A9 9 0 0 1 10 3.2 9 9 0 1 0 20.8 14Z"/></svg></button></div><button id="help-open" class="help-btn" data-i18n-aria="helpOpenAria" data-i18n-title="helpOpen" aria-label="Nasıl kullanılır? Yardımı aç" title="Nasıl kullanılır?">?</button></div>
  </header>
  <section class="pwrap" aria-labelledby="beats-title">
@@ -464,7 +464,7 @@ body.note-editor-open{overflow:hidden}
     veya başka bir cihaza taşıyabilirsiniz.
   </p>
 </section>
-  <footer class="footer"><div class="shortcuts"><span data-i18n-html="kbdSpace"><kbd>Boşluk</kbd> veya boş alana tıkla: başlat / durdur</span><span data-i18n-html="kbdCtrlSpace"><kbd>Ctrl</kbd> + <kbd>Boşluk</kbd>: demo başlat</span><span data-i18n-html="kbdArrows"><kbd>↑ ↓</kbd> Tempo</span><span data-i18n-html="kbdCtrlClick"><kbd>Ctrl + tık</kbd> Tek vuruşu sustur</span></div><span class="footer-note"><span data-i18n="footerNote">Pratik için tasarlandı.</span> v4.1</span></footer>
+  <footer class="footer"><div class="shortcuts"><span data-i18n-html="kbdSpace"><kbd>Boşluk</kbd> veya boş alana tıkla: başlat / durdur</span><span data-i18n-html="kbdCtrlSpace"><kbd>Ctrl</kbd> + <kbd>Boşluk</kbd>: demo başlat</span><span data-i18n-html="kbdArrows"><kbd>↑ ↓</kbd> Tempo</span><span data-i18n-html="kbdCtrlClick"><kbd>Ctrl + tık</kbd> Tek vuruşu sustur</span></div><span class="footer-note"><span data-i18n="footerNote">Pratik için tasarlandı.</span> v4.2.2</span></footer>
 </div>
 
 <div class="help-overlay" id="help-overlay" hidden>
@@ -536,6 +536,8 @@ body.note-editor-open{overflow:hidden}
    <p><b>Heceler</b> ritmi ağızdan söyleyerek öğrenmen için konmuştur. Her hece bir notanın altındadır ve o nota çalınca yanar:</p>
    <ul>
     <li><b>Kar-Tal:</b> iki sekizlik</li>
+    <li><b>Ga-zi:</b> noktalı sekizlik, ardından onaltılık</li>
+    <li><b>Ta-bak:</b> onaltılık, ardından noktalı sekizlik</li>
     <li><b>Ge-Li-Bo-Lu:</b> dört onaltılık</li>
     <li><b>Sa-Kaaar-Ya:</b> onaltılık, sekizlik, onaltılık (ortası uzun)</li>
     <li><b>An-Ka-Ra:</b> sekizlik, onaltılık, onaltılık</li>
@@ -640,7 +642,7 @@ tr:{htmlLang:"tr",
 docTitle:"Online Metronom – Ücretsiz Tempo ve Ritim Aracı | LmXMetro",
 docDesc:"Ücretsiz online metronom ile 30–300 BPM tempo ayarlayın. Farklı ölçüler, vuruş vurguları ve ritmik bölümler oluşturun, ritimlerinizi kaydedin.",
 tagline:"Kendi ritmini bul.",
-brandName:"Lmx Metronom v4.1",
+brandName:"Lmx Metronom v4.2.2",
 statusReady:"Çalmaya hazır",statusPlaying:"Ritim akıyor",statusDemo:"Demo: 1. ölçü",
 playStart:"▶ Başlat",playStop:"■ Durdur",
  themeDay:"Gündüz",themeNight:"Gece",
@@ -702,7 +704,7 @@ presetDelete:"sil",presetEdit:"Düzenle",
  subPopoverAria:"Ritim kalıbı seç",subPopoverHint:"Ctrl + tık: tüm ölçülere uygula",
  jsonPreviewAria:"Seçilen dosyanın JSON önizlemesi",
  helpClose:"Yardımı kapat",
- subName0:"Tek vuruş (bölme yok)",subName1:"Tek sekizlik",subName2:"Sekizlik + es",subName3:"Es + sekizlik",subName4:"3'lü (triol)",subName10:"6'lı",subName11:"8. 16 8. 16 (noktalı)",subName12:"8 + 16'lık triol",
+ subName0:"Tek vuruş (bölme yok)",subName1:"Tek sekizlik",subName2:"Sekizlik + es",subName3:"Es + sekizlik",subName4:"3'lü (triol)",subName10:"6'lı",subName11:"8. 16 8. 16 (noktalı)",subName12:"8 + 16'lık triol",subName16:"Ga-zi",subName17:"Ta-bak",
  cap0:"Tek vuruş",cap1:"Sekizlik",cap2:"Nota + es",cap3:"Es + nota",cap4:"Triol",cap10:"Altılama",
  rhythmPrefix:"Ritim",
  jsonParseErr1:"Dosya okunamadı. Geçerli bir JSON dosyası seç.",
@@ -738,7 +740,7 @@ en:{htmlLang:"en",
 docTitle:"Online Metronome – Free Tempo & Rhythm Tool | LmXMetro",
 docDesc:"Set a tempo from 30–300 BPM with this free online metronome. Build different meters, beat accents and rhythmic subdivisions, and save your rhythms.",
 tagline:"Find your rhythm.",
-brandName:"Lmx Metronome v4.1",
+brandName:"Lmx Metronome v4.2.2",
 statusReady:"Ready to play",statusPlaying:"Rhythm running",statusDemo:"Demo: Measure 1",
 playStart:"▶ Start",playStop:"■ Stop",
  themeDay:"Day",themeNight:"Night",
@@ -799,7 +801,7 @@ presetDelete:"delete",presetEdit:"Edit",
  subPopoverAria:"Choose a rhythm pattern",subPopoverHint:"Ctrl + click: apply to all measures",
  jsonPreviewAria:"JSON preview of the selected file",
  helpClose:"Close help",
- subName0:"Single beat (no subdivision)",subName1:"Single eighth",subName2:"Eighth + rest",subName3:"Rest + eighth",subName4:"Triplet",subName10:"Sextuplet",subName11:"Dotted 8th 16th",subName12:"8th + 16th triplet",
+ subName0:"Single beat (no subdivision)",subName1:"Single eighth",subName2:"Eighth + rest",subName3:"Rest + eighth",subName4:"Triplet",subName10:"Sextuplet",subName11:"Dotted 8th 16th",subName12:"8th + 16th triplet",subName16:"Ga-zi",subName17:"Ta-bak",
  cap0:"Single beat",cap1:"Eighth",cap2:"Note + rest",cap3:"Rest + note",cap4:"Triplet",cap10:"Sextuplet",
  rhythmPrefix:"Rhythm",
  jsonParseErr1:"Could not read the file. Choose a valid JSON file.",
@@ -892,6 +894,8 @@ presetDelete:"delete",presetEdit:"Edit",
  <p><b>Syllables</b> are there so you can learn the rhythm by singing it. Each syllable sits under a note and lights up when that note plays:</p>
  <ul>
   <li><b>Kar-Tal:</b> two eighth notes</li>
+    <li><b>Ga-zi:</b> dotted eighth followed by a sixteenth</li>
+  <li><b>Ta-bak:</b> sixteenth followed by a dotted eighth</li>
   <li><b>Ge-Li-Bo-Lu:</b> four sixteenth notes</li>
   <li><b>Sa-Kaaar-Ya:</b> sixteenth, eighth, sixteenth (the middle one is long)</li>
   <li><b>An-Ka-Ra:</b> eighth, sixteenth, sixteenth</li>
@@ -1043,7 +1047,11 @@ const subDefs=[
 ["8 + 16'lık triol",[1,0,0,0,0,0,1,0,1,0,1,0],["Es","ki","şe","hir"]],
 ["16 - 16 - 8 - 8",[1,1,1,0,1,0],["Ça","nak","Ka","le"]],
 ["8 - 16 - 16 - 8",[1,0,1,1,1,0],["Baa","lı","ke","Sir"]],
-["8 - 8 - 16 - 16",[1,0,1,0,1,1],["Af","yon","ka","ra"]]];
+["8 - 8 - 16 - 16",[1,0,1,0,1,1],["Af","yon","ka","ra"]],
+["Ga-zi",[1,0,0,1],["Ga","zi"]],
+["Ta-bak",[1,1,0,0],["Ta","bak"]]];
+// Keep stored pattern IDs stable while placing the new patterns next to Kar-Tal.
+const subDisplayOrder=[0,1,2,3,4,5,16,17,6,7,8,9,10,11,12,13,14,15];
 const NOTE_MODES=["play","rest","tie","mute"];
 function noteCount(pattern){return subDefs[pattern][1].filter(Boolean).length;}
 function noteModeAt(beat,n){const mode=noteModes[beat]?.[n];return NOTE_MODES.includes(mode)?mode:"play";}
@@ -1394,7 +1402,7 @@ function openSubPop(beat,anchor){
   const ma=measureAt(beat);
   subPopTitle.textContent=mt("subPopFullTpl").replace("{m}",ma.index+1).replace("{b}",ma.local+1);
   subPopList.innerHTML="";
-  subDefs.forEach(([t],i)=>{
+  subDisplayOrder.forEach(i=>{
     const b=document.createElement("button");
     b.className="sub-popover-item"+(pulseSub[beat]===i?" on":"");
     b.setAttribute('aria-pressed',pulseSub[beat]===i);
@@ -1418,7 +1426,7 @@ function fillSubPopList(beat){
   cancelNoteTap();subPopBeat=beat;syncSubPopHost();
   subPopTitle.textContent=mt("subPopFullTpl").replace("{m}",measureAt(beat).index+1).replace("{b}",measureAt(beat).local+1);
   subPopList.innerHTML="";
-  subDefs.forEach(([t],i)=>{
+  subDisplayOrder.forEach(i=>{
     const b=document.createElement("button");
     b.className="sub-popover-item"+(pulseSub[beat]===i?" on":"");
     b.setAttribute('aria-pressed',pulseSub[beat]===i);
@@ -1500,7 +1508,9 @@ const NOT=[
 {it:[["8",0],["16",1],["16",2],["16",3]],tup:"3",tupAt:[1,3]},
 {it:[["16",0],["16",1],["8",2],["8",3]]},
 {it:[["8",0],["16",1],["16",2],["8",3]]},
-{it:[["8",0],["8",1],["16",2],["16",3]]}];
+{it:[["8",0],["8",1],["16",2],["16",3]]},
+{it:[["8",0,{dot:1}],["16",1.6]]},
+{it:[["16",0],["8",1.6,{dot:1}]]}];
 function noteSVG(spec,sy,sc,modes){sc=sc||1;
   const U=22,P=16,it=spec.it,xs=it.map(([,u])=>P+u*U);
   const W=xs[xs.length-1]+P+(it[it.length-1][0]==="8"?6:0);
@@ -1773,7 +1783,7 @@ function revealMeasures(a,b){
 }
 function drawSubs(){
   $("subs").innerHTML="";
-  subDefs.forEach(([t],i)=>{const nt=subName(i);const b=document.createElement("button");b.className="chip"+(activeSubsAll(i)?" on":"");const sy=subDefs[i][2];
+  subDisplayOrder.forEach(i=>{const nt=subName(i);const b=document.createElement("button");b.className="chip"+(activeSubsAll(i)?" on":"");const sy=subDefs[i][2];
     {const sp=document.createElement("span");sp.innerHTML=noteSVG(NOT[i],sy);sp.title=nt;sp.style.display="flex";b.appendChild(sp);}
     b.title=nt;b.setAttribute('aria-label',nt);b.setAttribute('aria-pressed',activeSubsAll(i));
     const cap=subCap(i);
