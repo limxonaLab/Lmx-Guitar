@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="application-version" content="1.6.4">
+<meta name="application-version" content="1.6.3">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>LmX Practice — YouTube Ders Çalışma ve A–B Döngü</title>
 <meta name="description" content="YouTube ders ve örnek parçalarını A–B döngüsüyle çalış. Büyük oynatma çubuğu, hassas ileri geri sarma ve tekrar sayısıyla çalışma.">
@@ -48,6 +48,10 @@
 @media(max-width:350px){.brand small{display:none}.brand{gap:7px}.brand h1{font-size:15px}.header-actions .seg button{font-size:10px}.theme button{width:26px}.rate-control select{max-width:59px}.play{min-width:100px}.skip{min-width:37px}.loop-options{flex-wrap:wrap}.point input{font-size:18px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 
+/* Video shield: blocks hover/tap so YouTube's title bar and overlays never appear. */
+.video-shield{position:absolute;inset:0;z-index:2;cursor:pointer;background:transparent}
+/* Optional crop: raise --crop (e.g. 6%) to push title bar out of view; edges of the video get cut. */
+.video-stage{--crop:0%}.video-stage .player-mount{inset:calc(var(--crop) * -1);width:auto;height:auto}
 /* Compact, mobile-first practice controls. */
 html,body{touch-action:manipulation}
 .url-bar{margin:0}
@@ -207,7 +211,7 @@ input[type="text"],input[type="url"],textarea,[contenteditable="true"]{-webkit-u
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <div class="video-caption"><h2 class="video-title" id="video-title" data-i="noVideo">Video henüz seçilmedi</h2></div>
   <div class="player-shell" id="player-shell">
-  <section class="video-stage" data-aria="videoArea"><div class="player-mount" id="player-host"></div><div class="empty-video" id="empty-video"><div class="empty-icon"><svg viewBox="0 0 32 32"><rect x="3" y="7" width="26" height="18" rx="6"/><path d="m13 12 8 4-8 4z"/></svg></div><h2 data-i="emptyTitle">Dersin burada, odağın müzikte.</h2><p data-i="emptyLead">YouTube bağlantısını yukarıya yapıştırarak başla.</p><div class="tiny"><i></i><span data-i="emptyTiny">İzle · Böl · Tekrar et</span><i></i></div></div><button class="media-button" id="video-fullscreen" type="button" aria-pressed="false" data-aria="fullscreen" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button></section>
+  <section class="video-stage" data-aria="videoArea"><div class="player-mount" id="player-host"></div><div class="video-shield" id="video-shield" hidden></div><div class="empty-video" id="empty-video"><div class="empty-icon"><svg viewBox="0 0 32 32"><rect x="3" y="7" width="26" height="18" rx="6"/><path d="m13 12 8 4-8 4z"/></svg></div><h2 data-i="emptyTitle">Dersin burada, odağın müzikte.</h2><p data-i="emptyLead">YouTube bağlantısını yukarıya yapıştırarak başla.</p><div class="tiny"><i></i><span data-i="emptyTiny">İzle · Böl · Tekrar et</span><i></i></div></div><button class="media-button" id="video-fullscreen" type="button" aria-pressed="false" data-aria="fullscreen" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button></section>
    <div class="media-toolbar">
     <button class="media-button" id="volume-toggle" type="button" data-aria="mute" disabled><svg viewBox="0 0 24 24" id="volume-icon" aria-hidden="true"><path d="m11 5-6 4H2v6h3l6 4zM15 8c2 2 2 6 0 8m3-11c4 4 4 10 0 14"/></svg></button>
     <input class="volume-slider" id="volume" type="range" min="0" max="100" step="1" value="100" data-aria="volume" disabled>
@@ -507,11 +511,12 @@ function openVideo(parsed,restoring=false,autoplay=false,settings=null){
  if(!restoring)rememberVideo(parsed.id,parsed.start);
  initAPI();
 }
+function killCaptions(){try{player.unloadModule('captions');player.unloadModule('cc');}catch{}}
 function createOrCue(){
  if(!videoId)return;
  if(player&&playerReady){cueSelectedVideo();return;}
  if(player)return;
- $('empty-video').hidden=true;
+ $('empty-video').hidden=true;$('video-shield').hidden=false;
  // Configure the enclosing iframe before its first navigation. Setting this
  // only in onReady is too late to affect the initial embed request.
  const mount=document.createElement('iframe');mount.id='youtube-player';mount.title=t('videoArea');
@@ -525,11 +530,11 @@ function createOrCue(){
  // No cc_load_policy=1: do not force captions on. YouTube may still honor the viewer's caption preference.
  // The IFrame API attaches to the already configured iframe.
  player=new YT.Player('youtube-player',{events:{onReady:event=>{
-  player=event.target;playerReady=true;engine=new PracticeEngine(player);engine.onNotice=notice;
+  player=event.target;playerReady=true;killCaptions();engine=new PracticeEngine(player);engine.onNotice=notice;
   player.getIframe().title=t('videoArea');player.getIframe().setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen');
   cueSelectedVideo();render();
  },onStateChange:event=>{
-  if((event.target&&event.target!==player)||!engine)return;engine.stateChanged(event.data);
+  if((event.target&&event.target!==player)||!engine)return;killCaptions();engine.stateChanged(event.data);
   if([1,2,5,0].includes(event.data))loadingVideo=false;
   updateMetadata();render();
  },onPlaybackRateChange:event=>{if(event.target&&event.target!==player)return;syncRates();save();},onError:event=>{if(event.target&&event.target!==player)return;loadingVideo=false;if(engine){engine.stopLoop(false);engine.wantedPlaying=false;}error([101,150].includes(event.data)?'embedDenied':event.data===100?'notFound':event.data===153?(window.top!==window.self?'referrerEmbedded':'referrerError'):event.data===2?'invalidUrl':'genericError');render();},onAutoplayBlocked:event=>{if(event.target&&event.target!==player)return;if(engine)engine.wantedPlaying=false;notice('autoplayBlocked');render();}}});
@@ -708,6 +713,7 @@ function handlePlaybackKey(e){
  else if(e.key.toLowerCase()==='i')mark('a');else if(e.key.toLowerCase()==='o')mark('b');
 }
 document.addEventListener('keydown',handlePlaybackKey,true);
+$('video-shield').onclick=()=>{if(engine?.duration){finishSeek();engine.togglePlay();render();save();}};
 document.addEventListener('keyup',e=>{
  if(e.code==='Space'&&engine?.duration&&!e.target.closest('textarea,select,[contenteditable]:not([contenteditable="false"]),input:not([type="range"]):not([type="button"]):not([type="checkbox"]):not([type="radio"])')){e.preventDefault();e.stopImmediatePropagation();}
 },true);
