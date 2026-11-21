@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="application-version" content="1.6.3">
+<meta name="application-version" content="1.6.4">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>LmX Practice — YouTube Ders Çalışma ve A–B Döngü</title>
 <meta name="description" content="YouTube ders ve örnek parçalarını A–B döngüsüyle çalış. Büyük oynatma çubuğu, hassas ileri geri sarma ve tekrar sayısıyla çalışma.">
@@ -519,7 +519,7 @@ function createOrCue(){
  mount.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
  mount.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen');
  mount.setAttribute('allowfullscreen','');
- const params=new URLSearchParams({enablejsapi:'1',playsinline:'1',controls:'0',fs:'0',iv_load_policy:'3',rel:'0',autoplay:'0',origin:location.origin});
+ const params=new URLSearchParams({enablejsapi:'1',playsinline:'1',controls:'0',fs:'0',iv_load_policy:'3',rel:'0',autoplay:'0',disablekb:'1',cc_load_policy:'0',modestbranding:'1',origin:location.origin});
  mount.src='https://www.youtube.com/embed/'+encodeURIComponent(videoId)+'?'+params.toString();
  $('player-host').replaceChildren(mount);
  // No cc_load_policy=1: do not force captions on. YouTube may still honor the viewer's caption preference.
