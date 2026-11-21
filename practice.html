@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="application-version" content="1.6.6">
+<meta name="application-version" content="1.6.7">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>LmX Practice — YouTube Ders Çalışma ve A–B Döngü</title>
 <meta name="description" content="YouTube ders ve örnek parçalarını A–B döngüsüyle çalış. Büyük oynatma çubuğu, hassas ileri geri sarma ve tekrar sayısıyla çalışma.">
@@ -48,6 +48,13 @@
 @media(max-width:350px){.brand small{display:none}.brand{gap:7px}.brand h1{font-size:15px}.header-actions .seg button{font-size:10px}.theme button{width:26px}.rate-control select{max-width:59px}.play{min-width:100px}.skip{min-width:37px}.loop-options{flex-wrap:wrap}.point input{font-size:18px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 
+/* Video shield: blocks hover/tap so YouTube's title bar and overlays never appear. */
+.video-shield{position:absolute;inset:0;z-index:10;cursor:default;background:transparent;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
+/* The iframe can never receive mouse/touch, so YouTube hover UI cannot appear. */
+.video-stage .player-mount iframe{pointer-events:none}
+.video-shield:focus,.video-shield:focus-visible{outline:0}
+/* Optional crop: raise --crop (e.g. 6%) to push title bar out of view; edges of the video get cut. */
+.video-stage{--crop:0%}.video-stage .player-mount{inset:calc(var(--crop) * -1);width:auto;height:auto}
 /* Compact, mobile-first practice controls. */
 html,body{touch-action:manipulation}
 .url-bar{margin:0}
@@ -180,7 +187,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .media-toolbar input.volume-slider::-moz-range-thumb{width:14px;height:14px;border:0;background:var(--accent);box-shadow:none}
 .media-time{margin-right:auto;white-space:nowrap;color:var(--mut);font:11px ui-monospace,monospace;font-variant-numeric:tabular-nums}
 /* Only the fullscreen control belongs over the video; YouTube owns its iframe UI. */
-#video-fullscreen{position:absolute;top:max(10px,env(safe-area-inset-top,0px));right:max(10px,env(safe-area-inset-right,0px));z-index:3;width:38px;height:38px;background:#171317b8;color:#fff;border-color:#ffffff40;backdrop-filter:blur(6px)}
+#video-fullscreen{position:absolute;top:max(10px,env(safe-area-inset-top,0px));right:max(10px,env(safe-area-inset-right,0px));z-index:20;width:38px;height:38px;background:#171317b8;color:#fff;border-color:#ffffff40;backdrop-filter:blur(6px)}
 #video-fullscreen:hover{background:#171317e8;border-color:#ffffff80}
 #video-fullscreen[disabled]{visibility:hidden}
 body.video-fullscreen{overflow:hidden}
@@ -199,7 +206,7 @@ input[type="text"],input[type="url"],textarea,[contenteditable="true"]{-webkit-u
 </head>
 <body>
 <div class="app">
- <header class="header"><a class="brand" href="#" id="brand"><span class="brand-icon" aria-hidden="true"><img src="/lmx-practice-logo.svg" width="36" height="36" alt="" onload="this.parentElement.classList.add('has-logo')" onerror="this.hidden=true;this.nextElementSibling.removeAttribute('hidden')"><svg hidden viewBox="0 0 24 24"><path d="M18 7H7a4 4 0 0 0-4 4v1m3-8-3 3 3 3m0 7h11a4 4 0 0 0 4-4v-1m-3 8 3-3-3-3"/><path d="m10 9 5 3-5 3z"/></svg></span><span><h1>LmX Practice<span style="color:var(--accent)">.</span></h1><small data-i="tagline">Bir bölümü seç. Tekrar et. Oturt.</small></span></a><div class="header-actions"><span class="version">v1.6.6</span><div class="seg" role="group" aria-label="Language"><button data-lang="tr" type="button" aria-pressed="true">TR</button><button data-lang="en" type="button" aria-pressed="false">EN</button></div><div class="seg theme" role="group" data-aria="theme"><button id="light" type="button" data-aria="light" aria-pressed="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button id="dark" type="button" data-aria="dark" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M20.8 14A9 9 0 0 1 10 3.2 9 9 0 1 0 20.8 14Z"/></svg></button></div></div></header>
+ <header class="header"><a class="brand" href="#" id="brand"><span class="brand-icon" aria-hidden="true"><img src="/lmx-practice-logo.svg" width="36" height="36" alt="" onload="this.parentElement.classList.add('has-logo')" onerror="this.hidden=true;this.nextElementSibling.removeAttribute('hidden')"><svg hidden viewBox="0 0 24 24"><path d="M18 7H7a4 4 0 0 0-4 4v1m3-8-3 3 3 3m0 7h11a4 4 0 0 0 4-4v-1m-3 8 3-3-3-3"/><path d="m10 9 5 3-5 3z"/></svg></span><span><h1>LmX Practice<span style="color:var(--accent)">.</span></h1><small data-i="tagline">Bir bölümü seç. Tekrar et. Oturt.</small></span></a><div class="header-actions"><span class="version">v1.6.7</span><div class="seg" role="group" aria-label="Language"><button data-lang="tr" type="button" aria-pressed="true">TR</button><button data-lang="en" type="button" aria-pressed="false">EN</button></div><div class="seg theme" role="group" data-aria="theme"><button id="light" type="button" data-aria="light" aria-pressed="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button id="dark" type="button" data-aria="dark" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M20.8 14A9 9 0 0 1 10 3.2 9 9 0 1 0 20.8 14Z"/></svg></button></div></div></header>
  <main>
   <form class="url-bar" id="video-form"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 .1l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7-.1l-3 3a5 5 0 0 0 7 7l2-2"/></svg><label class="sr-only" for="video-url" data-i="urlLabel">YouTube video bağlantısı</label><input id="video-url" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://www.youtube.com/watch?v=…" required><button class="btn primary" id="load" type="submit" data-i="load">Video aç</button></form>
   <p class="form-note" id="url-message" role="status"></p>
@@ -207,10 +214,8 @@ input[type="text"],input[type="url"],textarea,[contenteditable="true"]{-webkit-u
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <div class="video-caption"><h2 class="video-title" id="video-title" data-i="noVideo">Video henüz seçilmedi</h2></div>
   <div class="player-shell" id="player-shell">
-  <section class="video-stage" data-aria="videoArea"><div class="player-mount" id="player-host"></div><div class="empty-video" id="empty-video"><div class="empty-icon"><svg viewBox="0 0 32 32"><rect x="3" y="7" width="26" height="18" rx="6"/><path d="m13 12 8 4-8 4z"/></svg></div><h2 data-i="emptyTitle">Dersin burada, odağın müzikte.</h2><p data-i="emptyLead">YouTube bağlantısını yukarıya yapıştırarak başla.</p><div class="tiny"><i></i><span data-i="emptyTiny">İzle · Böl · Tekrar et</span><i></i></div></div><button class="media-button" id="video-fullscreen" type="button" aria-pressed="false" data-aria="fullscreen" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button></section>
+  <section class="video-stage" data-aria="videoArea"><div class="player-mount" id="player-host"></div><div class="video-shield" id="video-shield" hidden></div><div class="empty-video" id="empty-video"><div class="empty-icon"><svg viewBox="0 0 32 32"><rect x="3" y="7" width="26" height="18" rx="6"/><path d="m13 12 8 4-8 4z"/></svg></div><h2 data-i="emptyTitle">Dersin burada, odağın müzikte.</h2><p data-i="emptyLead">YouTube bağlantısını yukarıya yapıştırarak başla.</p><div class="tiny"><i></i><span data-i="emptyTiny">İzle · Böl · Tekrar et</span><i></i></div></div><button class="media-button" id="video-fullscreen" type="button" aria-pressed="false" data-aria="fullscreen" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button></section>
    <div class="media-toolbar">
-    <button class="media-button" id="volume-toggle" type="button" data-aria="mute" disabled><svg viewBox="0 0 24 24" id="volume-icon" aria-hidden="true"><path d="m11 5-6 4H2v6h3l6 4zM15 8c2 2 2 6 0 8m3-11c4 4 4 10 0 14"/></svg></button>
-    <input class="volume-slider" id="volume" type="range" min="0" max="100" step="1" value="100" data-aria="volume" disabled>
     <span class="media-time" id="media-time">00:00 / 00:00</span>
    </div>
   </div>
@@ -507,11 +512,13 @@ function openVideo(parsed,restoring=false,autoplay=false,settings=null){
  if(!restoring)rememberVideo(parsed.id,parsed.start);
  initAPI();
 }
+function forceFullVolume(){try{player.unMute();player.setVolume(100);}catch{}}
+function killCaptions(){try{player.unloadModule('captions');player.unloadModule('cc');}catch{}}
 function createOrCue(){
  if(!videoId)return;
  if(player&&playerReady){cueSelectedVideo();return;}
  if(player)return;
- $('empty-video').hidden=true;
+ $('empty-video').hidden=true;$('video-shield').hidden=false;
  // Configure the enclosing iframe before its first navigation. Setting this
  // only in onReady is too late to affect the initial embed request.
  const mount=document.createElement('iframe');mount.id='youtube-player';mount.title=t('videoArea');
@@ -525,11 +532,11 @@ function createOrCue(){
  // No cc_load_policy=1: do not force captions on. YouTube may still honor the viewer's caption preference.
  // The IFrame API attaches to the already configured iframe.
  player=new YT.Player('youtube-player',{events:{onReady:event=>{
-  player=event.target;playerReady=true;engine=new PracticeEngine(player);engine.onNotice=notice;
+  player=event.target;playerReady=true;killCaptions();forceFullVolume();engine=new PracticeEngine(player);engine.onNotice=notice;
   player.getIframe().title=t('videoArea');player.getIframe().setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen');
   cueSelectedVideo();render();
  },onStateChange:event=>{
-  if((event.target&&event.target!==player)||!engine)return;engine.stateChanged(event.data);
+  if((event.target&&event.target!==player)||!engine)return;killCaptions();engine.stateChanged(event.data);
   if([1,2,5,0].includes(event.data))loadingVideo=false;
   updateMetadata();render();
  },onPlaybackRateChange:event=>{if(event.target&&event.target!==player)return;syncRates();save();},onError:event=>{if(event.target&&event.target!==player)return;loadingVideo=false;if(engine){engine.stopLoop(false);engine.wantedPlaying=false;}error([101,150].includes(event.data)?'embedDenied':event.data===100?'notFound':event.data===153?(window.top!==window.self?'referrerEmbedded':'referrerError'):event.data===2?'invalidUrl':'genericError');render();},onAutoplayBlocked:event=>{if(event.target&&event.target!==player)return;if(engine)engine.wantedPlaying=false;notice('autoplayBlocked');render();}}});
@@ -551,7 +558,7 @@ function updateMetadata(){
      engine.elapsed=settings.elapsed;engine.laps=settings.laps;engine.completed=settings.completed;
      engine.loopActive=settings.loopActive&&engine.validRange();engine.lastTick=performance.now();engine.jumpUntil=performance.now()+150;
      syncRates(settings.rate);
-     try{player.setVolume(settings.volume);if(settings.muted)player.mute();else player.unMute();}catch{}
+     forceFullVolume();
      let position=clamp(pendingStart,0,duration);
      if(engine.loopActive&&(position<engine.a||position>=engine.b))position=engine.a;
      engine.seek(position,engine.wantedPlaying);
@@ -565,7 +572,7 @@ function updateMetadata(){
 function syncRates(preferred){if(!playerReady)return;try{const rates=player.getAvailablePlaybackRates()||[1],current=preferred??player.getPlaybackRate();$('speed').replaceChildren();rates.forEach(rate=>{const o=document.createElement('option');o.value=rate;o.textContent=rate+'×';$('speed').appendChild(o);});$('speed').value=rates.includes(current)?current:1;if(preferred&&rates.includes(preferred))player.setPlaybackRate(preferred);}catch{}}
 function render(){
  const e=engine,ready=Boolean(playerReady&&e?.duration>0),playing=Boolean(e?.wantedPlaying);
- ['volume-toggle','volume','video-fullscreen','seek','play','back','forward','back-one','forward-one','frame-back','frame-forward','frames-back','frames-forward','mark-in','mark-out','loop-toggle'].forEach(id=>$(id).disabled=!ready);
+ ['video-fullscreen','seek','play','back','forward','back-one','forward-one','frame-back','frame-forward','frames-back','frames-forward','mark-in','mark-out','loop-toggle'].forEach(id=>$(id).disabled=!ready);
  $('speed').disabled=!playerReady||$('speed').options.length<2;
  $('video-title').textContent=videoTitle||t(videoId?(loadingVideo?'loading':'videoArea'):'noVideo');$('video-title').title=$('video-title').textContent;
  document.body.classList.toggle('playing',playing);
@@ -573,10 +580,6 @@ function render(){
  const duration=e?.duration||0,current=e?.current??pendingStart;
  $('media-time').textContent=formatTime(current)+' / '+formatTime(duration);
  try{
-  const muted=playerReady?player.isMuted():false,volume=playerReady?player.getVolume():100;
-  if(document.activeElement!==$('volume'))$('volume').value=muted?0:volume;
-  $('volume-toggle').setAttribute('aria-label',t(muted?'unmute':'mute'));
-  $('volume-icon').innerHTML=muted?'<path d="m11 5-6 4H2v6h3l6 4zM16 9l5 6m0-6-5 6"/>':'<path d="m11 5-6 4H2v6h3l6 4zM15 8c2 2 2 6 0 8m3-11c4 4 4 10 0 14"/>';
  }catch{}
 
  if(!e?.scrubbing){$('seek').max=duration||1;$('seek').value=clamp(current,0,duration||1);}
@@ -674,8 +677,6 @@ function updateLimit(){const value=Number($('limit').value);if(!Number.isInteger
 $('limit').onchange=updateLimit;$('limit').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();if(updateLimit())$('limit').blur();}};
 $('loop-toggle').onclick=()=>{if(!engine)return;if(engine.loopActive)engine.stopLoop();else{if(engine.mode==='counted'&&!updateLimit())return;if(!engine.startLoop())notice('invalidRange');}render();save();};
 $('speed').onchange=()=>{try{player.setPlaybackRate(Number($('speed').value));}catch{notice('rateUnavailable');}};
-$('volume-toggle').onclick=()=>{if(!playerReady)return;try{if(player.isMuted())player.unMute();else player.mute();}catch{}render();save();};
-$('volume').oninput=()=>{if(!playerReady)return;try{player.setVolume(Number($('volume').value));if(Number($('volume').value)>0)player.unMute();else player.mute();}catch{}save();};
 let videoFullscreen=false;
 function syncVideoFullscreen(){
  const shell=$('player-shell');shell.classList.toggle('is-fullscreen',videoFullscreen);document.body.classList.toggle('video-fullscreen',videoFullscreen);
@@ -708,6 +709,7 @@ function handlePlaybackKey(e){
  else if(e.key.toLowerCase()==='i')mark('a');else if(e.key.toLowerCase()==='o')mark('b');
 }
 document.addEventListener('keydown',handlePlaybackKey,true);
+$('video-shield').onclick=()=>{if(engine?.duration){finishSeek();engine.togglePlay();render();save();}};
 document.addEventListener('keyup',e=>{
  if(e.code==='Space'&&engine?.duration&&!e.target.closest('textarea,select,[contenteditable]:not([contenteditable="false"]),input:not([type="range"]):not([type="button"]):not([type="checkbox"]):not([type="radio"])')){e.preventDefault();e.stopImmediatePropagation();}
 },true);
