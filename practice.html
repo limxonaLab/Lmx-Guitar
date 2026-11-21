@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="application-version" content="1.6.2">
+<meta name="application-version" content="1.6.3">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>LmX Practice — YouTube Ders Çalışma ve A–B Döngü</title>
 <meta name="description" content="YouTube ders ve örnek parçalarını A–B döngüsüyle çalış. Büyük oynatma çubuğu, hassas ileri geri sarma ve tekrar sayısıyla çalışma.">
@@ -179,12 +179,15 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .media-toolbar input.volume-slider::-moz-range-track{background:var(--line);height:4px}
 .media-toolbar input.volume-slider::-moz-range-thumb{width:14px;height:14px;border:0;background:var(--accent);box-shadow:none}
 .media-time{margin-right:auto;white-space:nowrap;color:var(--mut);font:11px ui-monospace,monospace;font-variant-numeric:tabular-nums}
-.quality-button[aria-pressed="true"]{border-color:var(--accent);background:var(--soft);color:var(--accent)}
+/* Only the fullscreen control belongs over the video; YouTube owns its iframe UI. */
+#video-fullscreen{position:absolute;top:max(10px,env(safe-area-inset-top,0px));right:max(10px,env(safe-area-inset-right,0px));z-index:3;width:38px;height:38px;background:#171317b8;color:#fff;border-color:#ffffff40;backdrop-filter:blur(6px)}
+#video-fullscreen:hover{background:#171317e8;border-color:#ffffff80}
+#video-fullscreen[disabled]{visibility:hidden}
 body.video-fullscreen{overflow:hidden}
-.player-shell.is-fullscreen{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;flex-direction:column;padding:max(8px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));width:100%;height:100%;height:100dvh}
+.player-shell.is-fullscreen{position:fixed;inset:0;z-index:100;background:#000;display:flex;flex-direction:column;padding:0;width:100%;height:100%;height:100dvh}
 .player-shell.is-fullscreen .video-stage{flex:1;min-height:0;max-height:none;height:auto;border-radius:0;aspect-ratio:auto}
-.player-shell.is-fullscreen .media-toolbar{flex:none}
-@media(max-width:620px){.media-toolbar{gap:5px}.media-button{min-width:32px;width:32px;height:34px;padding:5px}.quality-button{width:auto;min-width:45px;font-size:10px}.media-time{font-size:10px}.media-toolbar input.volume-slider{flex-basis:58px;width:58px}}
+.player-shell.is-fullscreen .media-toolbar{display:none}
+@media(max-width:620px){.media-toolbar{gap:5px}.media-button{min-width:32px;width:32px;height:34px;padding:5px}.media-time{font-size:10px}.media-toolbar input.volume-slider{flex-basis:58px;width:58px}}
 
 
 /* Prevent text selection while keeping URL entry and paste available. */
@@ -196,7 +199,7 @@ input[type="text"],input[type="url"],textarea,[contenteditable="true"]{-webkit-u
 </head>
 <body>
 <div class="app">
- <header class="header"><a class="brand" href="#" id="brand"><span class="brand-icon" aria-hidden="true"><img src="/lmx-practice-logo.svg" width="36" height="36" alt="" onload="this.parentElement.classList.add('has-logo')" onerror="this.hidden=true;this.nextElementSibling.removeAttribute('hidden')"><svg hidden viewBox="0 0 24 24"><path d="M18 7H7a4 4 0 0 0-4 4v1m3-8-3 3 3 3m0 7h11a4 4 0 0 0 4-4v-1m-3 8 3-3-3-3"/><path d="m10 9 5 3-5 3z"/></svg></span><span><h1>LmX Practice<span style="color:var(--accent)">.</span></h1><small data-i="tagline">Bir bölümü seç. Tekrar et. Oturt.</small></span></a><div class="header-actions"><span class="version">v1.6.2</span><div class="seg" role="group" aria-label="Language"><button data-lang="tr" type="button" aria-pressed="true">TR</button><button data-lang="en" type="button" aria-pressed="false">EN</button></div><div class="seg theme" role="group" data-aria="theme"><button id="light" type="button" data-aria="light" aria-pressed="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button id="dark" type="button" data-aria="dark" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M20.8 14A9 9 0 0 1 10 3.2 9 9 0 1 0 20.8 14Z"/></svg></button></div></div></header>
+ <header class="header"><a class="brand" href="#" id="brand"><span class="brand-icon" aria-hidden="true"><img src="/lmx-practice-logo.svg" width="36" height="36" alt="" onload="this.parentElement.classList.add('has-logo')" onerror="this.hidden=true;this.nextElementSibling.removeAttribute('hidden')"><svg hidden viewBox="0 0 24 24"><path d="M18 7H7a4 4 0 0 0-4 4v1m3-8-3 3 3 3m0 7h11a4 4 0 0 0 4-4v-1m-3 8 3-3-3-3"/><path d="m10 9 5 3-5 3z"/></svg></span><span><h1>LmX Practice<span style="color:var(--accent)">.</span></h1><small data-i="tagline">Bir bölümü seç. Tekrar et. Oturt.</small></span></a><div class="header-actions"><span class="version">v1.6.3</span><div class="seg" role="group" aria-label="Language"><button data-lang="tr" type="button" aria-pressed="true">TR</button><button data-lang="en" type="button" aria-pressed="false">EN</button></div><div class="seg theme" role="group" data-aria="theme"><button id="light" type="button" data-aria="light" aria-pressed="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button id="dark" type="button" data-aria="dark" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M20.8 14A9 9 0 0 1 10 3.2 9 9 0 1 0 20.8 14Z"/></svg></button></div></div></header>
  <main>
   <form class="url-bar" id="video-form"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 .1l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7-.1l-3 3a5 5 0 0 0 7 7l2-2"/></svg><label class="sr-only" for="video-url" data-i="urlLabel">YouTube video bağlantısı</label><input id="video-url" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://www.youtube.com/watch?v=…" required><button class="btn primary" id="load" type="submit" data-i="load">Video aç</button></form>
   <p class="form-note" id="url-message" role="status"></p>
@@ -204,13 +207,11 @@ input[type="text"],input[type="url"],textarea,[contenteditable="true"]{-webkit-u
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <div class="video-caption"><h2 class="video-title" id="video-title" data-i="noVideo">Video henüz seçilmedi</h2></div>
   <div class="player-shell" id="player-shell">
-  <section class="video-stage" data-aria="videoArea"><div class="player-mount" id="player-host"></div><div class="empty-video" id="empty-video"><div class="empty-icon"><svg viewBox="0 0 32 32"><rect x="3" y="7" width="26" height="18" rx="6"/><path d="m13 12 8 4-8 4z"/></svg></div><h2 data-i="emptyTitle">Dersin burada, odağın müzikte.</h2><p data-i="emptyLead">YouTube bağlantısını yukarıya yapıştırarak başla.</p><div class="tiny"><i></i><span data-i="emptyTiny">İzle · Böl · Tekrar et</span><i></i></div></div></section>
+  <section class="video-stage" data-aria="videoArea"><div class="player-mount" id="player-host"></div><div class="empty-video" id="empty-video"><div class="empty-icon"><svg viewBox="0 0 32 32"><rect x="3" y="7" width="26" height="18" rx="6"/><path d="m13 12 8 4-8 4z"/></svg></div><h2 data-i="emptyTitle">Dersin burada, odağın müzikte.</h2><p data-i="emptyLead">YouTube bağlantısını yukarıya yapıştırarak başla.</p><div class="tiny"><i></i><span data-i="emptyTiny">İzle · Böl · Tekrar et</span><i></i></div></div><button class="media-button" id="video-fullscreen" type="button" aria-pressed="false" data-aria="fullscreen" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button></section>
    <div class="media-toolbar">
     <button class="media-button" id="volume-toggle" type="button" data-aria="mute" disabled><svg viewBox="0 0 24 24" id="volume-icon" aria-hidden="true"><path d="m11 5-6 4H2v6h3l6 4zM15 8c2 2 2 6 0 8m3-11c4 4 4 10 0 14"/></svg></button>
     <input class="volume-slider" id="volume" type="range" min="0" max="100" step="1" value="100" data-aria="volume" disabled>
     <span class="media-time" id="media-time">00:00 / 00:00</span>
-    <button class="media-button quality-button" id="quality-toggle" type="button" aria-pressed="false" data-i="quality" data-aria="qualityToggle" disabled>Kalite</button>
-    <button class="media-button" id="video-fullscreen" type="button" data-aria="fullscreen" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
    </div>
   </div>
   <section class="card playback-card compact-controls" data-aria="playbackArea">
@@ -395,10 +396,10 @@ const $=id=>document.getElementById(id);
 function setText(id,value){const node=$(id),text=String(value);if(node.textContent!==text)node.textContent=text;}
 const TEXT={tr:{tagline:'Bir bölümü seç. Tekrar et. Oturt.',theme:'Görünüm',light:'Açık tema',dark:'Koyu tema',videoArea:'YouTube videosu',playbackArea:'Video oynatma kontrolleri',emptyTitle:'Dersin burada, odağın müzikte.',emptyLead:'YouTube bağlantısını yukarıya yapıştırarak başla.',emptyTiny:'İzle · Böl · Tekrar et',urlLabel:'YouTube video bağlantısı',load:'Video aç',openYouTube:'YouTube’da aç',noVideo:'Video henüz seçilmedi',seekLabel:'Videoda konum',play:'Oynat',pause:'Duraklat',back:'5 saniye geri',forward:'5 saniye ileri',speed:'Hız',loopTitle:'A–B Döngü',inLabel:'Başlangıç · IN',outLabel:'Bitiş · OUT',mark:'Şu anı al',inTime:'Döngü başlangıç zamanı',outTime:'Döngü bitiş zamanı',sectionLength:'Seçili bölüm',gotoIn:'A noktasına dön',repeatMode:'Döngü çalışma modu',infinite:'∞ Sonsuz',counted:'Tekrar',repeatCount:'Tur sayısı',repeatComplete:'Seçilen tur sayısı tamamlandı.',workTime:'Süre',startLoop:'Döngüyü başlat',stopLoop:'Döngüyü durdur',laps:'tam tur',worked:'çalışıldı',remaining:'tur kaldı',timerHint:'Seçilen tam tur sayısına ulaşınca döngü durur.',shortcuts:'Klavye kısayolları',shortcutText:'Boşluk: oynat / duraklat · ← →: 5 saniye geri / ileri · I: başlangıcı al · O: bitişi al',savedLocal:'Son video ve ayarların bu tarayıcıda saklanır.',ready:'Hazır',paused:'Duraklatıldı',playing:'Oynatılıyor',buffering:'Yükleniyor',loading:'Video hazırlanıyor',ended:'Video bitti',loopOff:'Kapalı',loopOn:'Döngü açık',complete:'Tamamlandı',leftRange:'Döngü dışına geçildi; döngü kapatıldı.',timeComplete:'Çalışma süresi tamamlandı.',invalidUrl:'Geçerli bir YouTube video bağlantısı yapıştır.',invalidTime:'Zamanı dakika:saniye olarak gir. Örnek: 02:35.5',invalidRange:'Başlangıç ve bitiş arasında en az bir kare olmalı.',invalidLimit:'0–100 arasında bir tam tur sayısı seç.',embedDenied:'Bu video başka sitelerde oynatılamıyor. Farklı bir video bağlantısı deneyebilirsin.',notFound:'Video bulunamadı, kaldırılmış ya da gizli olabilir.',genericError:'YouTube videoyu oynatamadı. Bağlantıyı kontrol edip yeniden aç.',referrerError:'YouTube, bu sitenin kaynak adresini alamadı (153). Sayfayı doğrudan kendi site adresinden aç. Sorun sürerse sitenin veya tarayıcının referrer ayarı kontrol edilmeli.',referrerEmbedded:'YouTube, bu önizlemenin kaynak adresini alamadı (153). Önizleme yerine sayfanın doğrudan HTTP/HTTPS adresini yeni sekmede aç.',apiError:'YouTube’a bağlanılamadı. İnternet bağlantını kontrol edip Video aç düğmesiyle tekrar dene.',autoplayBlocked:'Oynatmak için video üzerindeki YouTube oynat düğmesine dokun.',localFile:'YouTube bu dosya/önizleme adresinden başlatılamıyor. Dosyayı Vercel’deki sitenden veya http://localhost gibi bir web sunucusundan aç; dosyaya çift tıklayarak açma.',rateUnavailable:'Bu videoda seçilen hız kullanılamıyor.',live:'Canlı yayında bu videonun zaman çubuğu henüz hazır değil.'},en:{tagline:'Pick a passage. Repeat. Make it yours.',theme:'Appearance',light:'Light theme',dark:'Dark theme',videoArea:'YouTube video',playbackArea:'Video playback controls',emptyTitle:'Your lesson. Your practice space.',emptyLead:'Paste a YouTube link above to get started.',emptyTiny:'Watch · Mark · Repeat',urlLabel:'YouTube video link',load:'Open video',openYouTube:'Open on YouTube',noVideo:'No video selected',seekLabel:'Video position',play:'Play',pause:'Pause',back:'Back 5 seconds',forward:'Forward 5 seconds',speed:'Speed',loopTitle:'A–B Loop',inLabel:'Start · IN',outLabel:'End · OUT',mark:'Set to now',inTime:'Loop start time',outTime:'Loop end time',sectionLength:'Selected passage',gotoIn:'Back to A',repeatMode:'Loop session mode',infinite:'∞ Infinite',counted:'Repeat',repeatCount:'Repeat count',repeatComplete:'The selected repeat count is complete.',workTime:'Time',startLoop:'Start loop',stopLoop:'Stop loop',laps:'full loops',worked:'practiced',remaining:'loops left',timerHint:'The loop stops after the selected number of complete repeats.',shortcuts:'Keyboard shortcuts',shortcutText:'Space: play / pause · ← →: back / forward 5 seconds · I: set start · O: set end',savedLocal:'Your last video and settings stay in this browser.',ready:'Ready',paused:'Paused',playing:'Playing',buffering:'Buffering',loading:'Preparing video',ended:'Video ended',loopOff:'Off',loopOn:'Loop on',complete:'Complete',leftRange:'Left the passage; looping is now off.',timeComplete:'Practice session complete.',invalidUrl:'Paste a valid YouTube video link.',invalidTime:'Enter minutes:seconds, for example 02:35.5',invalidRange:'Keep at least one frame between the start and end.',invalidLimit:'Choose a whole number of repeats from 0 to 100.',embedDenied:'This video cannot play on other websites. Try another video link.',notFound:'The video was removed, is private, or could not be found.',genericError:'YouTube could not play this video. Check the link and open it again.',referrerError:'YouTube did not receive this site’s referrer (153). Open the page directly on your website. If it persists, check the site or browser referrer policy.',referrerEmbedded:'YouTube did not receive this preview’s referrer (153). Open the actual HTTP/HTTPS page directly in a new tab instead of inside a preview.',apiError:'Could not connect to YouTube. Check your connection and try Open video again.',autoplayBlocked:'Tap the YouTube play button inside the video to start playback.',localFile:'YouTube cannot start from this file/preview address. Open the page on your website or a web server such as http://localhost; do not double-click the HTML file.',rateUnavailable:'That speed is unavailable for this video.',live:'The timeline is not ready for this live video.'}};
 let lang='tr';try{const route=location.pathname.match(/^\/(tr|en)(?:\/|$)/);lang=route?route[1]:(localStorage.getItem('lmx-lang')||((navigator.language||'tr').startsWith('tr')?'tr':'en'));}catch{}if(!TEXT[lang])lang='tr';
-Object.assign(TEXT.tr,{setA:'Şu anı A başlangıcı olarak işaretle',setB:'Şu anı B bitişi olarak işaretle',frame:'Kare',frameBack:'Bir kare geri · yaklaşık 1/30 saniye; duraklatır',frameForward:'Bir kare ileri · yaklaşık 1/30 saniye; duraklatır',volume:'Ses seviyesi',mute:'Sesi kapat',unmute:'Sesi aç',quality:'Kalite',qualityToggle:'YouTube kontrollerini ve kalite ayarlarını göster veya gizle',fullscreen:'Tam ekran',exitFullscreen:'Tam ekrandan çık',fullscreenError:'Tam ekran açılamadı.',historyTitle:'Son açılan videolar',historyEmpty:'Açtığın son 20 video burada görünür.',historyPlay:'Oynat',historyDelete:'Sil',historyPlayAria:'{title} videosunu aç ve oynat',historyDeleteAria:'{title} videosunu geçmişten sil',seconds:'sn',backOne:'1 saniye geri',forwardOne:'1 saniye ileri',framesBack:'5 kare geri · yaklaşık 1/6 saniye; duraklatır',framesForward:'5 kare ileri · yaklaşık 1/6 saniye; duraklatır',adjustA:'A başlangıcını sürükle veya ok tuşlarıyla ayarla',adjustB:'B bitişini sürükle veya ok tuşlarıyla ayarla'});
-Object.assign(TEXT.en,{setA:'Set the current position as start A',setB:'Set the current position as end B',frame:'Frame',frameBack:'Back one frame · approximately 1/30 second; pauses',frameForward:'Forward one frame · approximately 1/30 second; pauses',volume:'Volume',mute:'Mute',unmute:'Unmute',quality:'Quality',qualityToggle:'Show or hide YouTube controls and quality settings',fullscreen:'Fullscreen',exitFullscreen:'Exit fullscreen',fullscreenError:'Could not open fullscreen.',historyTitle:'Recently opened videos',historyEmpty:'Your 20 most recent videos will appear here.',historyPlay:'Play',historyDelete:'Delete',historyPlayAria:'Open and play {title}',historyDeleteAria:'Remove {title} from history',seconds:'s',backOne:'Back 1 second',forwardOne:'Forward 1 second',framesBack:'Back 5 frames · approximately 1/6 second; pauses',framesForward:'Forward 5 frames · approximately 1/6 second; pauses',adjustA:'Drag loop start A or adjust with arrow keys',adjustB:'Drag loop end B or adjust with arrow keys'});
+Object.assign(TEXT.tr,{setA:'Şu anı A başlangıcı olarak işaretle',setB:'Şu anı B bitişi olarak işaretle',frame:'Kare',frameBack:'Bir kare geri · yaklaşık 1/30 saniye; duraklatır',frameForward:'Bir kare ileri · yaklaşık 1/30 saniye; duraklatır',volume:'Ses seviyesi',mute:'Sesi kapat',unmute:'Sesi aç',fullscreen:'Tam ekran',exitFullscreen:'Tam ekrandan çık',fullscreenError:'Tam ekran açılamadı.',historyTitle:'Son açılan videolar',historyEmpty:'Açtığın son 20 video burada görünür.',historyPlay:'Oynat',historyDelete:'Sil',historyPlayAria:'{title} videosunu aç ve oynat',historyDeleteAria:'{title} videosunu geçmişten sil',seconds:'sn',backOne:'1 saniye geri',forwardOne:'1 saniye ileri',framesBack:'5 kare geri · yaklaşık 1/6 saniye; duraklatır',framesForward:'5 kare ileri · yaklaşık 1/6 saniye; duraklatır',adjustA:'A başlangıcını sürükle veya ok tuşlarıyla ayarla',adjustB:'B bitişini sürükle veya ok tuşlarıyla ayarla'});
+Object.assign(TEXT.en,{setA:'Set the current position as start A',setB:'Set the current position as end B',frame:'Frame',frameBack:'Back one frame · approximately 1/30 second; pauses',frameForward:'Forward one frame · approximately 1/30 second; pauses',volume:'Volume',mute:'Mute',unmute:'Unmute',fullscreen:'Fullscreen',exitFullscreen:'Exit fullscreen',fullscreenError:'Could not open fullscreen.',historyTitle:'Recently opened videos',historyEmpty:'Your 20 most recent videos will appear here.',historyPlay:'Play',historyDelete:'Delete',historyPlayAria:'Open and play {title}',historyDeleteAria:'Remove {title} from history',seconds:'s',backOne:'Back 1 second',forwardOne:'Forward 1 second',framesBack:'Back 5 frames · approximately 1/6 second; pauses',framesForward:'Forward 5 frames · approximately 1/6 second; pauses',adjustA:'Drag loop start A or adjust with arrow keys',adjustB:'Drag loop end B or adjust with arrow keys'});
 const t=k=>TEXT[lang][k]||k;
-let pendingAutoplay=false,nativeControls=false,playerRebuild=null;
+let pendingAutoplay=false;
 let player=null,engine=null,playerReady=false,videoId='',videoTitle='',pendingStart=0,pendingRestore=null,apiLoading=false,apiTimeout=null,toastTimer=null,seekLast=-Infinity,seekPreviewTimer=null,saveLast=0,durationSeen=0,loadingVideo=false;
 function notice(key){$('toast').textContent=t(key);$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,3200);}
 function error(key){$('error-text').textContent=t(key);$('error-box').hidden=false;}
@@ -496,7 +497,7 @@ function initAPI(){
 }
 window.onYouTubeIframeAPIReady=()=>{apiLoading=false;clearTimeout(apiTimeout);createOrCue();};
 function openVideo(parsed,restoring=false,autoplay=false,settings=null){
- if(!parsed)return;if(engine?.duration&&durationSeen&&!loadingVideo)save();playerRebuild=null;pendingAutoplay=autoplay;const different=videoId!==parsed.id;
+ if(!parsed)return;if(engine?.duration&&durationSeen&&!loadingVideo)save();pendingAutoplay=autoplay;const different=videoId!==parsed.id;
  if(engine){engine.stopLoop(false);engine.seekHold=null;engine.wantedPlaying=autoplay;engine.duration=0;engine.current=parsed.start;engine.state=-1;if(different){engine.a=0;engine.b=null;engine.elapsed=0;engine.laps=0;engine.completed=false;}}
  pendingRestore=normaliseVideoSettings(settings);
  clearTimeout(seekPreviewTimer);seekPreviewTimer=null;clearTimeout(pointPreviewTimer);pointPreviewTimer=null;pointDrag=null;if(engine)engine.scrubbing=false;
@@ -518,9 +519,10 @@ function createOrCue(){
  mount.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
  mount.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen');
  mount.setAttribute('allowfullscreen','');
- const params=new URLSearchParams({enablejsapi:'1',playsinline:'1',controls:nativeControls?'1':'0',rel:'0',autoplay:'0',origin:location.origin});
+ const params=new URLSearchParams({enablejsapi:'1',playsinline:'1',controls:'0',fs:'0',iv_load_policy:'3',rel:'0',autoplay:'0',origin:location.origin});
  mount.src='https://www.youtube.com/embed/'+encodeURIComponent(videoId)+'?'+params.toString();
  $('player-host').replaceChildren(mount);
+ // No cc_load_policy=1: do not force captions on. YouTube may still honor the viewer's caption preference.
  // The IFrame API attaches to the already configured iframe.
  player=new YT.Player('youtube-player',{events:{onReady:event=>{
   player=event.target;playerReady=true;engine=new PracticeEngine(player);engine.onNotice=notice;
@@ -555,13 +557,6 @@ function updateMetadata(){
      engine.seek(position,engine.wantedPlaying);
     }
     else{if(engine.b===null)engine.b=duration;syncRates();}
-    if(playerRebuild){
-     const resume=playerRebuild;playerRebuild=null;
-     engine.elapsed=resume.elapsed;engine.laps=resume.laps;engine.completed=resume.completed;
-     engine.loopActive=resume.loopActive&&engine.validRange();engine.lastTick=performance.now();engine.jumpUntil=performance.now()+150;
-     try{player.setVolume(resume.volume);if(resume.muted)player.mute();else player.unMute();}catch{}
-     engine.seek(pendingStart,resume.playing);
-    }
     save();
    }
   }
@@ -570,14 +565,13 @@ function updateMetadata(){
 function syncRates(preferred){if(!playerReady)return;try{const rates=player.getAvailablePlaybackRates()||[1],current=preferred??player.getPlaybackRate();$('speed').replaceChildren();rates.forEach(rate=>{const o=document.createElement('option');o.value=rate;o.textContent=rate+'×';$('speed').appendChild(o);});$('speed').value=rates.includes(current)?current:1;if(preferred&&rates.includes(preferred))player.setPlaybackRate(preferred);}catch{}}
 function render(){
  const e=engine,ready=Boolean(playerReady&&e?.duration>0),playing=Boolean(e?.wantedPlaying);
- ['volume-toggle','volume','quality-toggle','video-fullscreen','seek','play','back','forward','back-one','forward-one','frame-back','frame-forward','frames-back','frames-forward','mark-in','mark-out','loop-toggle'].forEach(id=>$(id).disabled=!ready);
+ ['volume-toggle','volume','video-fullscreen','seek','play','back','forward','back-one','forward-one','frame-back','frame-forward','frames-back','frames-forward','mark-in','mark-out','loop-toggle'].forEach(id=>$(id).disabled=!ready);
  $('speed').disabled=!playerReady||$('speed').options.length<2;
  $('video-title').textContent=videoTitle||t(videoId?(loadingVideo?'loading':'videoArea'):'noVideo');$('video-title').title=$('video-title').textContent;
  document.body.classList.toggle('playing',playing);
  setText('play-text',t(playing?'pause':'play'));$('play').setAttribute('aria-pressed',String(playing));$('play').setAttribute('aria-label',t(playing?'pause':'play'));if($('play-icon').dataset.playing!==String(playing)){$('play-icon').dataset.playing=String(playing);$('play-icon').innerHTML=playing?'<path d="M6 4h4v16H6zm8 0h4v16h-4z"/>':'<path d="m7 4 14 8-14 8z"/>';}
  const duration=e?.duration||0,current=e?.current??pendingStart;
  $('media-time').textContent=formatTime(current)+' / '+formatTime(duration);
- $('quality-toggle').setAttribute('aria-pressed',String(nativeControls));
  try{
   const muted=playerReady?player.isMuted():false,volume=playerReady?player.getVolume():100;
   if(document.activeElement!==$('volume'))$('volume').value=muted?0:volume;
@@ -682,21 +676,12 @@ $('loop-toggle').onclick=()=>{if(!engine)return;if(engine.loopActive)engine.stop
 $('speed').onchange=()=>{try{player.setPlaybackRate(Number($('speed').value));}catch{notice('rateUnavailable');}};
 $('volume-toggle').onclick=()=>{if(!playerReady)return;try{if(player.isMuted())player.unMute();else player.mute();}catch{}render();save();};
 $('volume').oninput=()=>{if(!playerReady)return;try{player.setVolume(Number($('volume').value));if(Number($('volume').value)>0)player.unMute();else player.mute();}catch{}save();};
-$('quality-toggle').onclick=()=>{
- if(!playerReady||!engine?.duration)return;
- engine.account();const start=engine.positionNow();
- let volume=100,muted=false;try{volume=player.getVolume();muted=player.isMuted();}catch{}
- playerRebuild={playing:engine.wantedPlaying,loopActive:engine.loopActive,elapsed:engine.elapsed,laps:engine.laps,completed:engine.completed,volume,muted};
- pendingRestore=normaliseVideoSettings({a:engine.a,b:engine.b,mode:engine.mode,limit:engine.limit,repeatLimit:engine.limit,rate:Number($('speed').value)||1});
- pendingStart=start;pendingAutoplay=false;nativeControls=!nativeControls;durationSeen=0;loadingVideo=true;
- engine.stopLoop();const old=player;player=null;engine=null;playerReady=false;
- try{old.destroy();}catch{}
- createOrCue();render();
-};
 let videoFullscreen=false;
 function syncVideoFullscreen(){
  const shell=$('player-shell');shell.classList.toggle('is-fullscreen',videoFullscreen);document.body.classList.toggle('video-fullscreen',videoFullscreen);
  $('video-fullscreen').setAttribute('aria-label',t(videoFullscreen?'exitFullscreen':'fullscreen'));
+ $('video-fullscreen').setAttribute('aria-pressed',String(videoFullscreen));
+ $('video-fullscreen').querySelector('path').setAttribute('d',videoFullscreen?'M3 8h5V3m13 5h-5V3M8 21v-5H3m13 5v-5h5':'M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5');
 }
 async function toggleVideoFullscreen(){
  const shell=$('player-shell');
