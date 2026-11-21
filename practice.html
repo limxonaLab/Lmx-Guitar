@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="application-version" content="1.6.3">
+<meta name="application-version" content="1.6.5">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>LmX Practice — YouTube Ders Çalışma ve A–B Döngü</title>
 <meta name="description" content="YouTube ders ve örnek parçalarını A–B döngüsüyle çalış. Büyük oynatma çubuğu, hassas ileri geri sarma ve tekrar sayısıyla çalışma.">
@@ -49,7 +49,10 @@
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 
 /* Video shield: blocks hover/tap so YouTube's title bar and overlays never appear. */
-.video-shield{position:absolute;inset:0;z-index:2;cursor:pointer;background:transparent}
+.video-shield{position:absolute;inset:0;z-index:10;cursor:default;background:transparent;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
+/* The iframe can never receive mouse/touch, so YouTube hover UI cannot appear. */
+.video-stage .player-mount iframe{pointer-events:none}
+.video-shield:focus,.video-shield:focus-visible{outline:0}
 /* Optional crop: raise --crop (e.g. 6%) to push title bar out of view; edges of the video get cut. */
 .video-stage{--crop:0%}.video-stage .player-mount{inset:calc(var(--crop) * -1);width:auto;height:auto}
 /* Compact, mobile-first practice controls. */
@@ -203,7 +206,7 @@ input[type="text"],input[type="url"],textarea,[contenteditable="true"]{-webkit-u
 </head>
 <body>
 <div class="app">
- <header class="header"><a class="brand" href="#" id="brand"><span class="brand-icon" aria-hidden="true"><img src="/lmx-practice-logo.svg" width="36" height="36" alt="" onload="this.parentElement.classList.add('has-logo')" onerror="this.hidden=true;this.nextElementSibling.removeAttribute('hidden')"><svg hidden viewBox="0 0 24 24"><path d="M18 7H7a4 4 0 0 0-4 4v1m3-8-3 3 3 3m0 7h11a4 4 0 0 0 4-4v-1m-3 8 3-3-3-3"/><path d="m10 9 5 3-5 3z"/></svg></span><span><h1>LmX Practice<span style="color:var(--accent)">.</span></h1><small data-i="tagline">Bir bölümü seç. Tekrar et. Oturt.</small></span></a><div class="header-actions"><span class="version">v1.6.3</span><div class="seg" role="group" aria-label="Language"><button data-lang="tr" type="button" aria-pressed="true">TR</button><button data-lang="en" type="button" aria-pressed="false">EN</button></div><div class="seg theme" role="group" data-aria="theme"><button id="light" type="button" data-aria="light" aria-pressed="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button id="dark" type="button" data-aria="dark" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M20.8 14A9 9 0 0 1 10 3.2 9 9 0 1 0 20.8 14Z"/></svg></button></div></div></header>
+ <header class="header"><a class="brand" href="#" id="brand"><span class="brand-icon" aria-hidden="true"><img src="/lmx-practice-logo.svg" width="36" height="36" alt="" onload="this.parentElement.classList.add('has-logo')" onerror="this.hidden=true;this.nextElementSibling.removeAttribute('hidden')"><svg hidden viewBox="0 0 24 24"><path d="M18 7H7a4 4 0 0 0-4 4v1m3-8-3 3 3 3m0 7h11a4 4 0 0 0 4-4v-1m-3 8 3-3-3-3"/><path d="m10 9 5 3-5 3z"/></svg></span><span><h1>LmX Practice<span style="color:var(--accent)">.</span></h1><small data-i="tagline">Bir bölümü seç. Tekrar et. Oturt.</small></span></a><div class="header-actions"><span class="version">v1.6.5</span><div class="seg" role="group" aria-label="Language"><button data-lang="tr" type="button" aria-pressed="true">TR</button><button data-lang="en" type="button" aria-pressed="false">EN</button></div><div class="seg theme" role="group" data-aria="theme"><button id="light" type="button" data-aria="light" aria-pressed="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button id="dark" type="button" data-aria="dark" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M20.8 14A9 9 0 0 1 10 3.2 9 9 0 1 0 20.8 14Z"/></svg></button></div></div></header>
  <main>
   <form class="url-bar" id="video-form"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 .1l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7-.1l-3 3a5 5 0 0 0 7 7l2-2"/></svg><label class="sr-only" for="video-url" data-i="urlLabel">YouTube video bağlantısı</label><input id="video-url" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://www.youtube.com/watch?v=…" required><button class="btn primary" id="load" type="submit" data-i="load">Video aç</button></form>
   <p class="form-note" id="url-message" role="status"></p>
